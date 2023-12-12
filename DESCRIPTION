@@ -1,0 +1,19 @@
+Package: spatTempBFA
+Type: Package
+Title: Spatiotemporal Bayesian Factor Analysis with Enhanced Scalability
+Version: 1.0
+Date: 2023-11-30
+Author: Yifan Cheng 
+Maintainer: Yifan Cheng <annieffcheng@gmail.com>
+Description: This repository implements practicable Bayesian nonparametric factor analysis models capable of tackling moderately large spatiotemporal data along with subsequent vital inferential tasks including spatial and temporal prediction as well as spatial clustering of temporal trends. Details pertaining to our models are in a manuscript by Cheng and Li (2023) `<arXiv:2312.05802>`
+License: GPL (>= 2)
+Encoding: UTF-8
+LazyData: true
+LazyDataCompression: xz
+NeedsCompilation: yes
+Depends: R 
+Imports: Rcpp (>= 1.0.9), graphics, grDevices, msm (>= 1.0.0), mvtnorm (>= 1.0-0), tmvtnorm, pgdraw (>= 1.0), stats, utils
+LinkingTo: Rcpp, RcppArmadillo
+Suggests: coda, classInt, knitr, rmarkdown
+VignetteBuilder: knitr
+RoxygenNote: 7.2.3
