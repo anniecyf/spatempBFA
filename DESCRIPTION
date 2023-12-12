@@ -1,4 +1,4 @@
-Package: spatTempBFA
+Package: spatempBFA
 Type: Package
 Title: Spatiotemporal Bayesian Factor Analysis with Enhanced Scalability
 Version: 1.0
