@@ -14,7 +14,7 @@ TimeDist <- as.matrix(dist(Time))
 APsi = 0.1; BPsi = 4.5
 library(mvtnorm)
 library(fields)
-library(spatTempBFA)
+library(spatempBFA)
 set.seed(19)
 fittingTimeMat <- array(0, dim = c(4, N, M))
 spatpredTimeMat <- array(0, dim = c(4, N, M))

@@ -16,9 +16,9 @@ library(mvtnorm)
 #library(dplyr)
 library(fields)
 #library(devtools) 
-#setwd("spatTempBFA")
+#setwd("spatempBFA")
 #load_all(".")
-library(spatTempBFA)
+library(spatempBFA)
 set.seed(29)
 nkeep10RandIndex <- nkeep100RandIndex <- nkeep1000RandIndex <- matrix(0, N, 4)
 models <- c("fullGPfixedL", "NNGPblockFixedL", "NNGPsequenFixedL", "NNGPsequenVaryLj")
@@ -199,7 +199,7 @@ save(nkeep100AccuRatio, file = "nkeep100AccuRatioMat_designedClustering.RData")
 save(nkeep1000AccuRatio, file = "nkeep1000AccuRatioMat_designedClustering.RData")
 
 
-# install.packages("spatTempBFA_1.0.tar.gz", repos = NULL, type = "source", dependencies = TRUE)
+# install.packages("spatempBFA_1.0.tar.gz", repos = NULL, type = "source", dependencies = TRUE)
 
 
 

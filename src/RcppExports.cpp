@@ -13,7 +13,7 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 
 // GetRooti
 arma::mat GetRooti(arma::mat const& Cov);
-RcppExport SEXP _spatTempBFA_GetRooti(SEXP CovSEXP) {
+RcppExport SEXP _spatempBFA_GetRooti(SEXP CovSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -24,7 +24,7 @@ END_RCPP
 }
 // getRootiH
 arma::mat getRootiH(double Psi, int Nu, int TempCorInd, int seasonPeriod);
-RcppExport SEXP _spatTempBFA_getRootiH(SEXP PsiSEXP, SEXP NuSEXP, SEXP TempCorIndSEXP, SEXP seasonPeriodSEXP) {
+RcppExport SEXP _spatempBFA_getRootiH(SEXP PsiSEXP, SEXP NuSEXP, SEXP TempCorIndSEXP, SEXP seasonPeriodSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -38,7 +38,7 @@ END_RCPP
 }
 // getInvH
 arma::mat getInvH(double Psi, int Nu, int TempCorInd, int seasonPeriod);
-RcppExport SEXP _spatTempBFA_getInvH(SEXP PsiSEXP, SEXP NuSEXP, SEXP TempCorIndSEXP, SEXP seasonPeriodSEXP) {
+RcppExport SEXP _spatempBFA_getInvH(SEXP PsiSEXP, SEXP NuSEXP, SEXP TempCorIndSEXP, SEXP seasonPeriodSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -52,7 +52,7 @@ END_RCPP
 }
 // getH
 arma::mat getH(double Psi, int TempCorInd, arma::mat const& TimeDist, int Nu, int seasonPeriod);
-RcppExport SEXP _spatTempBFA_getH(SEXP PsiSEXP, SEXP TempCorIndSEXP, SEXP TimeDistSEXP, SEXP NuSEXP, SEXP seasonPeriodSEXP) {
+RcppExport SEXP _spatempBFA_getH(SEXP PsiSEXP, SEXP TempCorIndSEXP, SEXP TimeDistSEXP, SEXP NuSEXP, SEXP seasonPeriodSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -67,7 +67,7 @@ END_RCPP
 }
 // SpEXP
 arma::mat SpEXP(double rho, arma::mat const& SpDist);
-RcppExport SEXP _spatTempBFA_SpEXP(SEXP rhoSEXP, SEXP SpDistSEXP) {
+RcppExport SEXP _spatempBFA_SpEXP(SEXP rhoSEXP, SEXP SpDistSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -79,7 +79,7 @@ END_RCPP
 }
 // GetLogLik
 arma::colvec GetLogLik(Rcpp::List DatObj_List, Rcpp::List Para_List, int NKeep, bool Verbose);
-RcppExport SEXP _spatTempBFA_GetLogLik(SEXP DatObj_ListSEXP, SEXP Para_ListSEXP, SEXP NKeepSEXP, SEXP VerboseSEXP) {
+RcppExport SEXP _spatempBFA_GetLogLik(SEXP DatObj_ListSEXP, SEXP Para_ListSEXP, SEXP NKeepSEXP, SEXP VerboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -93,7 +93,7 @@ END_RCPP
 }
 // GetLogLikMean
 double GetLogLikMean(Rcpp::List DatObj_List, Rcpp::List Para_List);
-RcppExport SEXP _spatTempBFA_GetLogLikMean(SEXP DatObj_ListSEXP, SEXP Para_ListSEXP) {
+RcppExport SEXP _spatempBFA_GetLogLikMean(SEXP DatObj_ListSEXP, SEXP Para_ListSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -105,7 +105,7 @@ END_RCPP
 }
 // SamplePPD
 arma::mat SamplePPD(Rcpp::List DatObj_List, Rcpp::List Para_List, int NKeep, bool Verbose);
-RcppExport SEXP _spatTempBFA_SamplePPD(SEXP DatObj_ListSEXP, SEXP Para_ListSEXP, SEXP NKeepSEXP, SEXP VerboseSEXP) {
+RcppExport SEXP _spatempBFA_SamplePPD(SEXP DatObj_ListSEXP, SEXP Para_ListSEXP, SEXP NKeepSEXP, SEXP VerboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -119,7 +119,7 @@ END_RCPP
 }
 // VAR1bfaRcppFixedL
 Rcpp::List VAR1bfaRcppFixedL(Rcpp::List DatObj_List, Rcpp::List HyPara_List, Rcpp::List MetrObj_List, Rcpp::List Para_List, Rcpp::List ParaCL_List, Rcpp::List SpatPara_List, Rcpp::List DatAug_List, Rcpp::List McmcObj_List, arma::mat RawSamples, bool Interactive);
-RcppExport SEXP _spatTempBFA_VAR1bfaRcppFixedL(SEXP DatObj_ListSEXP, SEXP HyPara_ListSEXP, SEXP MetrObj_ListSEXP, SEXP Para_ListSEXP, SEXP ParaCL_ListSEXP, SEXP SpatPara_ListSEXP, SEXP DatAug_ListSEXP, SEXP McmcObj_ListSEXP, SEXP RawSamplesSEXP, SEXP InteractiveSEXP) {
+RcppExport SEXP _spatempBFA_VAR1bfaRcppFixedL(SEXP DatObj_ListSEXP, SEXP HyPara_ListSEXP, SEXP MetrObj_ListSEXP, SEXP Para_ListSEXP, SEXP ParaCL_ListSEXP, SEXP SpatPara_ListSEXP, SEXP DatAug_ListSEXP, SEXP McmcObj_ListSEXP, SEXP RawSamplesSEXP, SEXP InteractiveSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -139,7 +139,7 @@ END_RCPP
 }
 // VAR1bfaRcppVaryingLjs
 Rcpp::List VAR1bfaRcppVaryingLjs(Rcpp::List DatObj_List, Rcpp::List HyPara_List, Rcpp::List MetrObj_List, Rcpp::List Para_List, Rcpp::List SpatPara_List, Rcpp::List DatAug_List, Rcpp::List McmcObj_List, arma::mat RawSamples, bool Interactive);
-RcppExport SEXP _spatTempBFA_VAR1bfaRcppVaryingLjs(SEXP DatObj_ListSEXP, SEXP HyPara_ListSEXP, SEXP MetrObj_ListSEXP, SEXP Para_ListSEXP, SEXP SpatPara_ListSEXP, SEXP DatAug_ListSEXP, SEXP McmcObj_ListSEXP, SEXP RawSamplesSEXP, SEXP InteractiveSEXP) {
+RcppExport SEXP _spatempBFA_VAR1bfaRcppVaryingLjs(SEXP DatObj_ListSEXP, SEXP HyPara_ListSEXP, SEXP MetrObj_ListSEXP, SEXP Para_ListSEXP, SEXP SpatPara_ListSEXP, SEXP DatAug_ListSEXP, SEXP McmcObj_ListSEXP, SEXP RawSamplesSEXP, SEXP InteractiveSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -158,7 +158,7 @@ END_RCPP
 }
 // bfaRcppFixedL
 Rcpp::List bfaRcppFixedL(Rcpp::List DatObj_List, Rcpp::List HyPara_List, Rcpp::List MetrObj_List, Rcpp::List Para_List, Rcpp::List ParaCL_List, Rcpp::List SpatPara_List, Rcpp::List DatAug_List, Rcpp::List McmcObj_List, arma::mat RawSamples, bool Interactive);
-RcppExport SEXP _spatTempBFA_bfaRcppFixedL(SEXP DatObj_ListSEXP, SEXP HyPara_ListSEXP, SEXP MetrObj_ListSEXP, SEXP Para_ListSEXP, SEXP ParaCL_ListSEXP, SEXP SpatPara_ListSEXP, SEXP DatAug_ListSEXP, SEXP McmcObj_ListSEXP, SEXP RawSamplesSEXP, SEXP InteractiveSEXP) {
+RcppExport SEXP _spatempBFA_bfaRcppFixedL(SEXP DatObj_ListSEXP, SEXP HyPara_ListSEXP, SEXP MetrObj_ListSEXP, SEXP Para_ListSEXP, SEXP ParaCL_ListSEXP, SEXP SpatPara_ListSEXP, SEXP DatAug_ListSEXP, SEXP McmcObj_ListSEXP, SEXP RawSamplesSEXP, SEXP InteractiveSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -178,7 +178,7 @@ END_RCPP
 }
 // bfaRcppVaryingLjs
 Rcpp::List bfaRcppVaryingLjs(Rcpp::List DatObj_List, Rcpp::List HyPara_List, Rcpp::List MetrObj_List, Rcpp::List Para_List, Rcpp::List SpatPara_List, Rcpp::List DatAug_List, Rcpp::List McmcObj_List, arma::mat RawSamples, bool Interactive);
-RcppExport SEXP _spatTempBFA_bfaRcppVaryingLjs(SEXP DatObj_ListSEXP, SEXP HyPara_ListSEXP, SEXP MetrObj_ListSEXP, SEXP Para_ListSEXP, SEXP SpatPara_ListSEXP, SEXP DatAug_ListSEXP, SEXP McmcObj_ListSEXP, SEXP RawSamplesSEXP, SEXP InteractiveSEXP) {
+RcppExport SEXP _spatempBFA_bfaRcppVaryingLjs(SEXP DatObj_ListSEXP, SEXP HyPara_ListSEXP, SEXP MetrObj_ListSEXP, SEXP Para_ListSEXP, SEXP SpatPara_ListSEXP, SEXP DatAug_ListSEXP, SEXP McmcObj_ListSEXP, SEXP RawSamplesSEXP, SEXP InteractiveSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -197,7 +197,7 @@ END_RCPP
 }
 // EtaKrigging
 arma::mat EtaKrigging(Rcpp::List DatObj_List, Rcpp::List Para_List, int NKeep, bool Verbose);
-RcppExport SEXP _spatTempBFA_EtaKrigging(SEXP DatObj_ListSEXP, SEXP Para_ListSEXP, SEXP NKeepSEXP, SEXP VerboseSEXP) {
+RcppExport SEXP _spatempBFA_EtaKrigging(SEXP DatObj_ListSEXP, SEXP Para_ListSEXP, SEXP NKeepSEXP, SEXP VerboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -211,7 +211,7 @@ END_RCPP
 }
 // VAR1EtaKrigging
 arma::mat VAR1EtaKrigging(Rcpp::List DatObj_List, Rcpp::List Para_List, int NKeep, bool Verbose);
-RcppExport SEXP _spatTempBFA_VAR1EtaKrigging(SEXP DatObj_ListSEXP, SEXP Para_ListSEXP, SEXP NKeepSEXP, SEXP VerboseSEXP) {
+RcppExport SEXP _spatempBFA_VAR1EtaKrigging(SEXP DatObj_ListSEXP, SEXP Para_ListSEXP, SEXP NKeepSEXP, SEXP VerboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -225,7 +225,7 @@ END_RCPP
 }
 // LambdaKrigging
 arma::mat LambdaKrigging(Rcpp::List DatObj_List, Rcpp::List Para_List, int NKeep, bool Verbose);
-RcppExport SEXP _spatTempBFA_LambdaKrigging(SEXP DatObj_ListSEXP, SEXP Para_ListSEXP, SEXP NKeepSEXP, SEXP VerboseSEXP) {
+RcppExport SEXP _spatempBFA_LambdaKrigging(SEXP DatObj_ListSEXP, SEXP Para_ListSEXP, SEXP NKeepSEXP, SEXP VerboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -239,7 +239,7 @@ END_RCPP
 }
 // AlphaKriggingFixedL
 Rcpp::List AlphaKriggingFixedL(Rcpp::List DatObj_List, Rcpp::List Para_List, int NKeep, bool Verbose);
-RcppExport SEXP _spatTempBFA_AlphaKriggingFixedL(SEXP DatObj_ListSEXP, SEXP Para_ListSEXP, SEXP NKeepSEXP, SEXP VerboseSEXP) {
+RcppExport SEXP _spatempBFA_AlphaKriggingFixedL(SEXP DatObj_ListSEXP, SEXP Para_ListSEXP, SEXP NKeepSEXP, SEXP VerboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -253,7 +253,7 @@ END_RCPP
 }
 // AlphaKriggingVaryLj
 Rcpp::List AlphaKriggingVaryLj(Rcpp::List DatObj_List, Rcpp::List Para_List, int NKeep, bool Verbose);
-RcppExport SEXP _spatTempBFA_AlphaKriggingVaryLj(SEXP DatObj_ListSEXP, SEXP Para_ListSEXP, SEXP NKeepSEXP, SEXP VerboseSEXP) {
+RcppExport SEXP _spatempBFA_AlphaKriggingVaryLj(SEXP DatObj_ListSEXP, SEXP Para_ListSEXP, SEXP NKeepSEXP, SEXP VerboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -267,7 +267,7 @@ END_RCPP
 }
 // YKriggingTemp
 arma::cube YKriggingTemp(Rcpp::List DatObj_List, Rcpp::List Para_List, arma::mat EtaKrig, int NKeep, bool Verbose);
-RcppExport SEXP _spatTempBFA_YKriggingTemp(SEXP DatObj_ListSEXP, SEXP Para_ListSEXP, SEXP EtaKrigSEXP, SEXP NKeepSEXP, SEXP VerboseSEXP) {
+RcppExport SEXP _spatempBFA_YKriggingTemp(SEXP DatObj_ListSEXP, SEXP Para_ListSEXP, SEXP EtaKrigSEXP, SEXP NKeepSEXP, SEXP VerboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -282,7 +282,7 @@ END_RCPP
 }
 // VAR1YKriggingTemp
 arma::cube VAR1YKriggingTemp(Rcpp::List DatObj_List, Rcpp::List Para_List, arma::mat EtaKrig, int NKeep, bool Verbose);
-RcppExport SEXP _spatTempBFA_VAR1YKriggingTemp(SEXP DatObj_ListSEXP, SEXP Para_ListSEXP, SEXP EtaKrigSEXP, SEXP NKeepSEXP, SEXP VerboseSEXP) {
+RcppExport SEXP _spatempBFA_VAR1YKriggingTemp(SEXP DatObj_ListSEXP, SEXP Para_ListSEXP, SEXP EtaKrigSEXP, SEXP NKeepSEXP, SEXP VerboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -297,7 +297,7 @@ END_RCPP
 }
 // YKriggingSpat
 arma::cube YKriggingSpat(Rcpp::List DatObj_List, Rcpp::List Para_List, arma::mat LambdaKrig, int NKeep, bool Verbose);
-RcppExport SEXP _spatTempBFA_YKriggingSpat(SEXP DatObj_ListSEXP, SEXP Para_ListSEXP, SEXP LambdaKrigSEXP, SEXP NKeepSEXP, SEXP VerboseSEXP) {
+RcppExport SEXP _spatempBFA_YKriggingSpat(SEXP DatObj_ListSEXP, SEXP Para_ListSEXP, SEXP LambdaKrigSEXP, SEXP NKeepSEXP, SEXP VerboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -312,7 +312,7 @@ END_RCPP
 }
 // UpdateLjVec
 arma::colvec UpdateLjVec(arma::mat const& U, arma::field<arma::mat> Weights, int K, int M, int O, arma::colvec LjVec);
-RcppExport SEXP _spatTempBFA_UpdateLjVec(SEXP USEXP, SEXP WeightsSEXP, SEXP KSEXP, SEXP MSEXP, SEXP OSEXP, SEXP LjVecSEXP) {
+RcppExport SEXP _spatempBFA_UpdateLjVec(SEXP USEXP, SEXP WeightsSEXP, SEXP KSEXP, SEXP MSEXP, SEXP OSEXP, SEXP LjVecSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -328,7 +328,7 @@ END_RCPP
 }
 // UpdateAlpha
 arma::field<arma::mat> UpdateAlpha(arma::field<arma::mat> Alpha, int K, int M, int O, arma::colvec LjVec);
-RcppExport SEXP _spatTempBFA_UpdateAlpha(SEXP AlphaSEXP, SEXP KSEXP, SEXP MSEXP, SEXP OSEXP, SEXP LjVecSEXP) {
+RcppExport SEXP _spatempBFA_UpdateAlpha(SEXP AlphaSEXP, SEXP KSEXP, SEXP MSEXP, SEXP OSEXP, SEXP LjVecSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -343,7 +343,7 @@ END_RCPP
 }
 // GetWeightsVaryLj
 arma::field<arma::mat> GetWeightsVaryLj(arma::field<arma::mat> Alpha, int K, int M, int O, arma::colvec LjVec);
-RcppExport SEXP _spatTempBFA_GetWeightsVaryLj(SEXP AlphaSEXP, SEXP KSEXP, SEXP MSEXP, SEXP OSEXP, SEXP LjVecSEXP) {
+RcppExport SEXP _spatempBFA_GetWeightsVaryLj(SEXP AlphaSEXP, SEXP KSEXP, SEXP MSEXP, SEXP OSEXP, SEXP LjVecSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -358,7 +358,7 @@ END_RCPP
 }
 // GetWeightsFixedL
 arma::cube GetWeightsFixedL(arma::cube const& Alpha, int K, int M, int L, int O);
-RcppExport SEXP _spatTempBFA_GetWeightsFixedL(SEXP AlphaSEXP, SEXP KSEXP, SEXP MSEXP, SEXP LSEXP, SEXP OSEXP) {
+RcppExport SEXP _spatempBFA_GetWeightsFixedL(SEXP AlphaSEXP, SEXP KSEXP, SEXP MSEXP, SEXP LSEXP, SEXP OSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -373,7 +373,7 @@ END_RCPP
 }
 // GetLogWeightsFixedL
 arma::cube GetLogWeightsFixedL(arma::cube const& Alpha, int K, int M, int L, int O);
-RcppExport SEXP _spatTempBFA_GetLogWeightsFixedL(SEXP AlphaSEXP, SEXP KSEXP, SEXP MSEXP, SEXP LSEXP, SEXP OSEXP) {
+RcppExport SEXP _spatempBFA_GetLogWeightsFixedL(SEXP AlphaSEXP, SEXP KSEXP, SEXP MSEXP, SEXP LSEXP, SEXP OSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -388,7 +388,7 @@ END_RCPP
 }
 // CholInv
 arma::mat CholInv(arma::mat const& Cov);
-RcppExport SEXP _spatTempBFA_CholInv(SEXP CovSEXP) {
+RcppExport SEXP _spatempBFA_CholInv(SEXP CovSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -399,7 +399,7 @@ END_RCPP
 }
 // whichJsCalc
 arma::field<arma::mat> whichJsCalc(arma::umat nnInd);
-RcppExport SEXP _spatTempBFA_whichJsCalc(SEXP nnIndSEXP) {
+RcppExport SEXP _spatempBFA_whichJsCalc(SEXP nnIndSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -410,7 +410,7 @@ END_RCPP
 }
 // getCloseNNDmat
 arma::mat getCloseNNDmat(arma::mat matx);
-RcppExport SEXP _spatTempBFA_getCloseNNDmat(SEXP matxSEXP) {
+RcppExport SEXP _spatempBFA_getCloseNNDmat(SEXP matxSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -421,7 +421,7 @@ END_RCPP
 }
 // getCholRobust
 arma::mat getCholRobust(arma::mat matx);
-RcppExport SEXP _spatTempBFA_getCholRobust(SEXP matxSEXP) {
+RcppExport SEXP _spatempBFA_getCholRobust(SEXP matxSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -432,39 +432,39 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_spatTempBFA_GetRooti", (DL_FUNC) &_spatTempBFA_GetRooti, 1},
-    {"_spatTempBFA_getRootiH", (DL_FUNC) &_spatTempBFA_getRootiH, 4},
-    {"_spatTempBFA_getInvH", (DL_FUNC) &_spatTempBFA_getInvH, 4},
-    {"_spatTempBFA_getH", (DL_FUNC) &_spatTempBFA_getH, 5},
-    {"_spatTempBFA_SpEXP", (DL_FUNC) &_spatTempBFA_SpEXP, 2},
-    {"_spatTempBFA_GetLogLik", (DL_FUNC) &_spatTempBFA_GetLogLik, 4},
-    {"_spatTempBFA_GetLogLikMean", (DL_FUNC) &_spatTempBFA_GetLogLikMean, 2},
-    {"_spatTempBFA_SamplePPD", (DL_FUNC) &_spatTempBFA_SamplePPD, 4},
-    {"_spatTempBFA_VAR1bfaRcppFixedL", (DL_FUNC) &_spatTempBFA_VAR1bfaRcppFixedL, 10},
-    {"_spatTempBFA_VAR1bfaRcppVaryingLjs", (DL_FUNC) &_spatTempBFA_VAR1bfaRcppVaryingLjs, 9},
-    {"_spatTempBFA_bfaRcppFixedL", (DL_FUNC) &_spatTempBFA_bfaRcppFixedL, 10},
-    {"_spatTempBFA_bfaRcppVaryingLjs", (DL_FUNC) &_spatTempBFA_bfaRcppVaryingLjs, 9},
-    {"_spatTempBFA_EtaKrigging", (DL_FUNC) &_spatTempBFA_EtaKrigging, 4},
-    {"_spatTempBFA_VAR1EtaKrigging", (DL_FUNC) &_spatTempBFA_VAR1EtaKrigging, 4},
-    {"_spatTempBFA_LambdaKrigging", (DL_FUNC) &_spatTempBFA_LambdaKrigging, 4},
-    {"_spatTempBFA_AlphaKriggingFixedL", (DL_FUNC) &_spatTempBFA_AlphaKriggingFixedL, 4},
-    {"_spatTempBFA_AlphaKriggingVaryLj", (DL_FUNC) &_spatTempBFA_AlphaKriggingVaryLj, 4},
-    {"_spatTempBFA_YKriggingTemp", (DL_FUNC) &_spatTempBFA_YKriggingTemp, 5},
-    {"_spatTempBFA_VAR1YKriggingTemp", (DL_FUNC) &_spatTempBFA_VAR1YKriggingTemp, 5},
-    {"_spatTempBFA_YKriggingSpat", (DL_FUNC) &_spatTempBFA_YKriggingSpat, 5},
-    {"_spatTempBFA_UpdateLjVec", (DL_FUNC) &_spatTempBFA_UpdateLjVec, 6},
-    {"_spatTempBFA_UpdateAlpha", (DL_FUNC) &_spatTempBFA_UpdateAlpha, 5},
-    {"_spatTempBFA_GetWeightsVaryLj", (DL_FUNC) &_spatTempBFA_GetWeightsVaryLj, 5},
-    {"_spatTempBFA_GetWeightsFixedL", (DL_FUNC) &_spatTempBFA_GetWeightsFixedL, 5},
-    {"_spatTempBFA_GetLogWeightsFixedL", (DL_FUNC) &_spatTempBFA_GetLogWeightsFixedL, 5},
-    {"_spatTempBFA_CholInv", (DL_FUNC) &_spatTempBFA_CholInv, 1},
-    {"_spatTempBFA_whichJsCalc", (DL_FUNC) &_spatTempBFA_whichJsCalc, 1},
-    {"_spatTempBFA_getCloseNNDmat", (DL_FUNC) &_spatTempBFA_getCloseNNDmat, 1},
-    {"_spatTempBFA_getCholRobust", (DL_FUNC) &_spatTempBFA_getCholRobust, 1},
+    {"_spatempBFA_GetRooti", (DL_FUNC) &_spatempBFA_GetRooti, 1},
+    {"_spatempBFA_getRootiH", (DL_FUNC) &_spatempBFA_getRootiH, 4},
+    {"_spatempBFA_getInvH", (DL_FUNC) &_spatempBFA_getInvH, 4},
+    {"_spatempBFA_getH", (DL_FUNC) &_spatempBFA_getH, 5},
+    {"_spatempBFA_SpEXP", (DL_FUNC) &_spatempBFA_SpEXP, 2},
+    {"_spatempBFA_GetLogLik", (DL_FUNC) &_spatempBFA_GetLogLik, 4},
+    {"_spatempBFA_GetLogLikMean", (DL_FUNC) &_spatempBFA_GetLogLikMean, 2},
+    {"_spatempBFA_SamplePPD", (DL_FUNC) &_spatempBFA_SamplePPD, 4},
+    {"_spatempBFA_VAR1bfaRcppFixedL", (DL_FUNC) &_spatempBFA_VAR1bfaRcppFixedL, 10},
+    {"_spatempBFA_VAR1bfaRcppVaryingLjs", (DL_FUNC) &_spatempBFA_VAR1bfaRcppVaryingLjs, 9},
+    {"_spatempBFA_bfaRcppFixedL", (DL_FUNC) &_spatempBFA_bfaRcppFixedL, 10},
+    {"_spatempBFA_bfaRcppVaryingLjs", (DL_FUNC) &_spatempBFA_bfaRcppVaryingLjs, 9},
+    {"_spatempBFA_EtaKrigging", (DL_FUNC) &_spatempBFA_EtaKrigging, 4},
+    {"_spatempBFA_VAR1EtaKrigging", (DL_FUNC) &_spatempBFA_VAR1EtaKrigging, 4},
+    {"_spatempBFA_LambdaKrigging", (DL_FUNC) &_spatempBFA_LambdaKrigging, 4},
+    {"_spatempBFA_AlphaKriggingFixedL", (DL_FUNC) &_spatempBFA_AlphaKriggingFixedL, 4},
+    {"_spatempBFA_AlphaKriggingVaryLj", (DL_FUNC) &_spatempBFA_AlphaKriggingVaryLj, 4},
+    {"_spatempBFA_YKriggingTemp", (DL_FUNC) &_spatempBFA_YKriggingTemp, 5},
+    {"_spatempBFA_VAR1YKriggingTemp", (DL_FUNC) &_spatempBFA_VAR1YKriggingTemp, 5},
+    {"_spatempBFA_YKriggingSpat", (DL_FUNC) &_spatempBFA_YKriggingSpat, 5},
+    {"_spatempBFA_UpdateLjVec", (DL_FUNC) &_spatempBFA_UpdateLjVec, 6},
+    {"_spatempBFA_UpdateAlpha", (DL_FUNC) &_spatempBFA_UpdateAlpha, 5},
+    {"_spatempBFA_GetWeightsVaryLj", (DL_FUNC) &_spatempBFA_GetWeightsVaryLj, 5},
+    {"_spatempBFA_GetWeightsFixedL", (DL_FUNC) &_spatempBFA_GetWeightsFixedL, 5},
+    {"_spatempBFA_GetLogWeightsFixedL", (DL_FUNC) &_spatempBFA_GetLogWeightsFixedL, 5},
+    {"_spatempBFA_CholInv", (DL_FUNC) &_spatempBFA_CholInv, 1},
+    {"_spatempBFA_whichJsCalc", (DL_FUNC) &_spatempBFA_whichJsCalc, 1},
+    {"_spatempBFA_getCloseNNDmat", (DL_FUNC) &_spatempBFA_getCloseNNDmat, 1},
+    {"_spatempBFA_getCholRobust", (DL_FUNC) &_spatempBFA_getCholRobust, 1},
     {NULL, NULL, 0}
 };
 
-RcppExport void R_init_spatTempBFA(DllInfo *dll) {
+RcppExport void R_init_spatempBFA(DllInfo *dll) {
     R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
     R_useDynamicSymbols(dll, FALSE);
 }

@@ -1,7 +1,7 @@
 rm(list=ls())
 library(mvtnorm)
 library(fields)
-library(spatTempBFA)
+library(spatempBFA)
 N <- 10
 K <- 3
 O <- 1

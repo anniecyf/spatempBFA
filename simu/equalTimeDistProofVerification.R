@@ -216,7 +216,7 @@ max(abs(rootiH%*%t(rootiH) - HpsiInv))#1.776357e-15
 max(abs(L%*%D%*%t(L)-Hpsi))#1.110223e-16
 ##### SamplePsi() subsequent verification trials #####
 rm(list=ls())
-setwd("spatTempBFA/src")
+setwd("spatempBFA/src")
 sourceCpp("CovarianceFunctions.cpp")
 Nu <- 27
 d <- 6
