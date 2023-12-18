@@ -167,6 +167,8 @@ struct VAR1hypara {
     double ARho;
     double BRho;
     double Zeta;
+    arma::mat V;
+    arma::colvec Mvec;
     arma::mat Omega;
     arma::mat BigTheta;
     arma::colvec SigmaBetaInvMuBeta;

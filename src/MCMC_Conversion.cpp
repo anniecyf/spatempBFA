@@ -327,6 +327,8 @@ VAR1hypara VAR1ConvertHyPara(Rcpp::List HyPara_List) {
   double ARho = HyPara_List["ARho"];
   double BRho = HyPara_List["BRho"];
   double Zeta = HyPara_List["Zeta"];
+  arma::mat V = HyPara_List["V"];
+  arma::colvec Mvec = HyPara_List["Mvec"];
   arma::mat Omega = HyPara_List["Omega"];
   arma::mat BigTheta = HyPara_List["BigTheta"];
   arma::colvec SigmaBetaInvMuBeta = HyPara_List["SigmaBetaInvMuBeta"];
@@ -342,6 +344,8 @@ VAR1hypara VAR1ConvertHyPara(Rcpp::List HyPara_List) {
   HyPara.ARho = ARho;
   HyPara.BRho = BRho;
   HyPara.Zeta = Zeta;
+  HyPara.V = V;
+  HyPara.Mvec = Mvec;
   HyPara.Omega = Omega;
   HyPara.BigTheta = BigTheta;
   HyPara.SigmaBetaInvMuBeta = SigmaBetaInvMuBeta;

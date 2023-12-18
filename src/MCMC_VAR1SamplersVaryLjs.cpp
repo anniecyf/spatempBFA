@@ -274,9 +274,22 @@ VAR1paraVaryLj SampleBeta(VAR1datobjVaryLj DatObj, VAR1paraVaryLj Para, VAR1hypa
 
 //Function to sample new value of A using a Metropolis sampler step-----------------------------------------------
 VAR1paraVaryLj SampleA(VAR1datobjVaryLj DatObj, VAR1paraVaryLj Para, VAR1hypara HyPara) {
-  arma::mat A = Para.A;
-  Para.A = A;
-  return Para;
+    int K = DatObj.K;
+    int Nu = DatObj.Nu;
+    arma::mat eyeK(K, K, arma::fill::eye);
+    arma::mat Upsilon = Para.Upsilon;
+    arma::mat BigPhi = Para.BigPhi; // k x T
+    arma::mat V = HyPara.V; //k x k
+    arma::colvec Mvec = HyPara.Mvec;//of length k^2
+    arma::mat Vinv = CholInv(V);
+    BigPhi.shed_col(Nu - 1);
+    arma::mat VA = CholInv(BigPhi * arma::trans(BigPhi) + Vinv); // note that \eta_0 is a vector of length k
+    arma::colvec meanVec = arma::kron(VA * Vinv, eyeK) * Mvec;
+    arma::mat CovMat = arma::kron(VA, Upsilon);
+    arma::colvec avec = rmvnormRcpp(1, meanVec, CovMat);
+    arma::mat A = arma::reshape(avec, K, K);//k x k
+    Para.A = A;
+    return Para;
 }
 
 

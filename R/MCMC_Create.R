@@ -645,6 +645,22 @@ VAR1CreateHyPara <- function(hypers, DatObj) {
       Omega <- diag(K)
     }
   }
+
+  ###Set hyperparameters for A
+  if ("A" %in% Userhypers) {
+    V <- hypers$A$V
+    Mvec <- matrix(hypers$A$Mvec, nrow = K, ncol = K)
+  } else { # if (!("A" %in% Userhypers)) 
+    M <- 0.8 * diag(K)
+    Mvec <- matrix(M, ncol = 1)
+    if (K == 1) {
+      V <- 0.001 * diag(K)
+    } else if (K <= 4) {
+      V <- 0.1 * diag(K)
+    } else {
+      V <- diag(K)
+    }
+  }
   
   ###Create object for hyperparameters
   HyPara <- list()
@@ -655,6 +671,8 @@ VAR1CreateHyPara <- function(hypers, DatObj) {
   HyPara$A1 <- A1
   HyPara$A2 <- A2
   HyPara$Zeta <- Zeta
+  HyPara$V <- V
+  HyPara$Mvec <- Mvec
   HyPara$Omega <- Omega
   HyPara$ARho <- ARho
   HyPara$BRho <- BRho
@@ -1139,6 +1157,7 @@ VAR1CreateParaVaryingLjs <- function(starting, DatObj, HyPara, LjVec) {
   FamilyInd <- DatObj$FamilyInd
   X <- DatObj$X
   GS <- DatObj$GS
+  EyeNu <- diag(Nu)
   
   ###Which parameters are user defined?
   UserStarters <- names(starting)
