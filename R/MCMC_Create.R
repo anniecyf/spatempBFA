@@ -649,10 +649,10 @@ VAR1CreateHyPara <- function(hypers, DatObj) {
   ###Set hyperparameters for A
   if ("A" %in% Userhypers) {
     V <- hypers$A$V
-    Mvec <- matrix(hypers$A$Mvec, nrow = K, ncol = K)
+    Mvec <- matrix(hypers$A$Mvec, ncol =1) # k^2 x 1
   } else { # if (!("A" %in% Userhypers)) 
     M <- 0.8 * diag(K)
-    Mvec <- matrix(M, ncol = 1)
+    Mvec <- matrix(M, ncol = 1) # k^2 x 1
     if (K == 1) {
       V <- 0.001 * diag(K)
     } else if (K <= 4) {
