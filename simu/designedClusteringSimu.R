@@ -30,7 +30,7 @@ colnames(nkeep10AccuRatio) <- colnames(nkeep100AccuRatio) <- colnames(nkeep1000A
 calcRandIndex <- function(predictedCluster, actualGroup, numObs){
   denominator <- numObs * (numObs-1) / 2
   numerator <- denominator
-  for (i in 1:numObs){
+  for (i in 1:(numObs-1)){
     for (j in (i + 1):numObs){
       if ( (predictedCluster[i]==predictedCluster[j]) + (actualGroup[i]==actualGroup[j]) == 1) numerator = numerator - 1
     }

@@ -72,8 +72,8 @@ include: \code{"normal"}, \code{"probit"}, \code{"tobit"}, and \code{"binomial"}
 
  When \code{NULL} is chosen then default hyperparameter values are automatically
  generated. These default hyperparameters are described in detail in (Berchuck et al.).
- Otherwise a \code{list} must be provided with names \code{Beta}, \code{Delta}, \code{Sigma2}, \code{Kappa}, \code{Rho}, or \code{Upsilon}
- containing further hyperparameter information. These objects are themselves
+ Otherwise a \code{list} must be provided with names \code{Beta}, \code{Delta}, \code{Sigma2}, \code{Kappa}, \code{Rho}, 
+ \code{Upsilon}, or \code{A} containing further hyperparameter information. These objects are themselves
  \code{lists} and may be constructed as follows.
 
  \code{Beta} is a \code{list} with two objects, \code{MuBeta} and \code{SigmaBeta}. These values represent the prior mean and variance 
@@ -96,7 +96,10 @@ include: \code{"normal"}, \code{"probit"}, \code{"tobit"}, and \code{"binomial"}
  \code{Upsilon} is a \code{list} with two objects,
  \code{Zeta} and \code{Omega}. \code{Zeta} represents the degrees of freedom parameter for the
  inverse-Wishart hyperprior and must be a real number scalar, while \code{Omega} represents
- the scale matrix and must be a \code{K x K} dimensional positive definite matrix.}
+ the scale matrix and must be a \code{K x K} dimensional positive definite matrix.
+ 
+ \code{A} is a \code{list} with two objects, \code{V} and \code{Mvec}. 
+ \code{V} is a \code{K x K} dimensional positive definite matrix, and \code{Mvec} is a scale vector of length \code{K^2}.}
 
 \item{tuning}{Either \code{NULL} or a \code{list} containing tuning values
  to be specified for the MCMC Metropolis steps. If \code{NULL} is not chosen then all

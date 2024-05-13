@@ -44,7 +44,7 @@ double randuRcpp() {
 
 
 
-//Function for sampling random standard uniform variable-----------------------------------
+//Function for sampling random binomial variable-----------------------------------
 double rbinomRcpp(double n, double p) {
   return R::rbinom(n, p);
 }

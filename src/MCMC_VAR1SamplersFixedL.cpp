@@ -282,12 +282,19 @@ VAR1paraFixedL SampleA(VAR1datobjFixedL DatObj, VAR1paraFixedL Para, VAR1hypara 
     arma::mat eyeK(K, K, arma::fill::eye);
     arma::mat Upsilon = Para.Upsilon;
     arma::mat BigPhi = Para.BigPhi; // k x T
+    arma::mat BigPhishedcolT = BigPhi;
     arma::mat V = HyPara.V; //k x k
     arma::colvec Mvec = HyPara.Mvec;//of length k^2
     arma::mat Vinv = CholInv(V);
-    BigPhi.shed_col(Nu - 1);
-    arma::mat VA = CholInv(BigPhi * arma::trans(BigPhi) + Vinv); // note that \eta_0 is a vector of length k
+    BigPhishedcolT.shed_col(Nu - 1);
+    arma::mat VA = CholInv(BigPhishedcolT * arma::trans(BigPhishedcolT) + Vinv); // note that \eta_0 is a vector of length k
     arma::colvec meanVec = arma::kron(VA * Vinv, eyeK) * Mvec;
+    arma::colvec etaTminus1(K, arma::fill::zeros), etaT(K);
+    for (arma::uword t = 0; t < Nu; t++) {
+        if (t > 0) { etaTminus1 = etaT; }
+        etaT = BigPhi.col(t);
+        meanVec += arma::kron(VA * etaTminus1, eyeK) * etaT;
+    }
     arma::mat CovMat = arma::kron(VA, Upsilon);
     arma::colvec avec = rmvnormRcpp(1, meanVec, CovMat);
     arma::mat A = arma::reshape(avec, K, K);//k x k
