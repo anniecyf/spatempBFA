@@ -181,14 +181,14 @@
 #'
 #'   \item{\code{alpha}}{A \code{list} of posterior samples for \code{alpha}. The list contains \code{K x NKeep} elements (ordered by column, i.e., the first K components of the list correspond to the first kept iteration and so on), 
 #'   each of which is a \code{matrix} of dimension \code{(Lj - 1) x (M x O)} for \code{Lj} at that MCMC iteration. If \code{Lj = 1} for a certain \code{j}
-#'   at a particular MCMC iteration, then that corresponding \code{matrix} in \code{alpha} is of dimension \code{1 x (M x O)} with entries all set to +Inf.}
+#'   at a particular MCMC iteration, then that corresponding \code{matrix} in \code{alpha} is of dimension \code{1 x (M x O)} with entries all set to +Inf.
 #'   In each element matrix for each clustering group, the corresponding entries are ordered first by observation type, then spatially.
-#'   (the first O correspond to the first location point, the next O correspond to the second location point and so on)
+#'   (the first O correspond to the first location point, the next O correspond to the second location point and so on)}
 #'
 #'   \item{\code{weights}}{A \code{list} of posterior samples for \code{weights}. The list contains \code{K x NKeep} elements (ordered by column), 
-#'   each of which is a \code{matrix} of dimension \code{Lj x (M x O)} for \code{Lj} at that MCMC iteration.}
+#'   each of which is a \code{matrix} of dimension \code{Lj x (M x O)} for \code{Lj} at that MCMC iteration.
 #'   In each element matrix for each clustering group, the corresponding entries are ordered first spatially, then by observation type.
-#'   (the first M correspond to the first observation type, the next M correspond to the second observation type and so on)
+#'   (the first M correspond to the first observation type, the next M correspond to the second observation type and so on)}
 #'
 #'   \item{\code{metropolis}}{\code{2 (or 1) x 3} \code{matrix} of metropolis
 #'   acceptance rates, updated tuners, and original tuners that result from the pilot

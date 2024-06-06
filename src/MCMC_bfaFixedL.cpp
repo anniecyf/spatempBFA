@@ -102,7 +102,7 @@ Rcpp::List bfaRcppFixedL(Rcpp::List DatObj_List,  Rcpp::List HyPara_List,
             }
         }
         else {// when BNP == 0
-            //Gibbs steps for Alpha and Kappa
+            //Gibbs steps for Lambda and Kappa
             if (scenario == 1) {
                 Para = SampleLambda(DatObj, Para, SpatPara1);
                 Para = SampleKappa(DatObj, Para, SpatPara1, HyPara);

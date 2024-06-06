@@ -197,13 +197,13 @@ Default is FALSE.}
 
   \item{\code{theta}}{\code{NKeep x (L x K)} \code{matrix} of posterior samples for \code{theta}.}
 
-  \item{\code{alpha}}{\code{NKeep x (M x O x K x (L - 1)} \code{matrix} of posterior samples for \code{alpha}.}
+  \item{\code{alpha}}{\code{NKeep x (M x O x K x (L - 1)} \code{matrix} of posterior samples for \code{alpha}.
   For each kept row (MCMC iteration) in \code{alpha}, the corresponding entries are ordered first by observation type, then spatially, 
-  then by clustering group, and finally by factor.
+  then by clustering group, and finally by factor.}
 
-  \item{\code{weights}}{\code{NKeep x (M x O x K x L)} \code{matrix} of posterior samples for \code{weights}.}
+  \item{\code{weights}}{\code{NKeep x (M x O x K x L)} \code{matrix} of posterior samples for \code{weights}.
   For each kept row (MCMC iteration) in \code{weights}, the corresponding entries are ordered first spatially, then by observation type, 
-  then by clustering group, and finally by factor.
+  then by clustering group, and finally by factor.}
 
   \item{\code{metropolis}}{\code{2 (or 1) x 3} \code{matrix} of metropolis
   acceptance rates, updated tuners, and original tuners that result from the pilot
