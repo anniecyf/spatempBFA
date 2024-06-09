@@ -7,7 +7,8 @@ library(credentials)
 usethis::use_git_config(user.name = "anniecyf", user.email = "annieffcheng@gmail.com")
 credentials::set_github_pat() #PAT: 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
 remotes::install_github("anniecyf/spatempBFA", dependencies = TRUE)
-# install_github("anniecyf/spatTempBFA", dependencies = TRUE)
+# setwd("C:/Users/annie/OneDrive - National University of Singapore/Documents/PhD/research/first paper/paper1 JCGS/spatempBFA")
+# load_all(".")
 library(spatempBFA)
 K <- 5
 O <- 2
@@ -59,7 +60,7 @@ for(j in 1:K){
   for(l in 1:Lj){
     w[[j]][,l] <- w[[j]][,l]*temp
     if(l<Lj) {
-      alphaJLreordered <- as.vector(matrix(Alpha[[j]][,l], O, M))
+      alphaJLreordered <- as.vector(t(matrix(Alpha[[j]][,l], O, M)))
       temp <- temp * pnorm(alphaJLreordered, lower.tail = FALSE)
     }
   }
@@ -72,7 +73,6 @@ for(j in 1:K){
   for(row in 1:(M*O)){
     Xi[row,j] <- sample(Lj, size=1, prob=wj[row,])
   }
-  #Xi[,j] <- apply(wj, 1, sample, x=1:Lj, replace=FALSE, size = 1)
 }
 ### 9) actual Delta
 a1=1; a2=10

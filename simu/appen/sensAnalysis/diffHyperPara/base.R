@@ -2,14 +2,8 @@ rm(list=ls())
 library(mvtnorm)
 library(fields)
 library(devtools) 
-setwd("C:/Users/annie/OneDrive - National University of Singapore/Documents/PhD/research/server/spatempBFA")
+setwd("C:/Users/annie/OneDrive - National University of Singapore/Documents/PhD/research/first paper/paper1 JCGS/spatempBFA")
 load_all(".")
-# library(usethis)
-# library(credentials)
-# usethis::use_git_config(user.name = "anniecyf", user.email = "annieffcheng@gmail.com")
-# credentials::set_github_pat() #PAT: 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
-# remotes::install_github("anniecyf/spatTempBFA", dependencies = TRUE)
-# install_github("anniecyf/spatTempBFA", dependencies = TRUE)
 library(spatempBFA)
 K <- 6
 O <- 1
@@ -77,9 +71,7 @@ for(j in 1:K){
 }
 Lambda <- matrix(0, M*O, K)
 for(j in 1:K){
-  for(i in 1:M){
-    Lambda[i,j] = Theta[[j]][Xi[i,j]]
-  }
+  Lambda[,j] = Theta[[j]][Xi[,j]]
 }
 
 Sigma.NuMO <- rnorm(Nu * M * O, sd = sqrt(sigma2))
@@ -207,10 +199,7 @@ save(Diags.sequenVaryLj, file = "regVaryLjsimuSequenT30M900Iter200DiagsNostoreal
 Deviance.sequenVaryLj <- as.mcmc(Diags.sequenVaryLj$deviance)
 save(Deviance.sequenVaryLj, file = "regVaryLjsimuSequenT30M900Iter200DevianceNostorealphaweight.RData")
 
-GibbsStepTimeFixedLfullGP <- regFixedL.simu$GibbsStepTime
-GibbsStepTimeFixedLblock <- regFixedL.simu.block$GibbsStepTime
-GibbsStepTimeFixedLsequen <- regFixedL.simu.sequen$GibbsStepTime
-GibbsStepTimeVaryLjSequen <- regVaryLj.simu.sequen$GibbsStepTime
+
 
 
 

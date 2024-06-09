@@ -2,15 +2,11 @@ rm(list=ls())
 library(mvtnorm)
 library(fields)
 library(devtools) 
-# setwd("C:/Users/annie/OneDrive - National University of Singapore/Documents/PhD/research/GitHub desktop repos/spatTempBFA")
-# load_all(".")
 library(usethis)
 library(credentials)
 usethis::use_git_config(user.name = "anniecyf", user.email = "annieffcheng@gmail.com")
 credentials::set_github_pat() #PAT: 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
 remotes::install_github("anniecyf/spatempBFA", dependencies = TRUE)
-# install_github("anniecyf/spatTempBFA", dependencies = TRUE)
-# library(spatTempBFA)
 library(spatempBFA)
 K <- 3
 O <- 1
