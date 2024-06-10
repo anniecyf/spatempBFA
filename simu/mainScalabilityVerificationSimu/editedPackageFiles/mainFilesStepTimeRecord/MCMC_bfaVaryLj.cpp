@@ -58,7 +58,7 @@ Rcpp::List bfaRcppVaryingLjs(Rcpp::List DatObj_List,  Rcpp::List HyPara_List,
   arma::mat GibbsStepTime(10, NKeep, arma::fill::zeros);
   //std::time_t t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16, t17;
   arma::colvec GibbsStepTimeVec(10, arma::fill::zeros);//auto time1 = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
-  //ctime -- t1 = std::time(nullptr); double time1 = std::difftime(t2, t1);// in seconds
+  //ctime -- t1 = std::time(nullptr); double time1 = std::difftime(t2, t1);// in seconds (precision not good)
    
   //User output
   BeginBurnInProgress(McmcObj, Interactive);
@@ -194,8 +194,8 @@ Rcpp::List bfaRcppVaryingLjs(Rcpp::List DatObj_List,  Rcpp::List HyPara_List,
     GibbsStepTimeVec(1) = static_cast<double>(std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t2).count()); // for xi
     GibbsStepTimeVec(2) = static_cast<double>(std::chrono::duration_cast<std::chrono::milliseconds>(t5 - t4).count()); // for theta
     GibbsStepTimeVec(3) = static_cast<double>(std::chrono::duration_cast<std::chrono::milliseconds>(t7 - t6).count()); // for delta
-    //GibbsStepTimeVec(4) = static_cast<double>(std::chrono::duration_cast<std::chrono::milliseconds>(t9 - t8).count()); // for alpha
-    //GibbsStepTimeVec(5) = static_cast<double>(std::chrono::duration_cast<std::chrono::milliseconds>(t10 - t9).count()); // for kappa
+    //GibbsStepTimeVec(4) = std::difftime(t9, t8); // for alpha
+    //GibbsStepTimeVec(5) = std::difftime(t10, t9); // for kappa
     GibbsStepTimeVec(7) = static_cast<double>(std::chrono::duration_cast<std::chrono::milliseconds>(t14 - t13).count()); // for eta
     GibbsStepTimeVec(8) = static_cast<double>(std::chrono::duration_cast<std::chrono::milliseconds>(t15 - t14).count()); // for upsilon
     int numTotalPara = size(RawSamples, 0);

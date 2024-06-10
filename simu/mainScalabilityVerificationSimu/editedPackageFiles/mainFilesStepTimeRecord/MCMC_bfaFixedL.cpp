@@ -52,7 +52,7 @@ Rcpp::List bfaRcppFixedL(Rcpp::List DatObj_List,  Rcpp::List HyPara_List,
     arma::mat GibbsStepTime(10, NKeep, arma::fill::zeros);
     //std::time_t t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16, t17;
     arma::colvec GibbsStepTimeVec(10, arma::fill::zeros);//auto time1 = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
-    //ctime -- t1 = std::time(nullptr); double time1 = std::difftime(t2, t1);// in seconds
+    //ctime -- t1 = std::time(nullptr); double time1 = std::difftime(t2, t1);// in seconds (precision not good)
     int keptIter = 0;
     bool storePostPara = false;
 
@@ -134,8 +134,8 @@ Rcpp::List bfaRcppFixedL(Rcpp::List DatObj_List,  Rcpp::List HyPara_List,
                 GibbsStepTimeVec(4) = static_cast<double>(std::chrono::duration_cast<std::chrono::milliseconds>(t9 - t8).count()); // for alpha
                 GibbsStepTimeVec(5) = static_cast<double>(std::chrono::duration_cast<std::chrono::milliseconds>(t10 - t9).count()); // for kappa
             }
-            //GibbsStepTimeVec(4) = static_cast<double>(std::chrono::duration_cast<std::chrono::milliseconds>(t9 - t8).count()); // for alpha
-            //GibbsStepTimeVec(5) = static_cast<double>(std::chrono::duration_cast<std::chrono::milliseconds>(t10 - t9).count()); // for kappa
+            //GibbsStepTimeVec(4) = std::difftime(t9, t8); // for alpha
+            //GibbsStepTimeVec(5) = std::difftime(t10, t9); // for kappa
         }
         else {// when BNP == 0
             //Gibbs steps for Lambda and Kappa
@@ -145,7 +145,7 @@ Rcpp::List bfaRcppFixedL(Rcpp::List DatObj_List,  Rcpp::List HyPara_List,
                 auto t9 = std::chrono::high_resolution_clock::now();
                 Para = SampleKappa(DatObj, Para, SpatPara1, HyPara);
                 auto t10 = std::chrono::high_resolution_clock::now();
-                GibbsStepTimeVec(4) = static_cast<double>(std::chrono::duration_cast<std::chrono::milliseconds>(t9 - t8).count()); // for alpha
+                GibbsStepTimeVec(4) = static_cast<double>(std::chrono::duration_cast<std::chrono::milliseconds>(t9 - t8).count()); // for lambda
                 GibbsStepTimeVec(5) = static_cast<double>(std::chrono::duration_cast<std::chrono::milliseconds>(t10 - t9).count()); // for kappa
             }
             else {//scenario must == 2 in this case
@@ -154,11 +154,11 @@ Rcpp::List bfaRcppFixedL(Rcpp::List DatObj_List,  Rcpp::List HyPara_List,
                 auto t9 = std::chrono::high_resolution_clock::now();
                 Para = SampleKappa(DatObj, Para, SpatPara2, HyPara);
                 auto t10 = std::chrono::high_resolution_clock::now();
-                GibbsStepTimeVec(4) = static_cast<double>(std::chrono::duration_cast<std::chrono::milliseconds>(t9 - t8).count()); // for alpha
+                GibbsStepTimeVec(4) = static_cast<double>(std::chrono::duration_cast<std::chrono::milliseconds>(t9 - t8).count()); // for lambda
                 GibbsStepTimeVec(5) = static_cast<double>(std::chrono::duration_cast<std::chrono::milliseconds>(t10 - t9).count()); // for kappa
             }
-            //GibbsStepTimeVec(4) = static_cast<double>(std::chrono::duration_cast<std::chrono::milliseconds>(t9 - t8).count()); // for lambda
-            //GibbsStepTimeVec(5) = static_cast<double>(std::chrono::duration_cast<std::chrono::milliseconds>(t10 - t9).count()); // for kappa
+            //GibbsStepTimeVec(4) = std::difftime(t9, t8); // for lambda
+            //GibbsStepTimeVec(5) = std::difftime(t10, t9); // for kappa
         }
 
         //Metropolis step for Rho
@@ -187,7 +187,7 @@ Rcpp::List bfaRcppFixedL(Rcpp::List DatObj_List,  Rcpp::List HyPara_List,
                 MetrObj = Update3.second;
                 GibbsStepTimeVec(6) = static_cast<double>(std::chrono::duration_cast<std::chrono::milliseconds>(t12 - t11).count()); // for rho
             }
-            //GibbsStepTimeVec(6) = static_cast<double>(std::chrono::duration_cast<std::chrono::milliseconds>(t12 - t11).count()); // for rho
+            //GibbsStepTimeVec(6) = std::difftime(t12, t11); // for rho
         }
 
         //Gibbs step for Eta
