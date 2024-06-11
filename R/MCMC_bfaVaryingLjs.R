@@ -190,9 +190,6 @@
 #'   In each element matrix for each clustering group, the corresponding entries are ordered first spatially, then by observation type.
 #'   (the first M correspond to the first observation type, the next M correspond to the second observation type and so on)}
 #'
-#'   \item{\code{GibbsStepTime}}{\code{NKeep x 10} \code{matrix} of posterior sampling computation time for 
-#'    Gibbs sampler steps corresponding to parameters except \code{beta} and \code{sigma2}.}
-#'
 #'   \item{\code{metropolis}}{\code{2 (or 1) x 3} \code{matrix} of metropolis
 #'   acceptance rates, updated tuners, and original tuners that result from the pilot
 #'   adaptation.}
@@ -280,8 +277,6 @@ bfaVaryingLjs <- function(formula, data, dist, time, K, LjVec,
   ###Collect output to be returned
   Metropolis <- SummarizeMetropolis(DatObj, MetrObj, RegObj$metropolis, McmcObj)
   Samples <- FormatSamplesVaryingLjs(DatObj, RegObj$rawsamples)
-  GibbsStepTime <- t(RegObj$GibbsStepTime) # NKeep x 10
-  colnames(GibbsStepTime) <- c("u", "xi", "theta", "delta", "alpha", "kappa", "rho", "eta", "upsilon", "psi")
 
   ###Return varyLjBFA object
   varyLjBFA <- list(lambda = Samples$Lambda,
@@ -299,7 +294,6 @@ bfaVaryingLjs <- function(formula, data, dist, time, K, LjVec,
                 theta = ThetaPost,
                 alpha = AlphaPost,
                 weights = WeightsPost,
-                GibbsStepTime = GibbsStepTime,
                 metropolis = Metropolis,
                 datobj = DatObj,
                 hypara = HyPara,

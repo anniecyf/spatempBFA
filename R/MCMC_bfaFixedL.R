@@ -195,9 +195,6 @@
 #'   For each kept row (MCMC iteration) in \code{weights}, the corresponding entries are ordered first spatially, then by observation type, 
 #'   then by clustering group, and finally by factor.}
 #'
-#'   \item{\code{GibbsStepTime}}{\code{NKeep x 10} or \code{NKeep x 6} \code{matrix} of posterior sampling computation time for 
-#'    Gibbs sampler steps corresponding to parameters except \code{beta} and \code{sigma2}.}
-#'
 #'   \item{\code{metropolis}}{\code{2 (or 1) x 3} \code{matrix} of metropolis
 #'   acceptance rates, updated tuners, and original tuners that result from the pilot
 #'   adaptation.}
@@ -277,13 +274,6 @@ bfaFixedL <- function(formula, data, dist, time, K, L = 20,
   ###Collect output to be returned
   Metropolis <- SummarizeMetropolis(DatObj, MetrObj, RegObj$metropolis, McmcObj)
   Samples <- FormatSamplesFixedL(DatObj, RegObj$rawsamples)
-  GibbsStepTime <- t(RegObj$GibbsStepTime) # NKeep x 10
-  if (DatObj$CL == 1) {
-      colnames(GibbsStepTime) <- c("z", "xi", "theta", "delta", "alpha", "kappa", "rho", "eta", "upsilon", "psi")
-  } else {
-      GibbsStepTime <- GibbsStepTime[,5:10]
-      colnames(GibbsStepTime) <- c("lambda", "kappa", "rho", "eta", "upsilon", "psi")
-  }
 
   ###Return FixedLbfa object
   FixedLbfa <- list(lambda = Samples$Lambda,
@@ -300,7 +290,6 @@ bfaFixedL <- function(formula, data, dist, time, K, L = 20,
                 theta = Samples$Theta,
                 alpha = Samples$Alpha,
                 weights = Samples$Weights,
-                GibbsStepTime = GibbsStepTime,
                 metropolis = Metropolis,
                 datobj = DatObj,
                 hypara = HyPara,
