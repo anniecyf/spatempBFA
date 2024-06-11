@@ -8,7 +8,7 @@ load_all(".")
 # library(credentials)
 # usethis::use_git_config(user.name = "anniecyf", user.email = "annieffcheng@gmail.com")
 # credentials::set_github_pat() #PAT: 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
-# remotes::install_github("anniecyf/spatTempBFA", dependencies = TRUE)
+# remotes::install_github("anniecyf/spatempBFA", dependencies = TRUE)
 # install_github("anniecyf/spatTempBFA", dependencies = TRUE)
 library(spatempBFA)
 K <- 6
