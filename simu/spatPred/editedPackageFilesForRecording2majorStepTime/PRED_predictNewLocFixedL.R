@@ -217,12 +217,12 @@ predictNewLocFixedL <- function(object, NNewLoc, distOrigNew = NULL, distNewNew 
   names(YOut) <- paste0("Y", M + 1:NNewLoc)  
   if (CL == 0) {
     return(list(Alpha = NULL, Weights = NULL, Lambda = t(LambdaKrig), Y = YOut, 
-                lambdaKrigTime = LambdaKrigList$lambdaKrigTime[1],
+                lambdaKrigTime = as.numeric(LambdaKrigList$lambdaKrigTime),
                 alphaKrigTime = NULL, weightsXiLambdaKrigTime = NULL))
   } else {
     return(list(Alpha = AlphaKrig, Weights = WeightsKrig, Lambda = t(LambdaKrig), Y = YOut, lambdaKrigTime = NULL,
-                alphaKrigTime = LatentKrig$alphaKrigTime[1], 
-                weightsXiLambdaKrigTime = LatentKrig$weightsXiLambdaKrigTime[1]))
+                alphaKrigTime = as.numeric(LatentKrig$alphaKrigTime), 
+                weightsXiLambdaKrigTime = as.numeric(LatentKrig$weightsXiLambdaKrigTime)))
   }
   
 }

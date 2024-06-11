@@ -208,7 +208,8 @@ predictNewLocVaryLj <- function(object, NNewLoc, distOrigNew = NULL, distNewNew 
   }
   names(YOut) <- paste0("Y", M + 1:NNewLoc)  
   return(list(Alpha = AlphaKrig, Weights = WeightsKrig, Lambda = t(LambdaKrig), Y = YOut, 
-              alphaKrigTime = LatentKrig$alphaKrigTime[1], weightsXiLambdaKrigTime = LatentKrig$weightsXiLambdaKrigTime[1]))
+              alphaKrigTime = as.numeric(LatentKrig$alphaKrigTime), 
+              weightsXiLambdaKrigTime = as.numeric(LatentKrig$weightsXiLambdaKrigTime)))
   
 }
 
