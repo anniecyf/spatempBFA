@@ -66,13 +66,6 @@
 #'   Each matrix is of dimension \code{NKeep x (T x O)}, where \code{T} is the number of time points and \code{O} is the number of observation types.
 #'   For each kept MCMC iteration, the values are ordered first temporally and then by observation type (the first T correspond to the first observation type, 
 #'   the next T correspond to the second observation type and so on). Each matrix is obtained through Bayesian krigging.}
-#'   
-#'   \item{\code{alphaKrigTime}}{Time (in milliseconds) it took to obtain \code{Alpha}. NULL when \code{clustering = FALSE} when fitting the main function.} 
-#'   
-#'   \item{\code{weightsXiLambdaKrigTime}}{Time (in milliseconds) it took to obtain \code{Weights}, \code{Xi}, and \code{Lambda} from \code{Alpha}
-#'              and posterior samples of \code{theta}. NULL when \code{clustering = FALSE} when fitting the main function.}
-#'              
-#'   \item{\code{lambdaKrigTime}}{Time (in milliseconds) it took to obtain \code{Lambda}. NULL when \code{clustering = TRUE} when fitting the main function.}            
 #'
 #'   }
 #' 
@@ -198,8 +191,7 @@ predictNewLocFixedL <- function(object, NNewLoc, distOrigNew = NULL, distNewNew 
 
   set.seed(seed)
   if (CL == 0){
-    LambdaKrigList <- LambdaKrigging(DatObj, Para, NKeep, Verbose)
-    LambdaKrig <- LambdaKrigList$lambda
+    LambdaKrig <- LambdaKrigging(DatObj, Para, NKeep, Verbose)
   } else {
     LatentKrig <- AlphaKriggingFixedL(DatObj, Para, NKeep, Verbose)
     AlphaKrig <- LatentKrig$alpha
@@ -216,13 +208,9 @@ predictNewLocFixedL <- function(object, NNewLoc, distOrigNew = NULL, distNewNew 
   }
   names(YOut) <- paste0("Y", M + 1:NNewLoc)  
   if (CL == 0) {
-    return(list(Alpha = NULL, Weights = NULL, Lambda = t(LambdaKrig), Y = YOut, 
-                lambdaKrigTime = LambdaKrigList$lambdaKrigTime[1],
-                alphaKrigTime = NULL, weightsXiLambdaKrigTime = NULL))
+    return(list(Alpha = NULL, Weights = NULL, Lambda = t(LambdaKrig), Y = YOut))
   } else {
-    return(list(Alpha = AlphaKrig, Weights = WeightsKrig, Lambda = t(LambdaKrig), Y = YOut, lambdaKrigTime = NULL,
-                alphaKrigTime = LatentKrig$alphaKrigTime[1], 
-                weightsXiLambdaKrigTime = LatentKrig$weightsXiLambdaKrigTime[1]))
+    return(list(Alpha = AlphaKrig, Weights = WeightsKrig, Lambda = t(LambdaKrig), Y = YOut))
   }
   
 }

@@ -71,11 +71,6 @@ are the same as the ones corresponding to the final reference time point.}
   Each matrix is of dimension \code{NKeep x (T x O)}, where \code{T} is the number of time points and \code{O} is the number of observation types.
   For each kept MCMC iteration, the values are ordered first temporally and then by observation type (the first T correspond to the first observation type, 
   the next T correspond to the second observation type and so on). Each matrix is obtained through Bayesian krigging.}
-  
-  \item{\code{alphaKrigTime}}{Time (in milliseconds) it took to obtain \code{Alpha}.}, 
-  
-  \item{\code{weightsXiLambdaKrigTime}}{Time (in milliseconds) it took to obtain \code{Weights}, \code{Xi}, and \code{Lambda} from \code{Alpha}
-             and posterior samples of \code{theta}.}
 
   }
 }
