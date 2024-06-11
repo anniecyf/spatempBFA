@@ -226,6 +226,9 @@ Default is FALSE.}
   For each kept row (MCMC iteration) in \code{weights}, the corresponding entries are ordered first spatially, then by observation type, 
   then by clustering group, and finally by factor.}
 
+  \item{\code{GibbsStepTime}}{\code{NKeep x 10} or \code{NKeep x 6} \code{matrix} of posterior sampling computation time for 
+   Gibbs sampler steps corresponding to parameters except \code{beta} and \code{sigma2}.}
+
   \item{\code{metropolis}}{\code{2 (or 1) x 3} \code{matrix} of metropolis
   acceptance rates, updated tuners, and original tuners that result from the pilot
   adaptation.}

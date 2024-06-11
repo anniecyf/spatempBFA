@@ -220,6 +220,9 @@ if we want to perform temporal trends clustering from the output object. Can be 
   In each element matrix for each clustering group, the corresponding entries are ordered first spatially, then by observation type.
   (the first M correspond to the first observation type, the next M correspond to the second observation type and so on)}
 
+  \item{\code{GibbsStepTime}}{\code{NKeep x 10} \code{matrix} of posterior sampling computation time for 
+   Gibbs sampler steps corresponding to parameters except \code{beta} and \code{sigma2}.}
+
   \item{\code{metropolis}}{\code{2 (or 1) x 3} \code{matrix} of metropolis
   acceptance rates, updated tuners, and original tuners that result from the pilot
   adaptation.}
