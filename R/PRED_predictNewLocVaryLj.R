@@ -64,6 +64,11 @@
 #'   Each matrix is of dimension \code{NKeep x (T x O)}, where \code{T} is the number of time points and \code{O} is the number of observation types.
 #'   For each kept MCMC iteration, the values are ordered first temporally and then by observation type (the first T correspond to the first observation type, 
 #'   the next T correspond to the second observation type and so on). Each matrix is obtained through Bayesian krigging.}
+#'   
+#'   \item{\code{alphaKrigTime}}{Time (in milliseconds) it took to obtain \code{Alpha}.}, 
+#'   
+#'   \item{\code{weightsXiLambdaKrigTime}}{Time (in milliseconds) it took to obtain \code{Weights}, \code{Xi}, and \code{Lambda} from \code{Alpha}
+#'              and posterior samples of \code{theta}.}
 #'
 #'   }
 #' 
@@ -202,7 +207,8 @@ predictNewLocVaryLj <- function(object, NNewLoc, distOrigNew = NULL, distNewNew 
     colnames(YOut[[n]]) <- paste("Y", M + n, YInd[, 2], YInd[, 1], sep="_") # the first T corresponds to obs type 1 and so on
   }
   names(YOut) <- paste0("Y", M + 1:NNewLoc)  
-  return(list(Alpha = AlphaKrig, Weights = WeightsKrig, Lambda = t(LambdaKrig), Y = YOut))
+  return(list(Alpha = AlphaKrig, Weights = WeightsKrig, Lambda = t(LambdaKrig), Y = YOut, 
+              alphaKrigTime = LatentKrig$alphaKrigTime[1], weightsXiLambdaKrigTime = LatentKrig$weightsXiLambdaKrigTime[1]))
   
 }
 

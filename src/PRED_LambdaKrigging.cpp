@@ -3,10 +3,12 @@
 #include <string>
 #include <RcppArmadillo.h>
 #include "PRED_predictions.h"
+#include <ctime>
+#include <chrono>
 
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export]]
-arma::mat LambdaKrigging(Rcpp::List DatObj_List, Rcpp::List Para_List, int NKeep, bool Verbose) {
+Rcpp::List LambdaKrigging(Rcpp::List DatObj_List, Rcpp::List Para_List, int NKeep, bool Verbose) {
     datobjPREDspat DatObj = ConvertDatObjPREDspatFixedL(DatObj_List);
     paraPREDspatFixedLnoCLlambda Para = ConvertParaPREDspatLambdaFixedLnoCL(Para_List);
     int T = DatObj.Nu;
@@ -40,6 +42,7 @@ arma::mat LambdaKrigging(Rcpp::List DatObj_List, Rcpp::List Para_List, int NKeep
     arma::mat LambdaOrig(M * O, K);
     arma::mat LambdaKrigMat(NNewLoc * O, K);//rows of LambdaKrigMat first ordered by observation type and then spatially (the first O correspond to new loc 1, 
     //the next O correspond to new loc 2 and so on), different as that for LambdaOrig 
+    auto lambdaKrigStartTime = std::chrono::high_resolution_clock::now();
     if (O == 1) {
         double kappa;
         for (arma::uword s = 0; s < NKeep; s++) {
@@ -184,7 +187,12 @@ arma::mat LambdaKrigging(Rcpp::List DatObj_List, Rcpp::List Para_List, int NKeep
         }
     }    
     if (Verbose) Rcpp::Rcout << std::fixed << "100%.. Done!" << std::endl;
-    return LambdaKrig;
+    auto lambdaKrigEndTime = std::chrono::high_resolution_clock::now();
+    arma::mat lambdaKrigTime(1, 1, arma::fill::zeros);
+    lambdaKrigTime(0) = static_cast<double>(std::chrono::duration_cast<std::chrono::milliseconds>(lambdaKrigEndTime - lambdaKrigStartTime).count());
+    //return LambdaKrig;
+    return Rcpp::List::create(Rcpp::Named("lambda") = LambdaKrig,
+                              Rcpp::Named("lambdaKrigTime") = lambdaKrigTime);
 }
 
 
@@ -228,6 +236,7 @@ Rcpp::List AlphaKriggingFixedL(Rcpp::List DatObj_List, Rcpp::List Para_List, int
     //For each row (MCMC iteration) in AlphaKrig and WeightsKrig, the corresponding predicted entries for Alpha and Weights are ordered first by observation type, then spatially, 
     //by clustering group, and finally by factor. This is different from the ordering (for Alpha) for the outputs from the main function for the original M location points.
     arma::cube AlphaOrig(M * O, L - 1, K);
+    auto alphaKrigStartTime = std::chrono::high_resolution_clock::now();
     if (O == 1) {
         double kappa;
         for (arma::uword s = 0; s < NKeep; s++) {
@@ -413,6 +422,9 @@ Rcpp::List AlphaKriggingFixedL(Rcpp::List DatObj_List, Rcpp::List Para_List, int
         }
     }       
     if (Verbose) Rcpp::Rcout << std::fixed << "100%.. Done!" << std::endl;
+    auto alphaKrigEndTime = std::chrono::high_resolution_clock::now();
+    arma::mat alphaKrigTime(1, 1, arma::fill::zeros);
+    alphaKrigTime(0) = static_cast<double>(std::chrono::duration_cast<std::chrono::milliseconds>(alphaKrigEndTime - alphaKrigStartTime).count());
 
     // calculate weights and sample xi; then calculate the predicted factor loadings matrix Lambda
     arma::mat WeightsKrig(NKeep, K * L * NNewLoc * O, arma::fill::zeros);
@@ -437,6 +449,7 @@ Rcpp::List AlphaKriggingFixedL(Rcpp::List DatObj_List, Rcpp::List Para_List, int
         VerboseSeq *= NKeep;
         Rcpp::Rcout << std::fixed << "Krigging Lambda: 0%.. ";
     }
+    auto weightsXiLambdaKrigStartTime = std::chrono::high_resolution_clock::now();
     for (arma::uword s = 0; s < NKeep; s++) {
         Theta = arma::reshape(ThetaMat.row(s), L, K);
         arma::mat AlphaKrigS = arma::reshape(AlphaKrig.row(s), NNewLoc * O * (L - 1), K);
@@ -474,10 +487,15 @@ Rcpp::List AlphaKriggingFixedL(Rcpp::List DatObj_List, Rcpp::List Para_List, int
         }
     }
     if (Verbose) Rcpp::Rcout << std::fixed << "100%.. Done!" << std::endl;
+    auto weightsXiLambdaKrigEndTime = std::chrono::high_resolution_clock::now();
+    arma::mat weightsXiLambdaKrigTime(1, 1, arma::fill::zeros);
+    weightsXiLambdaKrigTime(0) = static_cast<double>(std::chrono::duration_cast<std::chrono::milliseconds>(weightsXiLambdaKrigEndTime - weightsXiLambdaKrigStartTime).count());
 
     return Rcpp::List::create(Rcpp::Named("alpha") = AlphaKrig,
                               Rcpp::Named("weights") = WeightsKrig,
-                              Rcpp::Named("lambda") = LambdaKrig);
+                              Rcpp::Named("lambda") = LambdaKrig,
+                              Rcpp::Named("alphaKrigTime") = alphaKrigTime,
+                              Rcpp::Named("weightsXiLambdaKrigTime") = weightsXiLambdaKrigTime);
 }
 
 
@@ -516,7 +534,8 @@ Rcpp::List AlphaKriggingVaryLj(Rcpp::List DatObj_List, Rcpp::List Para_List, int
     double rho;    
     arma::field<arma::mat> AlphaKrigField(K, NKeep); //each element matrix is of dim (NNewLoc x O) x (Lj - 1) 
     //If Lj = 1 for a certain j at a particular MCMC iteration, then that corresponding matrix in alpha is of dimension (NNewLoc x O) x 1 with entries all set to +Inf.
-    //In each element matrix for each clustering group, the corresponding entries are ordered first by observation type, then spatially.   
+    //In each element matrix for each clustering group, the corresponding entries are ordered first by observation type, then spatially.
+    auto alphaKrigStartTime = std::chrono::high_resolution_clock::now();   
     if (O == 1) {
         double kappa;
         for (arma::uword s = 0; s < NKeep; s++) {
@@ -733,6 +752,9 @@ Rcpp::List AlphaKriggingVaryLj(Rcpp::List DatObj_List, Rcpp::List Para_List, int
         }
     }    
     if (Verbose) Rcpp::Rcout << std::fixed << "100%.. Done!" << std::endl;
+    auto alphaKrigEndTime = std::chrono::high_resolution_clock::now();
+    arma::mat alphaKrigTime(1, 1, arma::fill::zeros);
+    alphaKrigTime(0) = static_cast<double>(std::chrono::duration_cast<std::chrono::milliseconds>(alphaKrigEndTime - alphaKrigStartTime).count());
 
     // calculate weights and sample xi; then calculate the predicted factor loadings matrix Lambda
     arma::field<arma::mat> WeightsKrigField(K, NKeep); //each element matrix is of dim (NNewLoc x O) x Lj
@@ -750,6 +772,7 @@ Rcpp::List AlphaKriggingVaryLj(Rcpp::List DatObj_List, Rcpp::List Para_List, int
         VerboseSeq *= NKeep;
         Rcpp::Rcout << std::fixed << "Krigging Lambda: 0%.. ";
     }
+    auto weightsXiLambdaKrigStartTime = std::chrono::high_resolution_clock::now();
     for (arma::uword s = 0; s < NKeep; s++) {
         arma::colvec LjVec = LjVecMat.row(s).t();
         for (arma::uword j = 0; j < K; j++) {
@@ -798,8 +821,13 @@ Rcpp::List AlphaKriggingVaryLj(Rcpp::List DatObj_List, Rcpp::List Para_List, int
         }
     }
     if (Verbose) Rcpp::Rcout << std::fixed << "100%.. Done!" << std::endl;
+    auto weightsXiLambdaKrigEndTime = std::chrono::high_resolution_clock::now();
+    arma::mat weightsXiLambdaKrigTime(1, 1, arma::fill::zeros);
+    weightsXiLambdaKrigTime(0) = static_cast<double>(std::chrono::duration_cast<std::chrono::milliseconds>(weightsXiLambdaKrigEndTime - weightsXiLambdaKrigStartTime).count());
 
     return Rcpp::List::create(Rcpp::Named("alpha") = AlphaKrigField,
-           Rcpp::Named("weights") = WeightsKrigField,
-           Rcpp::Named("lambda") = LambdaKrig);
+                              Rcpp::Named("weights") = WeightsKrigField,
+                              Rcpp::Named("lambda") = LambdaKrig,
+                              Rcpp::Named("alphaKrigTime") = alphaKrigTime,
+                              Rcpp::Named("weightsXiLambdaKrigTime") = weightsXiLambdaKrigTime);
 }
