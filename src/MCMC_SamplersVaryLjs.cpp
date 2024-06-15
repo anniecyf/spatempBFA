@@ -842,7 +842,6 @@ std::pair<spatpara2VaryLj, metrobj> SampleRho(datobjVaryLj DatObj, paraVaryLj Pa
     double logDetDiff = O * log(detSpCovApproxProposal / detSpCovApprox);
     arma::mat SpCovInvDiff = SpCovInvApproxProposal - SpCovInvApprox;
     arma::mat kronInvDiff = arma::kron(SpCovInvDiff, KappaInv);
-    arma::mat kronInvDiff2 = arma::kron(KappaInv, SpCovInvDiff);
 
     //Loop over columns of j
     for (arma::uword j = 0; j < K; j++) {
