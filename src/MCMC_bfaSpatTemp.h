@@ -354,6 +354,7 @@ arma::vec sampleRcpp(arma::Col<int> const& x, int size, bool replace, arma::vec 
 double rtnormRcppMSM(double mean, double sd, double lower, double upper);
 arma::rowvec rtmvnormRcpp(arma::vec const& mean, arma::mat const& sigma, arma::vec const& lower, arma::vec const& upper);
 arma::mat rmvnormRcpp(int n, arma::vec const& mean, arma::mat const& sigma);
+arma::mat rmvnormRcppNew(int n, arma::vec const& mean, arma::mat const& cholSigma);
 double pnormRcpp(double q);
 double lpnormRcpp(double q);
 double UpperpnormRcpp(double q);

@@ -140,6 +140,14 @@ arma::mat rmvnormRcpp(int n, arma::vec const& mean, arma::mat const& sigma) {
   return arma::trans(arma::repmat(mean, 1, n).t() + Y * cholSigma);
 }
 
+arma::mat rmvnormRcppNew(int n, arma::vec const& mean, arma::mat const& cholSigma) {
+    int ncols = cholSigma.n_cols;
+    arma::vec Yvec(n * ncols);
+    Yvec = rnormSNRcpp(n * ncols);
+    arma::mat Y = arma::reshape(Yvec, n, ncols);
+    return arma::trans(arma::repmat(mean, 1, n).t() + Y * cholSigma);
+}
+
 
 
 //Sample from a standard normal distribution vectorize-----------------------------------------------

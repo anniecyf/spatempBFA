@@ -1311,7 +1311,7 @@ listParaVaryLj SampleAlpha(datobjVaryLj DatObj, paraVaryLj Para, spatpara3 SpatP
         double KappaInv = KappaInvMat(0, 0);
         arma::vec Vs(M);
         for (int i = 0; i < M; i++) {
-            double Vsi = KappaInv / Fs(i);
+            double Vsi = 1 / Fs(i);
             if (i < M - 1) {
                 arma::mat iAsNN = whichJs(i, 0);
                 int iNumJ = size(iAsNN, 1);
@@ -1321,11 +1321,12 @@ listParaVaryLj SampleAlpha(datobjVaryLj DatObj, paraVaryLj Para, spatpara3 SpatP
                         int j = ijInfo(0);
                         int ksi = ijInfo(1);
                         double Bsjksi = Bs(j, ksi);
-                        Vsi += std::pow(Bsjksi, 2) / Fs(j) * KappaInv;
+                        Vsi += std::pow(Bsjksi, 2) / Fs(j);
                     }
                 }
             }
-            Vs(i) = 1 / Vsi;
+            Vsi = 1 / Vsi;
+            Vs(i) = Vsi / KappaInv;
         }
         int nnMaxNum;
         int nnMaxNumJ;
@@ -1403,12 +1404,13 @@ listParaVaryLj SampleAlpha(datobjVaryLj DatObj, paraVaryLj Para, spatpara3 SpatP
         }
     }
     else {//if O > 1
-        arma::mat KappaInv = Para.KappaInv;
-        arma::cube Vs(O, O, M);
         arma::mat EyeO(O, O, arma::fill::eye);
+        arma::mat KappaInv = Para.KappaInv;
+        arma::mat Kappa = Para.Kappa;
+        arma::cube Vs(O, O, M);   
+        arma::cube cholVs(O, O, M);
         for (int i = 0; i < M; i++) {
-            arma::mat Vsi(O, O, arma::fill::zeros);
-            Vsi += (1 / Fs(i)) * KappaInv;
+            double VsiSca = 1 / Fs(i);
             if (i < M - 1) {
                 arma::mat iAsNN = whichJs(i, 0);
                 int iNumJ = size(iAsNN, 1);
@@ -1418,12 +1420,20 @@ listParaVaryLj SampleAlpha(datobjVaryLj DatObj, paraVaryLj Para, spatpara3 SpatP
                         int j = ijInfo(0);
                         int ksi = ijInfo(1);
                         double Bsjksi = Bs(j, ksi);
-                        Vsi += std::pow(Bsjksi, 2) * (1 / Fs(j)) * KappaInv;
+                        VsiSca += std::pow(Bsjksi, 2) / Fs(j);
                     }
                 }
             }
-            Vsi = CholInv(Vsi);
+            arma::mat Vsi = (1 / VsiSca) * Kappa;
+            arma::mat cholVsi;
+            try {
+                cholVsi = arma::chol(Vsi);
+            }
+            catch (...) {
+                cholVsi = getCholRobust(Vsi);
+            }
             Vs.slice(i) = Vsi;
+            cholVs.slice(i) = cholVsi;
         }
         int nnMaxNum;
         int nnMaxNumJ;
@@ -1504,8 +1514,14 @@ listParaVaryLj SampleAlpha(datobjVaryLj DatObj, paraVaryLj Para, spatpara3 SpatP
                             }                            
                         }
                         arma::colvec AlphaJLsiNew;
-                        if (truncated) { AlphaJLsiNew = arma::trans(rtmvnormRcpp(Vsi * muJLsi, Vsi, lowerVec, upperVec)); }
-                        else { AlphaJLsiNew = rmvnormRcpp(1, Vsi * muJLsi, Vsi); }
+                        if (truncated) { 
+                            AlphaJLsiNew = arma::trans(rtmvnormRcpp(Vsi * muJLsi, Vsi, lowerVec, upperVec)); 
+                        }
+                        else { 
+                            arma::mat Vsi = Vs.slice(i);
+                            arma::mat cholVsi = cholVs.slice(i);
+                            AlphaJLsiNew = rmvnormRcppNew(1, Vsi * muJLsi, cholVsi);
+                        }
                         AlphaJLMat.col(i) = AlphaJLsiNew;                       
                     }
                     AlphaJ.row(lj) = arma::reshape(AlphaJLMat, 1, M * O);
