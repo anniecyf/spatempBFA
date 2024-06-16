@@ -863,8 +863,10 @@ std::pair<spatpara2, metrobj> SampleRho(datobjFixedL DatObj, paraFixedL Para, pa
     double component1 = 0;
     double logDetDiff = O * log(detSpCovApproxProposal / detSpCovApprox);
     arma::mat SpCovInvDiff = SpCovInvApproxProposal - SpCovInvApprox;
-    arma::mat kronInvDiff = arma::kron(SpCovInvDiff, KappaInv);
-    arma::mat kronInvDiff2 = arma::kron(KappaInv, SpCovInvDiff);
+    arma::sp_mat kronInvDiff(arma::kron(SpCovInvDiff, KappaInv));
+    arma::sp_mat kronInvDiff2(arma::kron(KappaInv, SpCovInvDiff));
+    //arma::mat kronInvDiff = arma::kron(SpCovInvDiff, KappaInv);
+    //arma::mat kronInvDiff2 = arma::kron(KappaInv, SpCovInvDiff);
 
     if (DatObj.CL == 1) {//alphaMethod must = "block" here if DatObj.CL == 1
         component1 -= logDetDiff * (L - 1) * K;
@@ -982,7 +984,8 @@ std::pair<spatpara3, metrobj> SampleRho(datobjFixedL DatObj, paraFixedL Para, pa
         //Alpha structure components
         double component1 = 0;
         double logDetDiff = O * log(detSpCovApproxProposal / detSpCovApprox);
-        arma::mat kronInvDiff = arma::kron((SpCovInvApproxProposal - SpCovInvApprox), KappaInv);
+        arma::sp_mat kronInvDiff(arma::kron((SpCovInvApproxProposal - SpCovInvApprox), KappaInv));
+        //arma::mat kronInvDiff = arma::kron((SpCovInvApproxProposal - SpCovInvApprox), KappaInv);
         
         //Loop over columns of j (DatObj.CL must = 1 here)
         for (arma::uword j = 0; j < K; j++) {
@@ -1100,7 +1103,8 @@ paraFixedL SampleKappa(datobjFixedL DatObj, paraFixedL Para, paraCLfixedL ParaCL
     int O = DatObj.O;
     int L = DatObj.L;
     arma::cube Alpha = ParaCL.Alpha;
-    arma::mat SpCovInv = SpatPara.SpCovInv;
+    arma::sp_mat SpCovInv(SpatPara.SpCovInv);
+    //arma::mat SpCovInv = SpatPara.SpCovInv;
     double SmallUpsilon = HyPara.SmallUpsilon;
     arma::mat BigTheta = HyPara.BigTheta;
     arma::mat Resids(O, O, arma::fill::zeros);
@@ -1136,7 +1140,8 @@ paraFixedL SampleKappa(datobjFixedL DatObj, paraFixedL Para, spatpara2 SpatPara,
     int M = DatObj.M;
     int O = DatObj.O;
     arma::mat Lambda = Para.Lambda;
-    arma::mat SpCovInv = SpatPara.SpCovInv;
+    arma::sp_mat SpCovInv(SpatPara.SpCovInv);
+    //arma::mat SpCovInv = SpatPara.SpCovInv;
     double SmallUpsilon = HyPara.SmallUpsilon;
     arma::mat BigTheta = HyPara.BigTheta;
     arma::mat Resids(O, O, arma::fill::zeros);
@@ -1171,7 +1176,8 @@ paraFixedL SampleKappa(datobjFixedL DatObj, paraFixedL Para, paraCLfixedL ParaCL
     int O = DatObj.O;
     int L = DatObj.L;
     arma::cube Alpha = ParaCL.Alpha;
-    arma::mat SpCovInv = SpatPara.SpCovInv;
+    arma::sp_mat SpCovInv(SpatPara.SpCovInv);
+    //arma::mat SpCovInv = SpatPara.SpCovInv;
     double SmallUpsilon = HyPara.SmallUpsilon;
     arma::mat BigTheta = HyPara.BigTheta;
     arma::mat Resids(O, O, arma::fill::zeros);

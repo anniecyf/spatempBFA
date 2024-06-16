@@ -846,7 +846,8 @@ std::pair<spatpara2VaryLj, metrobj> SampleRho(datobjVaryLj DatObj, paraVaryLj Pa
     double component1 = 0;
     double logDetDiff = O * log(detSpCovApproxProposal / detSpCovApprox);
     arma::mat SpCovInvDiff = SpCovInvApproxProposal - SpCovInvApprox;
-    arma::mat kronInvDiff = arma::kron(SpCovInvDiff, KappaInv);
+    arma::sp_mat kronInvDiff(arma::kron(SpCovInvDiff, KappaInv));
+    //arma::mat kronInvDiff = arma::kron(SpCovInvDiff, KappaInv);
 
     //Loop over columns of j
     for (arma::uword j = 0; j < K; j++) {
@@ -954,7 +955,8 @@ std::pair<spatpara3, metrobj> SampleRho(datobjVaryLj DatObj, paraVaryLj Para, sp
     //Alpha structure components
     double component1 = 0;
     double logDetDiff = O * log(detSpCovApproxProposal / detSpCovApprox);
-    arma::mat kronInvDiff = arma::kron((SpCovInvApproxProposal - SpCovInvApprox), KappaInv);
+    arma::sp_mat kronInvDiff(arma::kron((SpCovInvApproxProposal - SpCovInvApprox), KappaInv));
+    //arma::mat kronInvDiff = arma::kron((SpCovInvApproxProposal - SpCovInvApprox), KappaInv);
 
     //Loop over columns of j
     for (arma::uword j = 0; j < K; j++) {
@@ -1065,7 +1067,8 @@ paraVaryLj SampleKappa(datobjVaryLj DatObj, paraVaryLj Para, spatpara2VaryLj Spa
     //Set parameter objects
     arma::field<arma::mat> Alpha = ListPara.Alpha;
     arma::colvec LjVec = Para.LjVec;
-    arma::mat SpCovInv = SpatPara.SpCovInv;
+    arma::sp_mat SpCovInv(SpatPara.SpCovInv);
+    //arma::mat SpCovInv = SpatPara.SpCovInv;
 
     //Set hyperparameter objects
     double SmallUpsilon = HyPara.SmallUpsilon;
@@ -1118,7 +1121,8 @@ paraVaryLj SampleKappa(datobjVaryLj DatObj, paraVaryLj Para, spatpara3 SpatPara,
     //Set parameter objects
     arma::field<arma::mat> Alpha = ListPara.Alpha;
     arma::colvec LjVec = Para.LjVec;
-    arma::mat SpCovInv = SpatPara.SpCovInv;
+    arma::sp_mat SpCovInv(SpatPara.SpCovInv);
+    //arma::mat SpCovInv = SpatPara.SpCovInv;
 
     //Set hyperparameter objects
     double SmallUpsilon = HyPara.SmallUpsilon;
