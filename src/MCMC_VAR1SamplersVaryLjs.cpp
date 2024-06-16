@@ -373,12 +373,19 @@ VAR1paraVaryLj SampleEta(VAR1datobjVaryLj DatObj, VAR1paraVaryLj Para, VAR1hypar
   arma::mat SigmaInv = arma::diagmat(arma::vectorise(1 / Cov.slice(0)));
   arma::mat tLambdaSigmaInv = arma::trans(Lambda) * SigmaInv;
   arma::mat CovEta = CholInv(tLambdaSigmaInv * Lambda + UpsilonInv + arma::trans(A) * UpsilonInv * A);
+  arma::mat cholSigma;
+  try {
+      cholSigma = arma::chol(CovEta);
+  }
+  catch (...) {
+      cholSigma = getCholRobust(CovEta);
+  }
   arma::colvec etaTminus1(K, arma::fill::zeros), etaTplus1(K), etaT(K), MeanEtaT(K);
   for (arma::uword t = 0; t < (Nu -  1); t++) { //for time = 1, 2, ..., (T - 1)
       if (t > 0) {etaTminus1 = BigPhi.col(t - 1);}
       etaTplus1 = BigPhi.col(t + 1);
       MeanEtaT = CovEta * (tLambdaSigmaInv * (YStarWide.col(t) - XBetaMat.col(t)) + UpsilonInv * A * etaTminus1 + arma::trans(A) * UpsilonInv * etaTplus1);
-      etaT = rmvnormRcpp(1, MeanEtaT, CovEta);
+      etaT = rmvnormRcppNew(1, MeanEtaT, cholSigma);
       BigPhi.col(t) = etaT;
       //End loop over visits  
   }
@@ -386,7 +393,7 @@ VAR1paraVaryLj SampleEta(VAR1datobjVaryLj DatObj, VAR1paraVaryLj Para, VAR1hypar
   etaTminus1 = BigPhi.col(Nu - 2);
   CovEta = CholInv(tLambdaSigmaInv * Lambda + UpsilonInv);
   MeanEtaT = CovEta * (tLambdaSigmaInv * (YStarWide.col(Nu - 1) - XBetaMat.col(Nu - 1)) + UpsilonInv * A * etaTminus1);
-  etaT = rmvnormRcpp(1, MeanEtaT, CovEta);
+  etaT = rmvnormRcppNew(1, MeanEtaT, cholSigma);
   BigPhi.col(Nu - 1) = etaT;
                         
   //Update parameters dependent on eta

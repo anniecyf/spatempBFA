@@ -121,10 +121,17 @@ arma::mat VAR1EtaKrigging(Rcpp::List DatObj_List, Rcpp::List Para_List, int NKee
             }
         }
         Upsilon = arma::symmatl(Upsilon);
+        arma::mat cholSigma;
+        try {
+            cholSigma = arma::chol(Upsilon);
+        }
+        catch (...) {
+            cholSigma = getCholRobust(Upsilon);
+        }
         A = arma::trans(arma::reshape(Amat.row(s), K, K));
         etaPrev = Eta(arma::span(K * (Nu - 1), (K * Nu - 1))); //initial value: etaT
         for (arma::uword t = 0; t < NNewTime; t++) {
-            etaPredColvec = rmvnormRcpp(1, A * etaPrev, Upsilon);
+            etaPredColvec = rmvnormRcppNew(1, A * etaPrev, cholSigma);
             krigEtaPerIter.col(t) = etaPredColvec;
             etaPrev = etaPredColvec;
         }       

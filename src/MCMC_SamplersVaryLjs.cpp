@@ -442,14 +442,19 @@ paraVaryLj SampleEta(datobjVaryLj DatObj, paraVaryLj Para, hypara HyPara) {
       arma::colvec EtaT(K);
       arma::mat SigmaInv = arma::diagmat(arma::vectorise(1 / Cov.slice(0)));
       arma::mat tLambdaSigmaInv = arma::trans(Lambda) * SigmaInv;
+      arma::mat CovEtaT = CholInv(tLambdaSigmaInv * Lambda + CondPrecEta);
+      arma::colvec MeanEtaT = CovEtaT * (tLambdaSigmaInv * (YStarWide.col(t) - XBetaMat.col(t)));
+      arma::mat cholSigma;
+      try {
+          cholSigma = arma::chol(CovEtaT);
+      }
+      catch (...) {
+          cholSigma = getCholRobust(CovEtaT);
+      }
       //Loop over t
       for (arma::uword t = 0; t < Nu; t++) {
-          arma::mat BigPhiMinusT = BigPhi;
-          BigPhiMinusT.shed_col(t);
           //Sample EtaT
-          arma::mat CovEtaT = CholInv(tLambdaSigmaInv * Lambda + CondPrecEta);
-          arma::colvec MeanEtaT = CovEtaT * (tLambdaSigmaInv * (YStarWide.col(t) - XBetaMat.col(t)));
-          EtaT = rmvnormRcpp(1, MeanEtaT, CovEtaT);
+          EtaT = rmvnormRcppNew(1, MeanEtaT, cholSigma);
           BigPhi.col(t) = EtaT;
           //End loop over t
       }
@@ -1351,7 +1356,7 @@ listParaVaryLj SampleAlpha(datobjVaryLj DatObj, paraVaryLj Para, spatpara3 SpatP
                             arma::mat Bsi = Bs(arma::span(i, i), arma::span(0, nnMaxNum));
                             arma::uvec nni = nnInd(arma::span(i, i), arma::span(0, nnMaxNum)).t();
                             arma::colvec AlphaJljNsi = AlphaJlj(nni);
-                            muJljsi += KappaInv / Fs(i) * arma::as_scalar(Bsi * AlphaJljNsi);
+                            muJljsi += arma::as_scalar(Bsi * AlphaJljNsi) / Fs(i);
                         }
                         if (i < M - 1) {
                             arma::mat iAsNN = whichJs(i, 0);
@@ -1370,10 +1375,11 @@ listParaVaryLj SampleAlpha(datobjVaryLj DatObj, paraVaryLj Para, spatpara3 SpatP
                                     arma::colvec AlphaJljNsj = AlphaJlj(nnj);
                                     AlphaJljNsj(ksi) = 0;
                                     Bsj(ksi) = 0;
-                                    muJljsi += (Bsjksi / Fs(j) * KappaInv) * (AlphaJljsj - arma::as_scalar(Bsj * AlphaJljNsj));
+                                    muJljsi += Bsjksi / Fs(j) * (AlphaJljsj - arma::as_scalar(Bsj * AlphaJljNsj));
                                 }
                             }
                         }
+                        muJljsi *= KappaInv;
                         double Vsi = Vs(i);
                         arma::uword XiJI = Xi(i, jj);
                         double AlphaJljsiNew;
@@ -1458,14 +1464,6 @@ listParaVaryLj SampleAlpha(datobjVaryLj DatObj, paraVaryLj Para, spatpara3 SpatP
                     arma::mat AlphaJLMat = arma::reshape(AlphaJ.row(lj), O, M);
                     for (int i = 0; i < M; i++) {
                         arma::colvec muJLsi(O, arma::fill::zeros);
-                        if (i > 0) {
-                            if (i < h) nnMaxNum = i - 1;
-                            else nnMaxNum = h - 1;
-                            arma::mat Bsi = Bs(arma::span(i, i), arma::span(0, nnMaxNum));
-                            arma::uvec nni = nnInd(arma::span(i, i), arma::span(0, nnMaxNum)).t();
-                            arma::mat AlphaJLNsi = arma::reshape(AlphaJLMat.cols(nni), (O * (nnMaxNum + 1)), 1);
-                            muJLsi += arma::kron((1 / Fs(i)) * Bsi, KappaInv) * AlphaJLNsi;
-                        }
                         if (i < M - 1) {
                             arma::mat iAsNN = whichJs(i, 0);
                             int iNumJ = size(iAsNN, 1);
@@ -1484,10 +1482,19 @@ listParaVaryLj SampleAlpha(datobjVaryLj DatObj, paraVaryLj Para, spatpara3 SpatP
                                     AlphaJLNsjMat.col(ksi) = arma::colvec(O, arma::fill::zeros);
                                     arma::mat AlphaJLNsj = arma::reshape(AlphaJLNsjMat, (O * (nnMaxNumJ + 1)), 1);
                                     Bsj(ksi) = 0;
-                                    muJLsi += (Bsjksi * (1 / Fs(j)) * KappaInv) * (AlphaJLsj - arma::kron(Bsj, EyeO) * AlphaJLNsj);
+                                    muJLsi += Bsjksi / Fs(j) * (AlphaJLsj - arma::kron(Bsj, EyeO) * AlphaJLNsj);
                                 }
                             }
                         }
+                        muJLsi = KappaInv * muJLsi;
+                        if (i > 0) {
+                            if (i < h) nnMaxNum = i - 1;
+                            else nnMaxNum = h - 1;
+                            arma::mat Bsi = Bs(arma::span(i, i), arma::span(0, nnMaxNum));
+                            arma::uvec nni = nnInd(arma::span(i, i), arma::span(0, nnMaxNum)).t();
+                            arma::mat AlphaJLNsi = arma::reshape(AlphaJLMat.cols(nni), (O * (nnMaxNum + 1)), 1);
+                            muJLsi += arma::kron((1 / Fs(i)) * Bsi, KappaInv) * AlphaJLNsi;
+                        }                       
                         arma::mat Vsi = Vs.slice(i);
                         arma::colvec AlphaJLsi = AlphaJLMat.col(i); // of length O
                         arma::vec upperVec(O); //upper truncation points for alphajlj(si)'s truncated multivariate normal distribution

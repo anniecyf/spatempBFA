@@ -376,12 +376,19 @@ VAR1paraFixedL SampleEta(VAR1datobjFixedL DatObj, VAR1paraFixedL Para, VAR1hypar
   arma::mat SigmaInv = arma::diagmat(arma::vectorise(1 / Cov.slice(0)));
   arma::mat tLambdaSigmaInv = arma::trans(Lambda) * SigmaInv;
   arma::mat CovEta = CholInv(tLambdaSigmaInv * Lambda + UpsilonInv + arma::trans(A) * UpsilonInv * A);
+  arma::mat cholSigma;
+  try {
+      cholSigma = arma::chol(CovEta);
+  }
+  catch (...) {
+      cholSigma = getCholRobust(CovEta);
+  }
   arma::colvec etaTminus1(K, arma::fill::zeros), etaTplus1(K), etaT(K), MeanEtaT(K);
   for (arma::uword t = 0; t < (Nu -  1); t++) { //for time = 1, 2, ..., (T - 1)
       if (t > 0) {etaTminus1 = BigPhi.col(t - 1);}
       etaTplus1 = BigPhi.col(t + 1);
       MeanEtaT = CovEta * (tLambdaSigmaInv * (YStarWide.col(t) - XBetaMat.col(t)) + UpsilonInv * A * etaTminus1 + arma::trans(A) * UpsilonInv * etaTplus1);
-      etaT = rmvnormRcpp(1, MeanEtaT, CovEta);
+      etaT = rmvnormRcppNew(1, MeanEtaT, cholSigma);
       BigPhi.col(t) = etaT;
       //End loop over visits  
   }
@@ -389,7 +396,7 @@ VAR1paraFixedL SampleEta(VAR1datobjFixedL DatObj, VAR1paraFixedL Para, VAR1hypar
   etaTminus1 = BigPhi.col(Nu - 2);
   CovEta = CholInv(tLambdaSigmaInv * Lambda + UpsilonInv);
   MeanEtaT = CovEta * (tLambdaSigmaInv * (YStarWide.col(Nu - 1) - XBetaMat.col(Nu - 1)) + UpsilonInv * A * etaTminus1);
-  etaT = rmvnormRcpp(1, MeanEtaT, CovEta);
+  etaT = rmvnormRcppNew(1, MeanEtaT, cholSigma);
   BigPhi.col(Nu - 1) = etaT;
                         
   //Update parameters dependent on eta
@@ -1059,12 +1066,19 @@ paraCLfixedL SampleAlpha(VAR1datobjFixedL DatObj, VAR1paraFixedL Para, paraCLfix
     arma::mat SpCovInv = SpatPara.SpCovInv;
 
     arma::mat CovAlpha = CholInv(EyeOM + arma::kron(SpCovInv, KappaInv));
+    arma::mat cholSigma;
+    try {
+        cholSigma = arma::chol(CovAlpha);
+    }
+    catch (...) {
+        cholSigma = getCholRobust(CovAlpha);
+    }
     for (arma::uword j = 0; j < K; j++) {
         arma::mat AlphaJ(L - 1, M * O);
         arma::mat ZJ = Z.slice(j);
         for (arma::uword l = 0; l < L - 1; l++) {
             arma::colvec MeanAlpha = CovAlpha * arma::trans(ZJ.row(l));
-            arma::colvec AlphaJL = rmvnormRcpp(1, MeanAlpha, CovAlpha);
+            arma::colvec AlphaJL = rmvnormRcppNew(1, MeanAlpha, cholSigma);
             AlphaJ.row(l) = arma::trans(AlphaJL);
         }
         Alpha.slice(j) = AlphaJ;
@@ -1155,12 +1169,19 @@ paraCLfixedL SampleAlpha(VAR1datobjFixedL DatObj, VAR1paraFixedL Para, paraCLfix
     arma::mat SpCovInv = SpatPara.SpCovInv;
 
     arma::mat CovAlpha = CholInv(EyeOM + arma::kron(SpCovInv, KappaInv));
+    arma::mat cholSigma;
+    try {
+        cholSigma = arma::chol(CovAlpha);
+    }
+    catch (...) {
+        cholSigma = getCholRobust(CovAlpha);
+    }
     for (arma::uword j = 0; j < K; j++) {
         arma::mat AlphaJ(L - 1, M * O);
         arma::mat ZJ = Z.slice(j);
         for (arma::uword l = 0; l < L - 1; l++) {
             arma::colvec MeanAlpha = CovAlpha * arma::trans(ZJ.row(l));
-            arma::colvec AlphaJL = rmvnormRcpp(1, MeanAlpha, CovAlpha);
+            arma::colvec AlphaJL = rmvnormRcppNew(1, MeanAlpha, cholSigma);
             AlphaJ.row(l) = arma::trans(AlphaJL);
         }
         Alpha.slice(j) = AlphaJ;
@@ -1327,6 +1348,7 @@ paraCLfixedL SampleAlpha(VAR1datobjFixedL DatObj, VAR1paraFixedL Para, paraCLfix
     else {
         arma::mat KappaInv = Para.KappaInv;
         arma::cube Vs(O, O, M);
+        arma::cube cholVs(O, O, M);
         for (int i = 0; i < M; i++) {
             arma::mat Vsi(O, O, arma::fill::eye);
             Vsi += (1 / Fs(i)) * KappaInv;
@@ -1344,7 +1366,15 @@ paraCLfixedL SampleAlpha(VAR1datobjFixedL DatObj, VAR1paraFixedL Para, paraCLfix
                 }
             }
             Vsi = CholInv(Vsi);
+            arma::mat cholVsi;
+            try {
+                cholVsi = arma::chol(Vsi);
+            }
+            catch (...) {
+                cholVsi = getCholRobust(Vsi);
+            }
             Vs.slice(i) = Vsi;
+            cholVs.slice(i) = cholVsi;
         }
         int nnMaxNum;
         int nnMaxNumJ;
@@ -1387,7 +1417,8 @@ paraCLfixedL SampleAlpha(VAR1datobjFixedL DatObj, VAR1paraFixedL Para, paraCLfix
                         }
                     }
                     arma::mat Vsi = Vs.slice(i);
-                    AlphaJLMat.col(i) = rmvnormRcpp(1, Vsi * muJLsi, Vsi);
+                    arma::mat cholVsi = cholVs.slice(i);
+                    AlphaJLMat.col(i) = rmvnormRcppNew(1, Vsi * muJLsi, cholVsi);
                 }
                 AlphaJ.row(lj) = arma::reshape(AlphaJLMat, 1, M * O);
             }

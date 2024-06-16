@@ -444,15 +444,20 @@ paraFixedL SampleEta(datobjFixedL DatObj, paraFixedL Para, hypara HyPara) {
       arma::mat CondPrecEta = UpsilonInv;
       arma::colvec EtaT(K);
       arma::mat SigmaInv = arma::diagmat(arma::vectorise(1 / Cov.slice(0)));
-      arma::mat tLambdaSigmaInv = arma::trans(Lambda) * SigmaInv;      
+      arma::mat tLambdaSigmaInv = arma::trans(Lambda) * SigmaInv;  
+      arma::mat CovEtaT = CholInv(tLambdaSigmaInv * Lambda + CondPrecEta);
+      arma::colvec MeanEtaT = CovEtaT * (tLambdaSigmaInv * (YStarWide.col(t) - XBetaMat.col(t)));
+      arma::mat cholSigma;
+      try {
+          cholSigma = arma::chol(CovEtaT);
+      }
+      catch (...) {
+          cholSigma = getCholRobust(CovEtaT);
+      }
       //Loop over t
       for (arma::uword t = 0; t < Nu; t++) {
-          arma::mat BigPhiMinusT = BigPhi;
-          BigPhiMinusT.shed_col(t);
-          //Sample EtaT          
-          arma::mat CovEtaT = CholInv(tLambdaSigmaInv * Lambda + CondPrecEta);
-          arma::colvec MeanEtaT = CovEtaT * (tLambdaSigmaInv * (YStarWide.col(t) - XBetaMat.col(t)));
-          EtaT = rmvnormRcpp(1, MeanEtaT, CovEtaT);
+          //Sample EtaT                   
+          EtaT = rmvnormRcppNew(1, MeanEtaT, cholSigma);
           BigPhi.col(t) = EtaT;
           //End loop over t
       }
