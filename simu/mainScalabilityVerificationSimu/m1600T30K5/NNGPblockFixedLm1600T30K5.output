@@ -44,9 +44,9 @@ Try help(fields) to get started.
 > K <- 5
 > O <- 1
 > L <- 50
-> M <- 900
+> M <- 1600
 > LjVec <- rep(min(50, M), K)
-> sqrootM <- 30
+> sqrootM <- 40
 > Nu <- 30
 > Time <- 1:Nu
 > TimeDist <- as.matrix(dist(Time))
@@ -125,24 +125,24 @@ Try help(fields) to get started.
 > MCMC <- list(NBurn = 20000, NSims = 10000, NThin = 2, NPilot = 5)
 > 
 > Sys.time()
-[1] "2024-06-16 22:18:28 +08"
-> regFixedL.simu <- bfaFixedL(Y ~ 0, data = dat, dist = D, time = Time,  K = K, 
-+                             starting = NULL, hypers = Hypers, tuning = NULL, mcmc = MCMC,
-+                             L = L,
-+                             family = "normal",
-+                             temporal.structure = "exponential",
-+                             spatial.structure = "continuous",
-+                             seed = 29, 
-+                             gamma.shrinkage = TRUE,
-+                             include.time = TRUE,
-+                             include.space = TRUE,
-+                             clustering = TRUE,
-+                             seasonPeriod = 1, 
-+                             equalTimeDist = TRUE,
-+                             spatApprox = FALSE, 
-+                             alphaMethod = "block", 
-+                             h = 15, 
-+                             storeSpatPredPara = FALSE,
-+                             storeWeights = FALSE,
-+                             alphasWeightsToFiles = FALSE) 
+[1] "2024-06-16 22:24:24 +08"
+> regFixedL.simu.block <- bfaFixedL(Y ~ 0, data = dat, dist = D, time = Time,  K = K, 
++                                   starting = NULL, hypers = Hypers, tuning = NULL, mcmc = MCMC,
++                                   L = L,
++                                   family = "normal",
++                                   temporal.structure = "exponential",
++                                   spatial.structure = "continuous",
++                                   seed = 29, 
++                                   gamma.shrinkage = TRUE,
++                                   include.time = TRUE,
++                                   include.space = TRUE,
++                                   clustering = TRUE,
++                                   seasonPeriod = 1, 
++                                   equalTimeDist = TRUE,
++                                   spatApprox = TRUE, 
++                                   alphaMethod = "block", 
++                                   h = 15,
++                                   storeSpatPredPara = FALSE,
++                                   storeWeights = FALSE,
++                                   alphasWeightsToFiles = FALSE) 
 Burn-in progress:  0%..  

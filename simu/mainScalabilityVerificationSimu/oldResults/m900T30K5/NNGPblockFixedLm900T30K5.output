@@ -125,24 +125,41 @@ Try help(fields) to get started.
 > MCMC <- list(NBurn = 20000, NSims = 10000, NThin = 2, NPilot = 5)
 > 
 > Sys.time()
-[1] "2024-06-16 22:18:28 +08"
-> regFixedL.simu <- bfaFixedL(Y ~ 0, data = dat, dist = D, time = Time,  K = K, 
-+                             starting = NULL, hypers = Hypers, tuning = NULL, mcmc = MCMC,
-+                             L = L,
-+                             family = "normal",
-+                             temporal.structure = "exponential",
-+                             spatial.structure = "continuous",
-+                             seed = 29, 
-+                             gamma.shrinkage = TRUE,
-+                             include.time = TRUE,
-+                             include.space = TRUE,
-+                             clustering = TRUE,
-+                             seasonPeriod = 1, 
-+                             equalTimeDist = TRUE,
-+                             spatApprox = FALSE, 
-+                             alphaMethod = "block", 
-+                             h = 15, 
-+                             storeSpatPredPara = FALSE,
-+                             storeWeights = FALSE,
-+                             alphasWeightsToFiles = FALSE) 
-Burn-in progress:  0%..  
+[1] "2024-06-07 09:16:44 +08"
+> regFixedL.simu.block <- bfaFixedL(Y ~ 0, data = dat, dist = D, time = Time,  K = K, 
++                                   starting = NULL, hypers = Hypers, tuning = NULL, mcmc = MCMC,
++                                   L = L,
++                                   family = "normal",
++                                   temporal.structure = "exponential",
++                                   spatial.structure = "continuous",
++                                   seed = 29, 
++                                   gamma.shrinkage = TRUE,
++                                   include.time = TRUE,
++                                   include.space = TRUE,
++                                   clustering = TRUE,
++                                   seasonPeriod = 1, 
++                                   equalTimeDist = TRUE,
++                                   spatApprox = TRUE, 
++                                   alphaMethod = "block", 
++                                   h = 15,
++                                   storeSpatPredPara = FALSE,
++                                   storeWeights = FALSE,
++                                   alphasWeightsToFiles = FALSE) 
+Burn-in progress:  0%..  10%.. 20%.. 30%.. 40%.. 50%.. 60%.. 70%.. 80%.. 90%.. 100%!
+Sampler progress:  0%.. 10%.. 20%.. 30%.. 40%.. 50%.. 60%.. 70%.. 80%.. 90%.. 100%!> Sys.time()
+[1] "2024-06-12 00:04:57 +08"
+> regFixedL.simu.block$runtime
+[1] "Model runtime: 4.62 days"
+> save(regFixedL.simu.block, file="regFixedL50simuBlockT30M900Iter30000.RData")
+> library(coda)
+> Diags.block <- diagnostics(regFixedL.simu.block, diags = c("dic", "dinf", "meanIC", "waic"), keepDeviance = TRUE)
+Calculating Log-Lik: 0%.. 25%.. 50%.. 75%.. 100%.. Done!
+Calculating PPD: 0%.. 25%.. 50%.. 75%.. 100%.. Done!
+> save(Diags.block, file = "regFixedL50simuBlockT30M900Iter30000Diags.RData")
+> Deviance.block <- as.mcmc(Diags.block$deviance)
+> save(Deviance.block, file = "regFixedL50simuBlockT30M900Iter30000Deviance.RData")
+> 
+> 
+> proc.time()
+      user     system    elapsed 
+398936.690      3.984 398944.366 

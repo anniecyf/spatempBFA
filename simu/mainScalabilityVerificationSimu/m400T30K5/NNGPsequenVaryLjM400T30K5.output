@@ -125,7 +125,7 @@ Try help(fields) to get started.
 > MCMC <- list(NBurn = 20000, NSims = 10000, NThin = 2, NPilot = 5)
 > 
 > Sys.time()
-[1] "2024-06-07 09:31:04 +08"
+[1] "2024-06-16 22:17:11 +08"
 > regVaryLj.simu.sequen <- bfaVaryingLjs(Y ~ 0, data = dat, dist = D, time = Time,  K = K, LjVec = LjVec,
 +                                        starting = NULL, hypers = Hypers, tuning = NULL, mcmc = MCMC,
 +                                        family = "normal",
@@ -142,36 +142,4 @@ Try help(fields) to get started.
 +                                        h = 15,
 +                                        storeSpatPredPara = FALSE, 
 +                                        storeWeights = FALSE) 
-Burn-in progress:  0%..  10%.. 20%.. 30%.. 40%.. 50%.. 60%.. 70%.. 80%.. 90%.. 100%!
-Sampler progress:  0%.. 10%.. 20%.. 30%.. 40%.. 50%.. 60%.. 70%.. 80%.. 90%.. 100%!> Sys.time()
-[1] "2024-06-07 11:12:50 +08"
-> save(regVaryLj.simu.sequen, file="regVaryLjsimuSequenT30M400Iter30000nostorealphaweight.RData")
-> regVaryLj.simu.sequen$runtime
-[1] "Model runtime: 1.7 hours"
-> library(coda)
-> Diags.sequenVaryLj <- diagnostics(regVaryLj.simu.sequen, diags = c("dic", "dinf", "meanIC", "waic"), keepDeviance = TRUE)
-Calculating Log-Lik: 0%.. 25%.. 50%.. 75%.. 100%.. Done!
-Calculating PPD: 0%.. 25%.. 50%.. 75%.. 100%.. Done!
-> save(Diags.sequenVaryLj, file = "regVaryLjsimuSequenT30M400Iter30000DiagsNostorealphaweight.RData")
-> Deviance.sequenVaryLj <- as.mcmc(Diags.sequenVaryLj$deviance)
-> save(Deviance.sequenVaryLj, file = "regVaryLjsimuSequenT30M400Iter30000DevianceNostorealphaweight.RData")
-> 
-> 
-> 
-> 
-> 
-> 
-> 
-> 
-> 
-> 
-> 
-> 
-> 
-> 
-> 
-> 
-> 
-> proc.time()
-    user   system  elapsed 
-6128.790    1.789 6130.692 
+Burn-in progress:  0%..  10%.. 
