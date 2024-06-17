@@ -128,6 +128,7 @@ arma::mat SpEXP(double Rho, arma::mat const& SpDist);
 //DISTRIBUTION FUNCTIONS
 arma::vec rnormRcpp(int n, double mean, double sd);
 arma::mat rmvnormRcpp(int n, arma::vec const& mean, arma::mat const& sigma);
+arma::mat rmvnormRcppNew(int n, arma::vec const& mean, arma::mat const& cholSigma);
 double rbinomRcpp(double n, double p);
 arma::vec rnormVecRcpp(arma::vec const& mean, arma::vec const& sd);
 double pnormRcpp(double q);
@@ -135,6 +136,7 @@ double UpperpnormRcpp(double q);
 arma::vec sampleRcpp(arma::Col<int> const& x, int size, bool replace, arma::vec const& prob);
 
 //UTILITY FUNCTIONS
+arma::mat getCholRobust(arma::mat matx);
 arma::mat CholInv(arma::mat const& Cov);
 
 #endif // __predictions__
