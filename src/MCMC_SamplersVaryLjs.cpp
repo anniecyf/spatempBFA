@@ -1488,9 +1488,9 @@ listParaVaryLj SampleAlpha(datobjVaryLj DatObj, paraVaryLj Para, spatpara3 SpatP
                                     Bsj(ksi) = 0;
                                     muJLsi += Bsjksi / Fs(j) * (AlphaJLsj - arma::kron(Bsj, EyeO) * AlphaJLNsj);
                                 }
+                                muJLsi = KappaInv * muJLsi;
                             }
                         }
-                        muJLsi = KappaInv * muJLsi;
                         if (i > 0) {
                             if (i < h) nnMaxNum = i - 1;
                             else nnMaxNum = h - 1;
