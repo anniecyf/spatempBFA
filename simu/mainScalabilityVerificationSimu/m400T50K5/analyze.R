@@ -1,6 +1,6 @@
 rm(list=ls())
 library(tidyverse)
-setwd("C:/Users/annie/OneDrive - National University of Singapore/Documents/PhD/research/server/spatempBFA/simu/r1/sect6a/m400T50K5")
+setwd("C:/Users/annie/OneDrive - National University of Singapore/Documents/PhD/research/first paper/spatempBFA/simu/mainScalabilityVerificationSimu/m400T50K5")
 list.files()
 load("regFixedL50simuT50M400Iter30000.RData")
 load("regFixedL50simuBlockT50M400Iter30000.RData")
