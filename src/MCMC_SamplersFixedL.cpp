@@ -1593,6 +1593,7 @@ paraCLfixedL SampleAlpha(datobjFixedL DatObj, paraFixedL Para, paraCLfixedL Para
                                 arma::mat AlphaJLNsj = arma::reshape(AlphaJLNsjMat, (O * (nnMaxNumJ + 1)), 1);
                                 Bsj(ksi) = 0;
                                 muJLsi += (Bsjksi * (1 / Fs(j)) * KappaInv) * (AlphaJLsj - arma::kron(Bsj, EyeO) * AlphaJLNsj);
+                                //arma::kron(Bsj, EyeO) can be treated as arma::sp_mat as well but probably no need as O is very small and often equals 1
                             }
                         }
                     }

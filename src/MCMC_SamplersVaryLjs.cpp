@@ -1487,6 +1487,7 @@ listParaVaryLj SampleAlpha(datobjVaryLj DatObj, paraVaryLj Para, spatpara3 SpatP
                                     arma::mat AlphaJLNsj = arma::reshape(AlphaJLNsjMat, (O * (nnMaxNumJ + 1)), 1);
                                     Bsj(ksi) = 0;
                                     muJLsi += Bsjksi / Fs(j) * (AlphaJLsj - arma::kron(Bsj, EyeO) * AlphaJLNsj);
+                                    //arma::kron(Bsj, EyeO) can be treated as arma::sp_mat as well but probably no need as O is very small and often equals 1
                                 }
                                 muJLsi = KappaInv * muJLsi;
                             }
