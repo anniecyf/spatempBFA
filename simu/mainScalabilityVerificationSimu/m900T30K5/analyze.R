@@ -1,5 +1,5 @@
 rm(list=ls())
-setwd("C:/Users/annie/OneDrive - National University of Singapore/Documents/PhD/research/server/spatempBFA/simu/mainScalabilityVerificationSimu/m900T30K5")
+setwd("C:/Users/annie/OneDrive - National University of Singapore/Documents/PhD/research/first paper/spatempBFA/simu/mainScalabilityVerificationSimu/m900T30K5")
 list.files()
 load("regFixedL50simuT30M900Iter30000.RData")
 load("regFixedL50simuBlockT30M900Iter30000.RData")
