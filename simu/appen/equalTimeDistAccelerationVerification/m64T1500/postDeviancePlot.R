@@ -1,0 +1,17 @@
+rm(list=ls())
+setwd("C:/Users/annie/OneDrive - National University of Singapore/Documents/PhD/research/first paper/spatempBFA/simu/appen/equalTimeDistAccelerationVerification/m64T1500")
+list.files()
+load("regFixedL30simuT1500M64Iter30000Deviance.RData")
+load("regFixedL30simuBlockT1500M64Iter30000Deviance.RData")
+load("regFixedL30simuSequenT1500M64Iter30000DevianceNostorealphaweights.RData")
+load("regVaryLjsimuSequenT1500M64Iter30000DevianceNostorealphaweight.RData")
+plot(Deviance)
+plot(Deviance.block)
+plot(Deviance.sequen)
+plot(Deviance.sequenVaryLj)
+
+
+load("regFixedL30simuT1500M64Iter30000Diags.RData")
+load("regFixedL30simuBlockT1500M64Iter30000Diags.RData")
+load("regFixedL30simuSequenT1500M64Iter30000DiagsNostorealphaweights.RData")
+load("regVaryLjsimuSequenT1500M64Iter30000DiagsNostorealphaweight.RData")
