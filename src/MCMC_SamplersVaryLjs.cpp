@@ -1434,6 +1434,7 @@ listParaVaryLj SampleAlpha(datobjVaryLj DatObj, paraVaryLj Para, spatpara3 SpatP
                 }
             }
             arma::mat Vsi = (1 / VsiSca) * Kappa;
+            // can calculate cholKappa out of the loop over i to further accelerate
             arma::mat cholVsi;
             try {
                 cholVsi = arma::chol(Vsi);

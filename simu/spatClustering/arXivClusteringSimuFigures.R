@@ -1,6 +1,6 @@
 ############################## accuracy ratio and Rand index box & violin plots ##############################
 rm(list=ls())
-setwd("C:/Users/annie/OneDrive - National University of Singapore/Documents/PhD/research/first paper/clus_spatempBFA")
+setwd("C:/Users/annie/OneDrive - National University of Singapore/Documents/PhD/research/spatial generalization aspect/clusteringSimulation")
 library(ggplot2)
 library(ggpubr)
 library(dplyr)
@@ -8,17 +8,11 @@ legendColors <- c("#FFAA11","#55CC11", "#1177CC", "#7755CC")
 load("nkeep10AccuRatioMat_designedClustering.RData") #nkeep10AccuRatio
 load("nkeep100AccuRatioMat_designedClustering.RData") #nkeep100AccuRatio
 load("nkeep1000AccuRatioMat_designedClustering.RData") #nkeep1000AccuRatio
-load("nkeep10RandIndexMat_designedClustering.RData") #nkeep10RandIndex
-load("nkeep100RandIndexMat_designedClustering.RData") #nkeep100RandIndex
-load("nkeep1000RandIndexMat_designedClustering.RData") #nkeep1000RandIndex
 N <- nrow(nkeep10AccuRatio)
 modelVec <- rep(c("fullGPfixedL", "NNGPblockFixedL", "NNGPsequenFixedL", "NNGPsequenVaryLj"), each = N)
 df10accu <- data.frame(accuratio = as.vector(nkeep10AccuRatio), model = as.factor(modelVec))
 df100accu <- data.frame(accuratio = as.vector(nkeep100AccuRatio), model = as.factor(modelVec))
 df1000accu <- data.frame(accuratio = as.vector(nkeep1000AccuRatio), model = as.factor(modelVec))
-df10randInd <- data.frame(randindex = as.vector(nkeep10RandIndex), model = as.factor(modelVec))
-df100randInd <- data.frame(randindex = as.vector(nkeep100RandIndex), model = as.factor(modelVec))
-df1000randInd <- data.frame(randindex = as.vector(nkeep1000RandIndex), model = as.factor(modelVec))
 
 p1000accuBoxLegend <- ggplot(df1000accu) + 
   geom_boxplot(aes(x = model, y = accuratio, fill = model)) +
@@ -29,69 +23,6 @@ p1000accuBoxLegend <- p1000accuBoxLegend + labs(y="Accuracy Ratio", x = "") +
         axis.text.y = element_text(size = 10, color = "black"),
         axis.ticks.x = element_blank(), axis.ticks.y = element_blank(), 
         legend.title = element_text(face = "bold", size = 12))
-
-p100accuBoxLegend <- ggplot(df100accu) + 
-  geom_boxplot(aes(x = model, y = accuratio, fill = model)) +
-  scale_fill_manual("Model", values = legendColors)
-p100accuBoxLegend <- p100accuBoxLegend + labs(y="Accuracy Ratio", x = "") +
-  theme(axis.title.y = element_text(size = 12),
-        axis.text.x = element_blank(),
-        axis.text.y = element_text(size = 10, color = "black"),
-        axis.ticks.x = element_blank(), axis.ticks.y = element_blank(), 
-        legend.title = element_text(face = "bold", size = 12))
-
-p10accuBoxLegend <- ggplot(df10accu) + 
-  geom_boxplot(aes(x = model, y = accuratio, fill = model)) +
-  scale_fill_manual("Model", values = legendColors)
-p10accuBoxLegend <- p10accuBoxLegend + labs(y="Accuracy Ratio", x = "") +
-  theme(axis.title.y = element_text(size = 12), 
-        axis.text.x = element_blank(),
-        axis.text.y = element_text(size = 10, color = "black"),
-        axis.ticks.x = element_blank(), axis.ticks.y = element_blank(), 
-        legend.title = element_text(face = "bold", size = 12))
-
-
-p1000randIndBoxLegend <- ggplot(df1000randInd) + 
-  geom_boxplot(aes(x = model, y = randindex, fill = model)) +
-  scale_fill_manual("Model", values = legendColors)
-p1000randIndBoxLegend <- p1000randIndBoxLegend + labs(y="Rand Index", x = "") +
-  theme(axis.title.y = element_text(size = 12),
-        axis.text.x = element_blank(),
-        axis.text.y = element_text(size = 10, color = "black"),
-        axis.ticks.x = element_blank(), axis.ticks.y = element_blank(), 
-        legend.title = element_text(face = "bold", size = 12))
-
-p100randIndBoxLegend <- ggplot(df100randInd) + 
-  geom_boxplot(aes(x = model, y = randindex, fill = model)) +
-  scale_fill_manual("Model", values = legendColors)
-p100randIndBoxLegend <- p100randIndBoxLegend + labs(y="Rand Index", x = "") +
-  theme(axis.title.y = element_text(size = 12),
-        axis.text.x = element_blank(),
-        axis.text.y = element_text(size = 10, color = "black"),
-        axis.ticks.x = element_blank(), axis.ticks.y = element_blank(), 
-        legend.title = element_text(face = "bold", size = 12))
-
-p10randIndBoxLegend <- ggplot(df10randInd) + 
-  geom_boxplot(aes(x = model, y = randindex, fill = model)) +
-  scale_fill_manual("Model", values = legendColors)
-p10randIndBoxLegend <- p10randIndBoxLegend + labs(y="Rand Index", x = "") +
-  theme(axis.title.y = element_text(size = 12),
-        axis.text.x = element_blank(),
-        axis.text.y = element_text(size = 10, color = "black"),
-        axis.ticks.x = element_blank(), axis.ticks.y = element_blank(), 
-        legend.title = element_text(face = "bold", size = 12))
-
-
-ggarrange(p1000accuBoxLegend, p100accuBoxLegend, p10accuBoxLegend,
-          p1000randIndBoxLegend, p100randIndBoxLegend, p10randIndBoxLegend,
-          labels = c("A", "B", "C", "D", "E", "F"), align = "v",
-          ncol = 3, nrow = 2, common.legend = TRUE, legend = "bottom")
-ggsave("boxplotsClustering.png", width=24, height=16, units="cm")
-
-
-
-
-
 p1000accuViolinLegend <- ggplot(df1000accu) + 
   geom_violin(aes(x = model, y = accuratio, fill = model)) +
   scale_fill_manual("Model", values = legendColors)
@@ -102,7 +33,34 @@ p1000accuViolinLegend <- p1000accuViolinLegend + labs(y="Accuracy Ratio", x = "M
         axis.text.y = element_text(size = 10, color = "black"),
         axis.ticks.x = element_blank(), axis.ticks.y = element_blank(), 
         legend.title = element_text(face = "bold", size = 12))
-
+p100accuBoxLegend <- ggplot(df100accu) + 
+  geom_boxplot(aes(x = model, y = accuratio, fill = model)) +
+  scale_fill_manual("Model", values = legendColors)
+p100accuBoxLegend <- p100accuBoxLegend + labs(y="Accuracy Ratio", x = "") +
+  theme(axis.title.y = element_text(size = 12),
+        axis.text.x = element_blank(),
+        axis.text.y = element_text(size = 10, color = "black"),
+        axis.ticks.x = element_blank(), axis.ticks.y = element_blank(), 
+        legend.title = element_text(face = "bold", size = 12))
+p100accuViolinLegend <- ggplot(df100accu) + 
+  geom_violin(aes(x = model, y = accuratio, fill = model)) +
+  scale_fill_manual("Model", values = legendColors)
+p100accuViolinLegend <- p100accuViolinLegend + labs(y="Accuracy Ratio", x = "Model") +
+  theme(axis.title.x = element_blank(),
+        axis.title.y = element_text(size = 12),
+        axis.text.x = element_blank(),
+        axis.text.y = element_text(size = 10, color = "black"),
+        axis.ticks.x = element_blank(), axis.ticks.y = element_blank(), 
+        legend.title = element_text(face = "bold", size = 12))
+p10accuBoxLegend <- ggplot(df10accu) + 
+  geom_boxplot(aes(x = model, y = accuratio, fill = model)) +
+  scale_fill_manual("Model", values = legendColors)
+p10accuBoxLegend <- p10accuBoxLegend + labs(y="Accuracy Ratio", x = "") +
+  theme(axis.title.y = element_text(size = 12), 
+        axis.text.x = element_blank(),
+        axis.text.y = element_text(size = 10, color = "black"),
+        axis.ticks.x = element_blank(), axis.ticks.y = element_blank(), 
+        legend.title = element_text(face = "bold", size = 12))
 p10accuViolinLegend <- ggplot(df10accu) + 
   geom_violin(aes(x = model, y = accuratio, fill = model)) +
   scale_fill_manual("Model", values = legendColors)
@@ -114,18 +72,37 @@ p10accuViolinLegend <- p10accuViolinLegend + labs(y="Accuracy Ratio", x = "Model
         axis.ticks.x = element_blank(), axis.ticks.y = element_blank(), 
         legend.title = element_text(face = "bold", size = 12))
 
-p100accuViolinLegend <- ggplot(df100accu) + 
-  geom_violin(aes(x = model, y = accuratio, fill = model)) +
+ggarrange(p1000accuBoxLegend, p100accuBoxLegend, p10accuBoxLegend,
+          p1000accuViolinLegend, p100accuViolinLegend, p10accuViolinLegend,
+          labels = c("A", "C", "E", "B", "D", "F"), align = "v",
+          ncol = 3, nrow = 2, common.legend = TRUE, legend = "bottom")
+ggsave("clusteringPlots/boxViolinPlots/valignedBoldBoxViolin101001000iterWeights.png", width=24, height=16, units="cm")
+
+
+rm(list=ls())
+setwd("C:/Users/annie/OneDrive - National University of Singapore/Documents/PhD/research/spatial generalization aspect/clusteringSimulation")
+library(ggplot2)
+library(ggpubr)
+library(dplyr)
+legendColors <- c("#FFAA11","#55CC11", "#1177CC", "#7755CC")
+load("nkeep10RandIndexMat_designedClustering.RData") #nkeep10RandIndex
+load("nkeep100RandIndexMat_designedClustering.RData") #nkeep100RandIndex
+load("nkeep1000RandIndexMat_designedClustering.RData") #nkeep1000RandIndex
+N <- nrow(nkeep10RandIndex)
+modelVec <- rep(c("fullGPfixedL", "NNGPblockFixedL", "NNGPsequenFixedL", "NNGPsequenVaryLj"), each = N)
+df10randInd <- data.frame(randindex = as.vector(nkeep10RandIndex), model = as.factor(modelVec))
+df100randInd <- data.frame(randindex = as.vector(nkeep100RandIndex), model = as.factor(modelVec))
+df1000randInd <- data.frame(randindex = as.vector(nkeep1000RandIndex), model = as.factor(modelVec))
+
+p1000randIndBoxLegend <- ggplot(df1000randInd) + 
+  geom_boxplot(aes(x = model, y = randindex, fill = model)) +
   scale_fill_manual("Model", values = legendColors)
-p100accuViolinLegend <- p100accuViolinLegend + labs(y="Accuracy Ratio", x = "Model") +
-  theme(axis.title.x = element_blank(),
-        axis.title.y = element_text(size = 12),
+p1000randIndBoxLegend <- p1000randIndBoxLegend + labs(y="Rand Index", x = "") +
+  theme(axis.title.y = element_text(size = 12),
         axis.text.x = element_blank(),
         axis.text.y = element_text(size = 10, color = "black"),
         axis.ticks.x = element_blank(), axis.ticks.y = element_blank(), 
         legend.title = element_text(face = "bold", size = 12))
-
-
 p1000randIndViolinLegend <- ggplot(df1000randInd) + 
   geom_violin(aes(x = model, y = randindex, fill = model)) +
   scale_fill_manual("Model", values = legendColors)
@@ -136,7 +113,15 @@ p1000randIndViolinLegend <- p1000randIndViolinLegend + labs(y="Rand Index", x = 
         axis.text.y = element_text(size = 10, color = "black"),
         axis.ticks.x = element_blank(), axis.ticks.y = element_blank(), 
         legend.title = element_text(face = "bold", size = 12))
-
+p100randIndBoxLegend <- ggplot(df100randInd) + 
+  geom_boxplot(aes(x = model, y = randindex, fill = model)) +
+  scale_fill_manual("Model", values = legendColors)
+p100randIndBoxLegend <- p100randIndBoxLegend + labs(y="Rand Index", x = "") +
+  theme(axis.title.y = element_text(size = 12),
+        axis.text.x = element_blank(),
+        axis.text.y = element_text(size = 10, color = "black"),
+        axis.ticks.x = element_blank(), axis.ticks.y = element_blank(), 
+        legend.title = element_text(face = "bold", size = 12))
 p100randIndViolinLegend <- ggplot(df100randInd) + 
   geom_violin(aes(x = model, y = randindex, fill = model)) +
   scale_fill_manual("Model", values = legendColors)
@@ -147,7 +132,15 @@ p100randIndViolinLegend <- p100randIndViolinLegend + labs(y="Rand Index", x = "M
         axis.text.y = element_text(size = 10, color = "black"),
         axis.ticks.x = element_blank(), axis.ticks.y = element_blank(), 
         legend.title = element_text(face = "bold", size = 12))
-
+p10randIndBoxLegend <- ggplot(df10randInd) + 
+  geom_boxplot(aes(x = model, y = randindex, fill = model)) +
+  scale_fill_manual("Model", values = legendColors)
+p10randIndBoxLegend <- p10randIndBoxLegend + labs(y="Rand Index", x = "") +
+  theme(axis.title.y = element_text(size = 12),
+        axis.text.x = element_blank(),
+        axis.text.y = element_text(size = 10, color = "black"),
+        axis.ticks.x = element_blank(), axis.ticks.y = element_blank(), 
+        legend.title = element_text(face = "bold", size = 12))
 p10randIndViolinLegend <- ggplot(df10randInd) + 
   geom_violin(aes(x = model, y = randindex, fill = model)) +
   scale_fill_manual("Model", values = legendColors)
@@ -159,11 +152,11 @@ p10randIndViolinLegend <- p10randIndViolinLegend + labs(y="Rand Index", x = "Mod
         axis.ticks.x = element_blank(), axis.ticks.y = element_blank(), 
         legend.title = element_text(face = "bold", size = 12))
 
-ggarrange(p1000accuViolinLegend, p100accuViolinLegend, p10accuViolinLegend,
+ggarrange(p1000randIndBoxLegend, p100randIndBoxLegend, p10randIndBoxLegend,
           p1000randIndViolinLegend, p100randIndViolinLegend, p10randIndViolinLegend,
-          labels = c("A", "B", "C", "D", "E", "F"), align = "v",
+          labels = c("A", "C", "E", "B", "D", "F"), align = "v",
           ncol = 3, nrow = 2, common.legend = TRUE, legend = "bottom")
-ggsave("violinplotsClustering.png", width=24, height=16, units="cm")
+ggsave("clusteringPlots/boxViolinPlots/randIndBoxViolin101001000iterWeights.png", width=24, height=16, units="cm")
 
 
 
