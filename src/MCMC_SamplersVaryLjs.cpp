@@ -1416,6 +1416,13 @@ listParaVaryLj SampleAlpha(datobjVaryLj DatObj, paraVaryLj Para, spatpara3 SpatP
         arma::mat EyeO(O, O, arma::fill::eye);
         arma::mat KappaInv = Para.KappaInv;
         arma::mat Kappa = Para.Kappa;
+        arma::mat cholKappa;
+        try {
+            cholKappa = arma::chol(Kappa);
+        }
+        catch (...) {
+            cholKappa = getCholRobust(Kappa);
+        }
         arma::cube Vs(O, O, M);   
         arma::cube cholVs(O, O, M);
         for (int i = 0; i < M; i++) {
@@ -1434,14 +1441,7 @@ listParaVaryLj SampleAlpha(datobjVaryLj DatObj, paraVaryLj Para, spatpara3 SpatP
                 }
             }
             arma::mat Vsi = (1 / VsiSca) * Kappa;
-            // can calculate cholKappa out of the loop over i to further accelerate
-            arma::mat cholVsi;
-            try {
-                cholVsi = arma::chol(Vsi);
-            }
-            catch (...) {
-                cholVsi = getCholRobust(Vsi);
-            }
+            arma::mat cholVsi = (1 / sqrt(VsiSca)) * cholKappa;
             Vs.slice(i) = Vsi;
             cholVs.slice(i) = cholVsi;
         }

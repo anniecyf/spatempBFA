@@ -386,13 +386,14 @@ Rcpp::List AlphaKriggingFixedL(Rcpp::List DatObj_List, Rcpp::List Para_List, int
                 arma::mat FrhoPlus = arma::trans(FrhoOrigNew) * CholInv(FrhoOrigOrig);
                 arma::mat Sigma = arma::kron((FrhoNewNew - FrhoPlus * FrhoOrigNew), Kappa);
                 arma::mat cholSigma;
+                // can further accelerate by first calculating Chol((FrhoNewNew - FrhoPlus * FrhoOrigNew)) and CholKappa then Kron to get cholSigma
                 try {
                     cholSigma = arma::chol(Sigma);
                 }
                 catch (...) {
                     cholSigma = getCholRobust(Sigma);
                 }
-                arma::mat FrhoPlusKron = arma::kron(FrhoPlus, EyeO);
+                arma::sp_mat FrhoPlusKron(arma::kron(FrhoPlus, EyeO));
                 for (arma::uword j = 0; j < K; j++) {
                     arma::mat AlphaOrigJ = AlphaOrig.slice(j); // of dim (M * O) x (L - 1) 
                     arma::mat AlphaKrigMatJ(NNewLoc * O, L - 1);
@@ -405,11 +406,19 @@ Rcpp::List AlphaKriggingFixedL(Rcpp::List DatObj_List, Rcpp::List Para_List, int
                 }
             }
             else { //when include.space = spatApprox = TRUE; in this case SpCorInd must = 0 (spatial.structure must be "continuous") as ensured by the corresponding R function 
-                arma::cube CovCube(O, O, NNewLoc);
+                //arma::cube CovCube(O, O, NNewLoc);
+                arma::vec CovScalarVec(NNewLoc);
                 arma::cube BCube(O, h * O, NNewLoc);
                 arma::mat FrhoOrigOrig = SpEXP(rho, dist);
                 arma::mat FrhoOrigNew = SpEXP(rho, distOrigNew);
                 arma::mat FrhoNewNew = SpEXP(rho, distNewNew);
+                arma::mat cholKappa;
+                try {
+                    cholKappa = arma::chol(Kappa);
+                }
+                catch (...) {
+                    cholKappa = getCholRobust(Kappa);
+                }
                 for (arma::uword i = 0; i < NNewLoc; i++) {
                     arma::uvec nni = arma::trans(nnIndpred.row(i));
                     arma::colvec FrhoOrigsi = FrhoOrigNew.col(i);
@@ -417,7 +426,8 @@ Rcpp::List AlphaKriggingFixedL(Rcpp::List DatObj_List, Rcpp::List Para_List, int
                     arma::mat Bsi = arma::trans(Frhosinsi) * CholInv(FrhoOrigOrig(nni, nni));
                     double Fsi = arma::as_scalar(1 - Bsi * Frhosinsi);
                     if (Fsi <= 0) Fsi = 0.00001;
-                    CovCube.slice(i) = Fsi * Kappa;
+                    //CovCube.slice(i) = Fsi * Kappa;
+                    CovScalarVec(i) = Fsi;
                     BCube.slice(i) = arma::kron(Bsi, EyeO);
                 }
                 for (arma::uword j = 0; j < K; j++) {
@@ -431,10 +441,12 @@ Rcpp::List AlphaKriggingFixedL(Rcpp::List DatObj_List, Rcpp::List Para_List, int
                             arma::uvec nni = arma::trans(nnIndpred.row(i));
                             arma::mat AlphaOrigJlNsiMat = AlphaOrigJlMat.cols(nni); // of dim O x h
                             arma::colvec AlphaOrigJlNsi = arma::reshape(AlphaOrigJlNsiMat, O * h, 1);
-                            arma::mat BsiKron = BCube.slice(i); // of dim O x hO
-                            arma::mat Sigmasi = CovCube.slice(i); // of dim O x O
+                            arma::sp_mat BsiKron(BCube.slice(i)); // of dim O x hO
+                            //arma::mat Sigmasi = CovCube.slice(i); // of dim O x O
+                            arma::mat cholSigmasi = sqrt(CovScalarVec(i)) * cholKappa; // of dim O x O
                             arma::colvec MeanJlsi = BsiKron * AlphaOrigJlNsi;
-                            AlphaKrigJlMat.col(i) = rmvnormRcpp(1, MeanJlsi, Sigmasi);
+                            AlphaKrigJlMat.col(i) = rmvnormRcppNew(1, MeanJlsi, cholSigmasi);
+                            //AlphaKrigJlMat.col(i) = rmvnormRcpp(1, MeanJlsi, Sigmasi);
                         }
                         AlphaKrigMatJ.col(l) = arma::reshape(AlphaKrigJlMat, NNewLoc * O, 1);
                     }
@@ -729,13 +741,14 @@ Rcpp::List AlphaKriggingVaryLj(Rcpp::List DatObj_List, Rcpp::List Para_List, int
                 arma::mat FrhoPlus = arma::trans(FrhoOrigNew) * CholInv(FrhoOrigOrig);
                 arma::mat Sigma = arma::kron((FrhoNewNew - FrhoPlus * FrhoOrigNew), Kappa);
                 arma::mat cholSigma;
+                // can further accelerate by first calculating Chol((FrhoNewNew - FrhoPlus * FrhoOrigNew)) and CholKappa then Kron to get cholSigma
                 try {
                     cholSigma = arma::chol(Sigma);
                 }
                 catch (...) {
                     cholSigma = getCholRobust(Sigma);
                 }
-                arma::mat FrhoPlusKron = arma::kron(FrhoPlus, EyeO);
+                arma::sp_mat FrhoPlusKron(arma::kron(FrhoPlus, EyeO));
                 for (arma::uword j = 0; j < K; j++) {
                     int Lj = LjVec(j);
                     if (Lj == 1) {
@@ -756,11 +769,18 @@ Rcpp::List AlphaKriggingVaryLj(Rcpp::List DatObj_List, Rcpp::List Para_List, int
                 }
             }
             else { //when include.space = spatApprox = TRUE; in this case SpCorInd must = 0 (spatial.structure must be "continuous") as ensured by the corresponding R function 
-                arma::cube CovCube(O, O, NNewLoc);
+                arma::vec CovScalarVec(NNewLoc);
                 arma::cube BCube(O, h * O, NNewLoc);
                 arma::mat FrhoOrigOrig = SpEXP(rho, dist);
                 arma::mat FrhoOrigNew = SpEXP(rho, distOrigNew);
                 arma::mat FrhoNewNew = SpEXP(rho, distNewNew);
+                arma::mat cholKappa;
+                try {
+                    cholKappa = arma::chol(Kappa);
+                }
+                catch (...) {
+                    cholKappa = getCholRobust(Kappa);
+                }
                 for (arma::uword i = 0; i < NNewLoc; i++) {
                     arma::uvec nni = arma::trans(nnIndpred.row(i));
                     arma::colvec FrhoOrigsi = FrhoOrigNew.col(i);
@@ -768,7 +788,7 @@ Rcpp::List AlphaKriggingVaryLj(Rcpp::List DatObj_List, Rcpp::List Para_List, int
                     arma::mat Bsi = arma::trans(Frhosinsi) * CholInv(FrhoOrigOrig(nni, nni));
                     double Fsi = arma::as_scalar(1 - Bsi * Frhosinsi);
                     if (Fsi <= 0) Fsi = 0.00001;
-                    CovCube.slice(i) = Fsi * Kappa;
+                    CovScalarVec(i) = Fsi;
                     BCube.slice(i) = arma::kron(Bsi, EyeO);
                 }
                 for (arma::uword j = 0; j < K; j++) {
@@ -789,10 +809,10 @@ Rcpp::List AlphaKriggingVaryLj(Rcpp::List DatObj_List, Rcpp::List Para_List, int
                                 arma::uvec nni = arma::trans(nnIndpred.row(i));
                                 arma::mat AlphaOrigSJlNsiMat = AlphaOrigSJlMat.cols(nni); // of dim O x h
                                 arma::colvec AlphaOrigSJlNsi = arma::reshape(AlphaOrigSJlNsiMat, O * h, 1);
-                                arma::mat BsiKron = BCube.slice(i); // of dim O x hO
-                                arma::mat Sigmasi = CovCube.slice(i); // of dim O x O
+                                arma::sp_mat BsiKron(BCube.slice(i)); // of dim O x hO
+                                arma::mat cholSigmasi = sqrt(CovScalarVec(i)) * cholKappa; // of dim O x O
                                 arma::colvec MeanSJlsi = BsiKron * AlphaOrigSJlNsi;
-                                AlphaKrigSJlMat.col(i) = rmvnormRcpp(1, MeanSJlsi, Sigmasi);
+                                AlphaKrigSJlMat.col(i) = rmvnormRcppNew(1, MeanSJlsi, cholSigmasi);
                             }
                             AlphaKrigSJ.col(l) = arma::reshape(AlphaKrigSJlMat, NNewLoc * O, 1);
                         }

@@ -1,12 +1,11 @@
 rm(list=ls())
-library(tidyverse)
 setwd("C:/Users/annie/OneDrive - National University of Singapore/Documents/PhD/research/first paper/spatempBFA/simu/appen/equalTimeDistAccelerationVerification/m64T1500")
 list.files()
 load("regFixedL30simuT1500M64Iter30000.RData")
-load("regFixedL30simuBlock1T1500M64Iter30000.RData")
+load("regFixedL30simuBlockT1500M64Iter30000.RData")
 load("regFixedL30simuSequenT1500M64Iter30000nostorealphaweights.RData")
 regFixedL.simu.sequen.fast <- regFixedL.simu.sequen
-load("regVaryLjsimuSequenT1500M64Iter30000nostorealphaweight.RData")
+load("regFixedL30simuSequenT1500M64Iter30000specifyEqualTimeDistFnostorealphaweight.RData")
 load("regVaryLjsimuSequenT1500M64Iter30000nostorealphaweight.RData")
 regVaryLj.simu.sequen.fast <- regVaryLj.simu.sequen
 load("regVaryLjsimuSequenT1500M64Iter30000specifyEqualTimeDistFnostorealphaweight.RData")

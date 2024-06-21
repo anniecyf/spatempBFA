@@ -1,0 +1,66 @@
+---
+title: "Key Parameters' Posterior Sampling Time Analysis"
+author: Yifan CHENG $\quad$ [\textcolor{blue}{y.cheng@u.nus.edu}](mailto:y.cheng@u.nus.edu)  
+output:
+  pdf_document: default
+header-includes: 
+ - \usepackage{bm}
+ - \usepackage{xcolor}
+---
+
+# Portions of Recorded Gibbs Sampler Time for 10 Key Parameters
+We first display the first 50 kept post-burn-in MCMC iterations' posterior sampling time (in milliseconds) for 10 key Gibbs sampler steps (corresponding to $\psi$, $\Upsilon$, $\bm{\eta}_t$'s, $z_{jl}(\bm{s}_{i,o})$'s or $u_j(\bm{s}_{i,o})$'s, $\xi_j(\bm{s}_{i,o})$'s, $\theta_{jl_j}$'s, $\delta_{1:k}$, $\rho$, $\kappa$, and $\alpha_{jl_j}(\bm{s}_{i,o})$'s). For our 4 models `fullGPfixedL`, `NNGPblockFixedL`, `NNGPsequenFixedL`, and `NNGPsequenVaryLj`, we have considered 6 settings (both `equalTimeDist = TRUE` $\&$ `equalTimeDist = FALSE` specified for the latter 2 models and only `equalTimeDist = TRUE` specified for the first 2 models).
+```{r echo = F}
+rm(list=ls())
+wd <- "C:/Users/annie/OneDrive - National University of Singapore/Documents/PhD/research/first paper/spatempBFA/simu/appen/equalTimeDistAccelerationVerification/m64T1500"
+```
+```{r}
+setwd(wd)
+load("GibbsStepTimeFixedLfullGP.RData")
+load("GibbsStepTimeFixedLblock.RData")
+load("GibbsStepTimeFixedLsequen.RData")
+load("GibbsStepTimeFixedLsequenFast.RData")
+load("GibbsStepTimeVaryLjSequen.RData")
+load("GibbsStepTimeVaryLjSequenFast.RData")
+head(GibbsStepTimeFixedLfullGP, 50)
+head(GibbsStepTimeFixedLblock, 50)
+head(GibbsStepTimeFixedLsequen, 50)
+head(GibbsStepTimeFixedLsequen.fast, 50)
+head(GibbsStepTimeVaryLjSequen, 50)
+head(GibbsStepTimeVaryLjSequen.fast, 50)
+```   
+
+# Posterior Sampling Time Summary Statistics
+We then present vital posterior sampling time summary statistics for the 3 temporal parameters $\psi$, $\Upsilon$, and $\bm{\eta}_t$'s to showcase the manifest computational acceleration brought about by our tactics for evenly dispersed time points presented in Appendix B.
+```{r}
+apply(GibbsStepTimeFixedLfullGP[,8:10], 2, summary)
+apply(GibbsStepTimeFixedLblock[,8:10], 2, summary)
+apply(GibbsStepTimeFixedLsequen[,8:10], 2, summary)
+apply(GibbsStepTimeFixedLsequen.fast[,8:10], 2, summary)
+apply(GibbsStepTimeVaryLjSequen[,8:10], 2, summary)
+apply(GibbsStepTimeVaryLjSequen.fast[,8:10], 2, summary)
+```
+The results correspond well to what we have discussed in Appendix B of our manuscript. 
+
+```{r}
+round(apply(GibbsStepTimeFixedLfullGP[,8:10], 2, sd), 5)
+round(apply(GibbsStepTimeFixedLblock[,8:10], 2, sd), 5)
+round(apply(GibbsStepTimeFixedLsequen[,8:10], 2, sd), 5)
+round(apply(GibbsStepTimeFixedLsequen.fast[,8:10], 2, sd), 5)
+round(apply(GibbsStepTimeVaryLjSequen[,8:10], 2, sd), 5)
+round(apply(GibbsStepTimeVaryLjSequen.fast[,8:10], 2, sd), 5)
+```
+
+
+
+
+
+     
+     
+
+
+     
+
+
+
+
