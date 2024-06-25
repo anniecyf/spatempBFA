@@ -6,7 +6,7 @@ K <- 5
 O <- 1
 L <- 50
 M <- 900
-sqrootM <- 20
+sqrootM <- 30
 Nu <- 30
 Time <- 1:Nu
 TimeDist <- as.matrix(dist(Time))
