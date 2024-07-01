@@ -1,5 +1,5 @@
 ---
-title: "Key Parameters' Posterior Sampling Time Analysis"
+title: "Posterior Sampling Time Analysis -- $m=64$ and $T=500$"
 author: Yifan CHENG $\quad$ [\textcolor{blue}{y.cheng@u.nus.edu}](mailto:y.cheng@u.nus.edu)  
 output:
   pdf_document: default
@@ -8,59 +8,91 @@ header-includes:
  - \usepackage{xcolor}
 ---
 
-# Portions of Recorded Gibbs Sampler Time for 10 Key Parameters
-We first display the first 50 kept post-burn-in MCMC iterations' posterior sampling time (in milliseconds) for 10 key Gibbs sampler steps (corresponding to $\psi$, $\Upsilon$, $\bm{\eta}_t$'s, $z_{jl}(\bm{s}_{i,o})$'s or $u_j(\bm{s}_{i,o})$'s, $\xi_j(\bm{s}_{i,o})$'s, $\theta_{jl_j}$'s, $\delta_{1:k}$, $\rho$, $\kappa$, and $\alpha_{jl_j}(\bm{s}_{i,o})$'s). For our 4 models `fullGPfixedL`, `NNGPblockFixedL`, `NNGPsequenFixedL`, and `NNGPsequenVaryLj`, we have considered 6 settings (both `equalTimeDist = TRUE` $\&$ `equalTimeDist = FALSE` specified for the latter 2 models and only `equalTimeDist = TRUE` specified for the first 2 models).
-```{r echo = F}
-rm(list=ls())
-wd <- "C:/Users/annie/OneDrive - National University of Singapore/Documents/PhD/research/first paper/spatempBFA/simu/appen/equalTimeDistAccelerationVerification/m64T500"
+# Simulation Set-Up and Overall Model Fitting Time
+When fitting each of our 4 models (`fullGPfixedL`, `NNGPblockFixedL`, `NNGPsequenFixedL`, and `NNGPsequenVaryLj`) with $m=8^2=64$ and $T=500$, we specified both `equalTimeDist = TRUE` and `equalTimeDist = FALSE`. We thus have $4\times 2 = 8$ model settings. 
+```{r eval=F}
+setwd(paste(projDirec, "simu/appen/equalTimeDistAccelerationVerification/m64T500", sep = "/"))
+load("regFixedL30simuT500M64Iter30000.RData")
+regFixedL.simu.fast <- regFixedL.simu
+load("regFixedL30simuT500M64Iter30000specifyEqualTimeDistF.RData")
+load("regFixedL30simuBlockT500M64Iter30000.RData")
+regFixedL.simu.block.fast <- regFixedL.simu.block
+load("regFixedL30simuBlockT500M64Iter30000specifyEqualTimeDistF.RData")
+load("regFixedL30simuSequenT500M64Iter30000nostorealphaweights.RData")
+regFixedL.simu.sequen.fast <- regFixedL.simu.sequen
+load("regFixedL30simuSequenT500M64Iter30000specifyEqualTimeDistFnostorealphaweights.RData")
+load("regVaryLjsimuSequenT500M64Iter30000nostorealphaweight.RData")
+regVaryLj.simu.sequen.fast <- regVaryLj.simu.sequen
+load("regVaryLjsimuSequenT500M64Iter30000specifyEqualTimeDistFnostorealphaweight.RData")
+##all of the 8 matrices below are 5000 x 10 (10000 / 2 = 5000 kept post-burn-in MCMC iterations, 7 + 3 = 10 key parameters)## 
+GibbsStepTimeFixedLfullGP.fast <- regFixedL.simu.fast$GibbsStepTime         # equalTimeDist = TRUE
+GibbsStepTimeFixedLblock.fast <- regFixedL.simu.block.fast$GibbsStepTime    # equalTimeDist = TRUE
+GibbsStepTimeFixedLsequen.fast <- regFixedL.simu.sequen.fast$GibbsStepTime  # equalTimeDist = TRUE
+GibbsStepTimeVaryLjSequen.fast <- regVaryLj.simu.sequen.fast$GibbsStepTime  # equalTimeDist = TRUE
+GibbsStepTimeFixedLfullGP <- regFixedL.simu$GibbsStepTime                   # equalTimeDist = FALSE
+GibbsStepTimeFixedLblock <- regFixedL.simu.block$GibbsStepTime              # equalTimeDist = FALSE
+GibbsStepTimeFixedLsequen <- regFixedL.simu.sequen$GibbsStepTime            # equalTimeDist = FALSE
+GibbsStepTimeVaryLjSequen <- regVaryLj.simu.sequen$GibbsStepTime            # equalTimeDist = FALSE
+save(GibbsStepTimeFixedLfullGP, file = "GibbsStepTimeFixedLfullGP.RData")
+save(GibbsStepTimeFixedLblock, file = "GibbsStepTimeFixedLblock.RData")
+save(GibbsStepTimeFixedLsequen, file = "GibbsStepTimeFixedLsequen.RData")
+save(GibbsStepTimeVaryLjSequen, file = "GibbsStepTimeVaryLjSequen.RData")
+save(GibbsStepTimeFixedLfullGP.fast, file = "GibbsStepTimeFixedLfullGPfast.RData")
+save(GibbsStepTimeFixedLblock.fast, file = "GibbsStepTimeFixedLblockFast.RData")
+save(GibbsStepTimeFixedLsequen.fast, file = "GibbsStepTimeFixedLsequenFast.RData")
+save(GibbsStepTimeVaryLjSequen.fast, file = "GibbsStepTimeVaryLjSequenFast.RData")
 ```
-```{r}
+Since $m=64$ is quite small, we do not expect any significant differences in the posterior sampling time between our 4 models with the same `equalTimeDist` input. Since $T=500$ is quite large, what we have discussed in Appendix B of our manuscript suggest that the 3 temporal parameters' posterior sampling steps can be markedly accelerated by adopting our approaches and specifying `equalTimeDist = TRUE` for each of our 4 models. 
+
+The results we have obtained corroborate these well. With `equalTimeDist = TRUE` specified, the overall model fitting time for our 4 models, i.e., `fullGPfixedL`, `NNGPblockFixedL`, `NNGPsequenFixedL`, and `NNGPsequenVaryLj`, are 7.04 hours, 7.03 hours, 7.04 hours, and 6.31 hours, respectively. If we do not take advantage of our tactics for evenly dispersed time points presented in Appendix B of our manuscript by specifying `equalTimeDist = FALSE` instead, we will need around 27 days to fit the same 4 models using the same computation resources. 
+
+# Portions of Recorded Gibbs Sampler Time for 10 Key Parameters
+We first display the first 50 kept post-burn-in MCMC iterations' posterior sampling time (in milliseconds) for 10 key Gibbs sampler steps (corresponding to $\psi$, $\Upsilon$, $\bm{\eta}_t$'s, $z_{jl}(\bm{s}_{i,o})$'s or $u_j(\bm{s}_{i,o})$'s, $\xi_j(\bm{s}_{i,o})$'s, $\theta_{jl_j}$'s, $\delta_{1:k}$, $\rho$, $\kappa$, and $\alpha_{jl_j}(\bm{s}_{i,o})$'s) for our 8 model settings.
+```{r echo = -(1:2)}
+rm(list=ls())
+projDirec <- "C:/Users/annie/OneDrive - National University of Singapore/Documents/PhD/research/first paper/spatempBFA"
+wd <- paste(projDirec, "simu/appen/equalTimeDistAccelerationVerification/m64T500", sep = "/")
 setwd(wd)
 load("GibbsStepTimeFixedLfullGP.RData")
+load("GibbsStepTimeFixedLfullGPfast.RData")
 load("GibbsStepTimeFixedLblock.RData")
+load("GibbsStepTimeFixedLblockFast.RData")
 load("GibbsStepTimeFixedLsequen.RData")
 load("GibbsStepTimeFixedLsequenFast.RData")
 load("GibbsStepTimeVaryLjSequen.RData")
 load("GibbsStepTimeVaryLjSequenFast.RData")
-head(GibbsStepTimeFixedLfullGP, 50)
-head(GibbsStepTimeFixedLblock, 50)
-head(GibbsStepTimeFixedLsequen, 50)
-head(GibbsStepTimeFixedLsequen.fast, 50)
-head(GibbsStepTimeVaryLjSequen, 50)
-head(GibbsStepTimeVaryLjSequen.fast, 50)
+head(GibbsStepTimeFixedLfullGP, 50)      # equalTimeDist = FALSE
+head(GibbsStepTimeFixedLfullGP.fast, 50) # equalTimeDist = TRUE
+head(GibbsStepTimeFixedLblock, 50)       # equalTimeDist = FALSE
+head(GibbsStepTimeFixedLblock.fast, 50)  # equalTimeDist = TRUE
+head(GibbsStepTimeFixedLsequen, 50)      # equalTimeDist = FALSE
+head(GibbsStepTimeFixedLsequen.fast, 50) # equalTimeDist = TRUE
+head(GibbsStepTimeVaryLjSequen, 50)      # equalTimeDist = FALSE
+head(GibbsStepTimeVaryLjSequen.fast, 50) # equalTimeDist = TRUE
 ```   
 
-# Posterior Sampling Time Summary Statistics
+# Posterior Sampling Time Summary Statistics for the 3 Temporal Parameters
 We then present vital posterior sampling time summary statistics for the 3 temporal parameters $\psi$, $\Upsilon$, and $\bm{\eta}_t$'s to showcase the manifest computational acceleration brought about by our tactics for evenly dispersed time points presented in Appendix B.
 ```{r}
-apply(GibbsStepTimeFixedLfullGP[,8:10], 2, summary)
-apply(GibbsStepTimeFixedLblock[,8:10], 2, summary)
-apply(GibbsStepTimeFixedLsequen[,8:10], 2, summary)
-apply(GibbsStepTimeFixedLsequen.fast[,8:10], 2, summary)
-apply(GibbsStepTimeVaryLjSequen[,8:10], 2, summary)
-apply(GibbsStepTimeVaryLjSequen.fast[,8:10], 2, summary)
+apply(GibbsStepTimeFixedLfullGP[,8:10], 2, summary)      # equalTimeDist = FALSE
+apply(GibbsStepTimeFixedLfullGP.fast[,8:10], 2, summary) # equalTimeDist = TRUE
+apply(GibbsStepTimeFixedLblock[,8:10], 2, summary)       # equalTimeDist = FALSE
+apply(GibbsStepTimeFixedLblock.fast[,8:10], 2, summary)  # equalTimeDist = TRUE
+apply(GibbsStepTimeFixedLsequen[,8:10], 2, summary)      # equalTimeDist = FALSE
+apply(GibbsStepTimeFixedLsequen.fast[,8:10], 2, summary) # equalTimeDist = TRUE
+apply(GibbsStepTimeVaryLjSequen[,8:10], 2, summary)      # equalTimeDist = FALSE
+apply(GibbsStepTimeVaryLjSequen.fast[,8:10], 2, summary) # equalTimeDist = TRUE
 ```
-The results correspond well to what we have discussed in Appendix B of our manuscript. 
+The results correspond well to what we have discussed in Appendix B of our manuscript. **Specifying `equalTimeDist = TRUE` instead of `equalTimeDist = FALSE` on equispaced time points markedly accelerates posterior Gibbs sampler steps for $\psi$, $\Upsilon$, and $\bm{\eta}_t$'s.**
 
+We finally calculate standard deviations for the 3 temporal-related parameters' posterior sampling time across all kept post-burn-in MCMC iterations.
 ```{r}
 round(apply(GibbsStepTimeFixedLfullGP[,8:10], 2, sd), 5)
+round(apply(GibbsStepTimeFixedLfullGP.fast[,8:10], 2, sd), 5)
 round(apply(GibbsStepTimeFixedLblock[,8:10], 2, sd), 5)
+round(apply(GibbsStepTimeFixedLblock.fast[,8:10], 2, sd), 5)
 round(apply(GibbsStepTimeFixedLsequen[,8:10], 2, sd), 5)
 round(apply(GibbsStepTimeFixedLsequen.fast[,8:10], 2, sd), 5)
 round(apply(GibbsStepTimeVaryLjSequen[,8:10], 2, sd), 5)
 round(apply(GibbsStepTimeVaryLjSequen.fast[,8:10], 2, sd), 5)
 ```
-
-
-
-
-
-     
-     
-
-
-     
-
-
-
-

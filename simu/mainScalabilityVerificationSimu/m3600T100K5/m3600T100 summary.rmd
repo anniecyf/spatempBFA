@@ -10,11 +10,10 @@ header-includes:
 
 # Portions of Recorded Gibbs Sampler Time for 10 Key Parameters
 We first display the first 50 kept post-burn-in MCMC iterations' posterior sampling time (in milliseconds) for 10 key Gibbs sampler steps corresponding to our 4 models, i.e., `fullGPfixedL`, `NNGPblockFixedL`, `NNGPsequenFixedL`, and `NNGPsequenVaryLj`.
-```{r echo = F}
+```{r echo = -(1:2)}
 rm(list=ls())
-wd <- "C:/Users/annie/OneDrive - National University of Singapore/Documents/PhD/research/first paper/spatempBFA/simu/mainScalabilityVerificationSimu/m3600T100K5"
-```
-```{r}
+projDirec <- "C:/Users/annie/OneDrive - National University of Singapore/Documents/PhD/research/first paper/spatempBFA"
+wd <- paste(projDirec, "simu/mainScalabilityVerificationSimu/m3600T100K5", sep = "/")
 setwd(wd)
 load("GibbsStepTimeFixedLfullGP.RData")
 load("GibbsStepTimeFixedLblock.RData")

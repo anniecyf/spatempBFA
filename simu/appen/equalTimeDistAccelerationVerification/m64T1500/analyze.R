@@ -14,8 +14,8 @@ save(GibbsStepTimeFixedLblock, file = "GibbsStepTimeFixedLblock.RData")
 save(GibbsStepTimeFixedLsequen, file = "GibbsStepTimeFixedLsequen.RData")
 save(GibbsStepTimeVaryLjSequen, file = "GibbsStepTimeVaryLjSequen.RData")
 
-load("GibbsStepTimeFixedLsequen.RData")
-load("GibbsStepTimeVaryLjSequen.RData")
+load("GibbsStepTimeFixedLfullGP.RData")
+load("GibbsStepTimeFixedLblock.RData")
 load("GibbsStepTimeFixedLsequen.RData")
 load("GibbsStepTimeVaryLjSequen.RData")
 
