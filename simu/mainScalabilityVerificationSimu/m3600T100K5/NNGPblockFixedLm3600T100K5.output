@@ -45,11 +45,11 @@ Try help(fields) to get started.
 > library(spatempBFA)
 > K <- 5
 > O <- 1
-> L <- 30
-> M <- 64
-> LjVec <- rep(min(30, M), K)
-> sqrootM <- 8
-> Nu <- 500
+> L <- 50
+> M <- 3600
+> LjVec <- rep(min(50, M), K)
+> sqrootM <- 60
+> Nu <- 100
 > Time <- 1:Nu
 > TimeDist <- as.matrix(dist(Time))
 > APsi = 0.1; BPsi = 4.5
@@ -127,22 +127,25 @@ Try help(fields) to get started.
 > MCMC <- list(NBurn = 20000, NSims = 10000, NThin = 2, NPilot = 5)
 > 
 > Sys.time()
-[1] "2024-06-28 11:53:44 +08"
-> regVaryLj.simu.sequen <- bfaVaryingLjs(Y ~ 0, data = dat, dist = D, time = Time,  K = K, LjVec = LjVec,
-+                                        starting = NULL, hypers = Hypers, tuning = NULL, mcmc = MCMC,
-+                                        family = "normal",
-+                                        temporal.structure = "exponential",
-+                                        spatial.structure = "continuous",
-+                                        seed = 29, 
-+                                        gamma.shrinkage = TRUE,
-+                                        include.time = TRUE,
-+                                        include.space = TRUE,
-+                                        seasonPeriod = 1, 
-+                                        equalTimeDist = FALSE,
-+                                        spatApprox = TRUE, 
-+                                        alphaSequen = TRUE, 
-+                                        h = 15,
-+                                        storeSpatPredPara = FALSE, 
-+                                        storeWeights = FALSE) 
-Burn-in progress:  0%..  10%.. 
-last updated 20240630 7:29:39am
+[1] "2024-06-28 11:08:59 +08"
+> regFixedL.simu.block <- bfaFixedL(Y ~ 0, data = dat, dist = D, time = Time,  K = K, 
++                                   starting = NULL, hypers = Hypers, tuning = NULL, mcmc = MCMC,
++                                   L = L,
++                                   family = "normal",
++                                   temporal.structure = "exponential",
++                                   spatial.structure = "continuous",
++                                   seed = 29, 
++                                   gamma.shrinkage = TRUE,
++                                   include.time = TRUE,
++                                   include.space = TRUE,
++                                   clustering = TRUE,
++                                   seasonPeriod = 1, 
++                                   equalTimeDist = TRUE,
++                                   spatApprox = TRUE, 
++                                   alphaMethod = "block", 
++                                   h = 15,
++                                   storeSpatPredPara = FALSE,
++                                   storeWeights = FALSE,
++                                   alphasWeightsToFiles = FALSE) 
+Burn-in progress:  0%..  10%.. 20%.. 30%.. 40%.. 
+last updated 20240701 12:28:33am

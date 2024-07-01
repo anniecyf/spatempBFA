@@ -127,7 +127,7 @@ Try help(fields) to get started.
 > MCMC <- list(NBurn = 20000, NSims = 10000, NThin = 2, NPilot = 5)
 > 
 > Sys.time()
-[1] "2024-06-21 07:30:50 +08"
+[1] "2024-06-28 11:53:17 +08"
 > regFixedL.simu.sequen <- bfaFixedL(Y ~ 0, data = dat, dist = D, time = Time,  K = K, 
 +                                    starting = NULL, hypers = Hypers, tuning = NULL, mcmc = MCMC,
 +                                    L = L,
@@ -147,5 +147,5 @@ Try help(fields) to get started.
 +                                    storeSpatPredPara = FALSE,
 +                                    storeWeights = FALSE,
 +                                    alphasWeightsToFiles = FALSE) 
-Burn-in progress:  0%..  10%.. 20%.. 30%.. 
-last updated 20240626 14:16:40 before power shutdown
+Burn-in progress:  0%..  10%.. 
+last updated 20240630 6:41:43am

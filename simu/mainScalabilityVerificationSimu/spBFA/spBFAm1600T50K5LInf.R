@@ -4,10 +4,10 @@ library(fields)
 library(spBFA)
 K <- 5
 O <- 1
-L <- 30
-M <- 64
-sqrootM <- 8
-Nu <- 500
+L <- 50
+M <- 1600
+sqrootM <- 40
+Nu <- 50
 Time <- 1:Nu
 TimeDist <- as.matrix(dist(Time))
 APsi = 0.1; BPsi = 4.5
@@ -84,25 +84,51 @@ Hypers <- list(Sigma2 = list(A = 1, B = 1), Rho = list(ARho=0.1, BRho=1),
                Upsilon = list(Zeta = K + 1, Omega = diag(K)))
 MCMC <- list(NBurn = 20000, NSims = 10000, NThin = 2, NPilot = 5)
 
-
 Sys.time()
-reg.simu <- bfa_sp(Y ~ 0, data = dat, dist = D, time = Time,  K = K, 
-                   starting = NULL, hypers = Hypers, tuning = NULL, mcmc = MCMC,
-                   L = L,
-                   family = "normal",
-                   trials = NULL,
-                   temporal.structure = "exponential",
-                   spatial.structure = "continuous",
-                   seed = 29, 
-                   gamma.shrinkage = TRUE,
-                   include.space = TRUE,
-                   clustering = TRUE) 
-save(reg.simu, file="spBFAL30simuT500M64Iter30000.RData")
+reg.simu.LInf <- bfa_sp(Y ~ 0, data = dat, dist = D, time = Time,  K = K, 
+                        starting = NULL, hypers = Hypers, tuning = NULL, mcmc = MCMC,
+                        L = Inf,
+                        family = "normal",
+                        trials = NULL,
+                        temporal.structure = "exponential",
+                        spatial.structure = "continuous",
+                        seed = 29, 
+                        gamma.shrinkage = TRUE,
+                        include.space = TRUE,
+                        clustering = TRUE) 
+save(reg.simu.LInf, file="spBFALInfsimuT50M1600Iter30000.RData")
 Sys.time()
-reg.simu$runtime
+reg.simu.LInf$runtime
 library(coda)
-Diags <- spBFA::diagnostics(reg.simu, diags = c("dic", "dinf", "waic"), keepDeviance = TRUE)
-save(Diags, file="spBFAL30simuT500M64Iter30000Diags.RData")
-Deviance <- as.mcmc(Diags$deviance)
-#save(Deviance, file = "spBFAL30simuT500M64Iter30000Deviance.RData")
+Diags.LInf <- spBFA::diagnostics(reg.simu.LInf, diags = c("dic", "dinf", "waic"), keepDeviance = TRUE)
+save(Diags.LInf, file="spBFALInfsimuT50M1600Iter30000Diags.RData")
+Deviance.LInf <- as.mcmc(Diags.LInf$deviance)
+#save(Deviance, file = "spBFALInfsimuT50M1600Iter30000Deviance.RData")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

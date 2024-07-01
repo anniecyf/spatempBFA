@@ -127,7 +127,7 @@ Try help(fields) to get started.
 > MCMC <- list(NBurn = 20000, NSims = 10000, NThin = 2, NPilot = 5)
 > 
 > Sys.time()
-[1] "2024-06-28 11:53:44 +08"
+[1] "2024-06-21 07:31:09 +08"
 > regVaryLj.simu.sequen <- bfaVaryingLjs(Y ~ 0, data = dat, dist = D, time = Time,  K = K, LjVec = LjVec,
 +                                        starting = NULL, hypers = Hypers, tuning = NULL, mcmc = MCMC,
 +                                        family = "normal",
@@ -144,5 +144,5 @@ Try help(fields) to get started.
 +                                        h = 15,
 +                                        storeSpatPredPara = FALSE, 
 +                                        storeWeights = FALSE) 
-Burn-in progress:  0%..  10%.. 
-last updated 20240630 7:29:39am
+Burn-in progress:  0%..  10%.. 20%.. 30%.. 
+last updated 20240626 15:25:34 before power shutdown

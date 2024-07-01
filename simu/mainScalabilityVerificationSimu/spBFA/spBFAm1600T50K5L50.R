@@ -4,10 +4,10 @@ library(fields)
 library(spBFA)
 K <- 5
 O <- 1
-L <- 30
-M <- 64
-sqrootM <- 8
-Nu <- 1500
+L <- 50
+M <- 1600
+sqrootM <- 40
+Nu <- 50
 Time <- 1:Nu
 TimeDist <- as.matrix(dist(Time))
 APsi = 0.1; BPsi = 4.5
@@ -97,12 +97,12 @@ reg.simu <- bfa_sp(Y ~ 0, data = dat, dist = D, time = Time,  K = K,
                    gamma.shrinkage = TRUE,
                    include.space = TRUE,
                    clustering = TRUE) 
-save(reg.simu, file="spBFAL30simuT1500M64Iter30000.RData")
+save(reg.simu, file="spBFAL50simuT50M1600Iter30000.RData")
 Sys.time()
 reg.simu$runtime
 library(coda)
 Diags <- spBFA::diagnostics(reg.simu, diags = c("dic", "dinf", "waic"), keepDeviance = TRUE)
-save(Diags, file="spBFAL30simuT1500M64Iter30000Diags.RData")
+save(Diags, file="spBFAL50simuT50M1600Iter30000Diags.RData")
 Deviance <- as.mcmc(Diags$deviance)
-#save(Deviance, file = "spBFAL30simuT1500M64Iter30000Deviance.RData")
+#save(Deviance, file = "spBFAL50simuT50M1600Iter30000Deviance.RData")
 
