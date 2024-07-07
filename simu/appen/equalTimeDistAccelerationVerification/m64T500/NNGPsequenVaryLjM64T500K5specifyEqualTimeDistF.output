@@ -144,5 +144,5 @@ Try help(fields) to get started.
 +                                        h = 15,
 +                                        storeSpatPredPara = FALSE, 
 +                                        storeWeights = FALSE) 
-Burn-in progress:  0%..  10%.. 
-last updated 20240630 7:29:39am
+Burn-in progress:  0%..  10%.. 20%.. 30%.. 40%.. 50%.. 
+last updated 20240707 3:39:06pm

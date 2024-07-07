@@ -127,25 +127,25 @@ Try help(fields) to get started.
 > MCMC <- list(NBurn = 20000, NSims = 10000, NThin = 2, NPilot = 5)
 > 
 > Sys.time()
-[1] "2024-06-28 11:53:17 +08"
-> regFixedL.simu.sequen <- bfaFixedL(Y ~ 0, data = dat, dist = D, time = Time,  K = K, 
-+                                    starting = NULL, hypers = Hypers, tuning = NULL, mcmc = MCMC,
-+                                    L = L,
-+                                    family = "normal",
-+                                    temporal.structure = "exponential",
-+                                    spatial.structure = "continuous",
-+                                    seed = 29, 
-+                                    gamma.shrinkage = TRUE,
-+                                    include.time = TRUE,
-+                                    include.space = TRUE,
-+                                    clustering = TRUE,
-+                                    seasonPeriod = 1, 
-+                                    equalTimeDist = FALSE,
-+                                    spatApprox = TRUE, 
-+                                    alphaMethod = "sequential", 
-+                                    h = 15, 
-+                                    storeSpatPredPara = FALSE,
-+                                    storeWeights = FALSE,
-+                                    alphasWeightsToFiles = FALSE) 
-Burn-in progress:  0%..  10%.. 20%.. 30%.. 40%.. 50%.. 
-last updated 20240707 3:34:11pm
+[1] "2024-07-01 16:01:00 +08"
+> regFixedL.simu <- bfaFixedL(Y ~ 0, data = dat, dist = D, time = Time,  K = K, 
++                             starting = NULL, hypers = Hypers, tuning = NULL, mcmc = MCMC,
++                             L = L,
++                             family = "normal",
++                             temporal.structure = "exponential",
++                             spatial.structure = "continuous",
++                             seed = 29, 
++                             gamma.shrinkage = TRUE,
++                             include.time = TRUE,
++                             include.space = TRUE,
++                             clustering = TRUE,
++                             seasonPeriod = 1, 
++                             equalTimeDist = FALSE,
++                             spatApprox = FALSE, 
++                             alphaMethod = "block", 
++                             h = 15, 
++                             storeSpatPredPara = FALSE,
++                             storeWeights = FALSE,
++                             alphasWeightsToFiles = FALSE) 
+Burn-in progress:  0%..  10%.. 20%.. 30%.. 
+last updated 20240707 7:11:14am
