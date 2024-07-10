@@ -138,5 +138,5 @@ Try help(fields) to get started.
 +                         gamma.shrinkage = TRUE,
 +                         include.space = TRUE,
 +                         clustering = TRUE) 
-Burn-in progress:  0%..  10%.. 20%.. 30%.. 40%.. 50%.. 60%.. 
-last updated 20240707 9:44:59am
+Burn-in progress:  0%..  10%.. 20%.. 30%.. 40%.. 50%.. 60%.. 70%.. 80%.. 
+last updated 20240710 8:01:29 am

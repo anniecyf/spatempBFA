@@ -147,5 +147,5 @@ Try help(fields) to get started.
 +                                   storeSpatPredPara = FALSE,
 +                                   storeWeights = FALSE,
 +                                   alphasWeightsToFiles = FALSE) 
-Burn-in progress:  0%..  10%.. 20%.. 30%.. 
-last updated 20240707 7:10:57am
+Burn-in progress:  0%..  10%.. 20%.. 30%.. 40%.. 
+last updated 20240709 2:30:21 am
