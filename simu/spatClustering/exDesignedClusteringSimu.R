@@ -4,19 +4,15 @@ numSpatOverallGroups <- 2
 M <- 100
 K <- 2
 O <- 1
-L <- min(60, M)
-LjVec <- rep(min(60, M), K)
+L <- min(10, M)
+LjVec <- rep(min(10, M), K)
 sqrootM <- 10
 Nu <- 30
 Time <- 1:Nu
 TimeDist <- as.matrix(dist(Time))
 APsi = 0.1; BPsi = 4.5
 library(mvtnorm)
-#library(dplyr)
 library(fields)
-#library(devtools) 
-#setwd("spatempBFA")
-#load_all(".")
 library(spatempBFA)
 set.seed(29)
 fittedClusGpMat <- matrix(0, M, 4*3)
@@ -24,7 +20,6 @@ models <- c("fullGPfixedL", "NNGPblockFixedL", "NNGPsequenFixedL", "NNGPsequenVa
 weightsNumIter <- c(10, 100, 1000)
 ind <- expand.grid(1:3, 1:4)
 colnames(fittedClusGpMat) <- paste0(models[ind[,2]], weightsNumIter[ind[,1]], "iterWeights")
-  
 calcGroup1 <- function(row, col, sqrootM){
   return((row - 1)*sqrootM + col)
 }
@@ -49,9 +44,9 @@ spatGroupOverall[whichGroup1] <- 1
 #matrix(spatGroupOverall, 10, 10)
 Lambda[,2] = theta2j[spatGroupOverall]
 Hypers <- list(Sigma2 = list(A = 1, B = 1), Rho = list(ARho=0.1, BRho=1),
-                 Kappa = list(SmallUpsilon = O + 1, BigTheta = diag(O)),
-                 Psi = list(APsi = APsi, BPsi = BPsi),
-                 Upsilon = list(Zeta = K + 1, Omega = diag(K)))
+               Kappa = list(SmallUpsilon = O + 1, BigTheta = diag(O)),
+               Psi = list(APsi = APsi, BPsi = BPsi),
+               Upsilon = list(Zeta = K + 1, Omega = diag(K)))
 MCMC <- list(NBurn = 20000, NSims = 10000, NThin = 2, NPilot = 5)
 Sigma.NuMO <- rnorm(Nu * M * O, sd = sqrt(sigma2))
 EtaMat <- matrix(Eta, K, Nu)
@@ -78,6 +73,7 @@ regFixedL.simu <- bfaFixedL(Y ~ 0, data = dat, dist = D, time = Time,  K = K,
                             storeSpatPredPara = TRUE,
                             storeWeights = TRUE,
                             alphasWeightsToFiles = FALSE) 
+save(regFixedL.simu, file = paste("exSpatClustering", "regFixedL.simu", "RData", sep = "."))
 clusFixedL10 <- clusteringFixedL(regFixedL.simu, o = 1, nkeep = 10, nCent = numSpatOverallGroups)
 fittedClusGpMat[,1] <- clusFixedL10$cluster
 clusFixedL100 <- clusteringFixedL(regFixedL.simu, o = 1, nkeep = 100, nCent = numSpatOverallGroups)
@@ -104,6 +100,7 @@ regFixedL.simu.block <- bfaFixedL(Y ~ 0, data = dat, dist = D, time = Time,  K =
                                   storeSpatPredPara = TRUE,
                                   storeWeights = TRUE,
                                   alphasWeightsToFiles = FALSE) 
+save(regFixedL.simu.block, file = paste("exSpatClustering", "regFixedL.simu.block", "RData", sep = "."))
 clusFixedLblock10 <- clusteringFixedL(regFixedL.simu.block, o = 1, nkeep = 10, nCent = numSpatOverallGroups)
 fittedClusGpMat[,4] <- clusFixedLblock10$cluster
 clusFixedLblock100 <- clusteringFixedL(regFixedL.simu.block, o = 1, nkeep = 100, nCent = numSpatOverallGroups)
@@ -130,6 +127,7 @@ regFixedL.simu.sequen <- bfaFixedL(Y ~ 0, data = dat, dist = D, time = Time,  K 
                                    storeSpatPredPara = TRUE,
                                    storeWeights = TRUE,
                                    alphasWeightsToFiles = FALSE) 
+save(regFixedL.simu.sequen, file = paste("exSpatClustering", "regFixedL.simu.sequen", "RData", sep = "."))
 clusFixedLsequen10 <- clusteringFixedL(regFixedL.simu.sequen, o = 1, nkeep = 10, nCent = numSpatOverallGroups)
 fittedClusGpMat[,7] <- clusFixedLsequen10$cluster
 clusFixedLsequen100 <- clusteringFixedL(regFixedL.simu.sequen, o = 1, nkeep = 100, nCent = numSpatOverallGroups)
@@ -154,6 +152,7 @@ regVaryLj.simu.sequen <- bfaVaryingLjs(Y ~ 0, data = dat, dist = D, time = Time,
                                        h = 15,
                                        storeSpatPredPara = TRUE, 
                                        storeWeights = TRUE) 
+save(regVaryLj.simu.sequen, file = paste("exSpatClustering", "regVaryLj.simu.sequen", "RData", sep = "."))
 clusVaryLj10 <- clusteringVaryLj(regVaryLj.simu.sequen, o = 1, nkeep = 10, nCent = numSpatOverallGroups)
 fittedClusGpMat[,10] <- clusVaryLj10$cluster
 clusVaryLj100 <- clusteringVaryLj(regVaryLj.simu.sequen, o = 1, nkeep = 100, nCent = numSpatOverallGroups)
@@ -162,32 +161,3 @@ clusVaryLj1000 <- clusteringVaryLj(regVaryLj.simu.sequen, o = 1, nkeep = 1000, n
 fittedClusGpMat[,12] <- clusVaryLj1000$cluster
   
 save(fittedClusGpMat, file = "fittedClusGpMat_exDesignedClusteringSimu.RData")
-
-  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

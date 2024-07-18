@@ -148,5 +148,21 @@ Try help(fields) to get started.
 +                             storeWeights = FALSE,
 +                             alphasWeightsToFiles = FALSE) 
 Burn-in progress:  0%..  10%.. 20%.. 30%.. 40%.. 50%.. 60%.. 70%.. 80%.. 90%.. 100%!
-Sampler progress:  0%.. 
-last updated 20240710 4:41:00 am
+Sampler progress:  0%.. 10%.. 20%.. 30%.. 40%.. 50%.. 60%.. 70%.. 80%.. 90%.. 100%!> Sys.time()
+[1] "2024-07-18 13:23:21 +08"
+> regFixedL.simu$runtime
+[1] "Model runtime: 20.09 days"
+> save(regFixedL.simu, file="regFixedL50simuT100M3600Iter30000.RData")
+> library(coda)
+> Diags <- diagnostics(regFixedL.simu, diags = c("dic", "dinf", "meanIC", "waic"), keepDeviance = TRUE)
+Calculating Log-Lik: 0%.. 25%.. 50%.. 75%.. 100%.. Done!
+Calculating PPD: 0%.. 25%.. 50%.. 75%.. 100%.. Done!
+> save(Diags, file = "regFixedL50simuT100M3600Iter30000Diags.RData")
+> Deviance <- as.mcmc(Diags$deviance)
+> save(Deviance, file = "regFixedL50simuT100M3600Iter30000Deviance.RData")
+> 
+> 
+> 
+> proc.time()
+      user     system    elapsed 
+1658488.60   84542.57 1743394.95 

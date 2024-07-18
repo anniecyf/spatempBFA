@@ -4,22 +4,15 @@ numSpatOverallGroups <- 2
 M <- 100
 K <- 2
 O <- 1
-L <- min(60, M)
-LjVec <- rep(min(60, M), K)
+L <- min(10, M)
+LjVec <- rep(min(10, M), K)
 sqrootM <- 10
 Nu <- 30
 Time <- 1:Nu
 TimeDist <- as.matrix(dist(Time))
 APsi = 0.1; BPsi = 4.5
 library(mvtnorm)
-#library(dplyr)
 library(fields)
-library(devtools) 
-library(usethis)
-library(credentials)
-usethis::use_git_config(user.name = "anniecyf", user.email = "annieffcheng@gmail.com")
-credentials::set_github_pat() #PAT: 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
-remotes::install_github("anniecyf/spatempBFA", dependencies = TRUE)
 library(spatempBFA)
 set.seed(29)
 fittedClusGpMat <- matrix(0, M, 4*3)
@@ -27,7 +20,6 @@ models <- c("fullGPfixedL", "NNGPblockFixedL", "NNGPsequenFixedL", "NNGPsequenVa
 weightsNumIter <- c(10, 100, 1000)
 ind <- expand.grid(1:3, 1:4)
 colnames(fittedClusGpMat) <- paste0(models[ind[,2]], weightsNumIter[ind[,1]], "iterWeights")
-
 calcGroup1 <- function(row, col, sqrootM){
   return((row - 1)*sqrootM + col)
 }
@@ -62,8 +54,6 @@ meanMat <- Lambda%*%EtaMat #M*O\times Nu
 Yobs <- as.vector(meanMat) + Sigma.NuMO
 dat <- data.frame(Y = Yobs)
 
-
-
 regVAR1FixedL.simu <- VAR1bfaFixedL(Y ~ 0, data = dat, dist = D, Nu = Nu,  K = K, 
                             starting = NULL, hypers = NULL, tuning = NULL, mcmc = MCMC,
                             L = L,
@@ -79,6 +69,7 @@ regVAR1FixedL.simu <- VAR1bfaFixedL(Y ~ 0, data = dat, dist = D, Nu = Nu,  K = K
                             storeSpatPredPara = TRUE,
                             storeWeights = TRUE,
                             alphasWeightsToFiles = FALSE) 
+save(regVAR1FixedL.simu, file = paste("exSpatClustering", "regVAR1FixedL.simu", "RData", sep = "."))
 clusFixedL10 <- clusteringFixedL(regVAR1FixedL.simu, o = 1, nkeep = 10, nCent = numSpatOverallGroups)
 fittedClusGpMat[,1] <- clusFixedL10$cluster
 clusFixedL100 <- clusteringFixedL(regVAR1FixedL.simu, o = 1, nkeep = 100, nCent = numSpatOverallGroups)
@@ -101,6 +92,7 @@ regVAR1FixedL.simu.block <- VAR1bfaFixedL(Y ~ 0, data = dat, dist = D, Nu = Nu, 
                                   storeSpatPredPara = TRUE,
                                   storeWeights = TRUE,
                                   alphasWeightsToFiles = FALSE) 
+save(regVAR1FixedL.simu.block, file = paste("exSpatClustering", "regVAR1FixedL.simu.block", "RData", sep = "."))
 clusFixedLblock10 <- clusteringFixedL(regVAR1FixedL.simu.block, o = 1, nkeep = 10, nCent = numSpatOverallGroups)
 fittedClusGpMat[,4] <- clusFixedLblock10$cluster
 clusFixedLblock100 <- clusteringFixedL(regVAR1FixedL.simu.block, o = 1, nkeep = 100, nCent = numSpatOverallGroups)
@@ -123,6 +115,7 @@ regVAR1FixedL.simu.sequen <- VAR1bfaFixedL(Y ~ 0, data = dat, dist = D, Nu = Nu,
                                            storeSpatPredPara = TRUE,
                                            storeWeights = TRUE,
                                            alphasWeightsToFiles = FALSE) 
+save(regVAR1FixedL.simu.sequen, file = paste("exSpatClustering", "regVAR1FixedL.simu.sequen", "RData", sep = "."))
 clusFixedLsequen10 <- clusteringFixedL(regVAR1FixedL.simu.sequen, o = 1, nkeep = 10, nCent = numSpatOverallGroups)
 fittedClusGpMat[,7] <- clusFixedLsequen10$cluster
 clusFixedLsequen100 <- clusteringFixedL(regVAR1FixedL.simu.sequen, o = 1, nkeep = 100, nCent = numSpatOverallGroups)
@@ -142,7 +135,8 @@ regVAR1VaryLj.simu.sequen <- VAR1bfaVaryingLjs(Y ~ 0, data = dat, dist = D, Nu =
                                        alphaSequen = TRUE, 
                                        h = 15,
                                        storeSpatPredPara = TRUE, 
-                                       storeWeights = TRUE) 
+                                       storeWeights = TRUE)
+save(regVAR1VaryLj.simu.sequen, file = paste("exSpatClustering", "regVAR1VaryLj.simu.sequen", "RData", sep = "."))
 clusVaryLj10 <- clusteringVaryLj(regVAR1VaryLj.simu.sequen, o = 1, nkeep = 10, nCent = numSpatOverallGroups)
 fittedClusGpMat[,10] <- clusVaryLj10$cluster
 clusVaryLj100 <- clusteringVaryLj(regVAR1VaryLj.simu.sequen, o = 1, nkeep = 100, nCent = numSpatOverallGroups)
@@ -150,35 +144,5 @@ fittedClusGpMat[,11] <- clusVaryLj100$cluster
 clusVaryLj1000 <- clusteringVaryLj(regVAR1VaryLj.simu.sequen, o = 1, nkeep = 1000, nCent = numSpatOverallGroups)
 fittedClusGpMat[,12] <- clusVaryLj1000$cluster
 
-setwd("C:/Users/annie/OneDrive - National University of Singapore/Documents/PhD/research/paper2 materials")
+#setwd("C:/Users/annie/OneDrive - National University of Singapore/Documents/PhD/research/paper2 materials")
 save(fittedClusGpMat, file = "VAR1fittedClusGpMat_exDesignedClusteringSimu.RData")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

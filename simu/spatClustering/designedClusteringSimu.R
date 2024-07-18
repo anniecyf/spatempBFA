@@ -5,19 +5,15 @@ N <- 100
 M <- 100
 K <- 2
 O <- 1
-L <- min(60, M)
-LjVec <- rep(min(60, M), K)
+L <- min(10, M)
+LjVec <- rep(min(10, M), K)
 sqrootM <- 10
 Nu <- 30
 Time <- 1:Nu
 TimeDist <- as.matrix(dist(Time))
 APsi = 0.1; BPsi = 4.5
 library(mvtnorm)
-#library(dplyr)
 library(fields)
-#library(devtools) 
-#setwd("spatempBFA")
-#load_all(".")
 library(spatempBFA)
 set.seed(29)
 nkeep10RandIndex <- nkeep100RandIndex <- nkeep1000RandIndex <- matrix(0, N, 4)
@@ -25,8 +21,9 @@ models <- c("fullGPfixedL", "NNGPblockFixedL", "NNGPsequenFixedL", "NNGPsequenVa
 colnames(nkeep10RandIndex) <- colnames(nkeep100RandIndex) <- colnames(nkeep1000RandIndex) <- models
 nkeep10AccuRatio <- nkeep100AccuRatio <- nkeep1000AccuRatio <- matrix(0, N, 4)
 colnames(nkeep10AccuRatio) <- colnames(nkeep100AccuRatio) <- colnames(nkeep1000AccuRatio) <- models
-
-
+calcGroup1 <- function(row, col, sqrootM){
+  return((row - 1)*sqrootM + col)
+}
 calcRandIndex <- function(predictedCluster, actualGroup, numObs){
   denominator <- numObs * (numObs-1) / 2
   numerator <- denominator
@@ -38,7 +35,6 @@ calcRandIndex <- function(predictedCluster, actualGroup, numObs){
   randIndex <- numerator / denominator
   return(randIndex)
 }
-
 calcAccuRatio <- function(predictedCluster, actualGroup, numObs){
   #actualGroup is spatGroupOverall; numObs is M;       kmeans3 = kmeans(X, centers = 3); cl3 = kmeans3$cluster
   #predictedCluster is kmeans2$cluster
@@ -47,7 +43,6 @@ calcAccuRatio <- function(predictedCluster, actualGroup, numObs){
   accuRatio <- max(sum(predictedCluster==actualGroupsPoss1), sum(predictedCluster==actualGroupsPoss2))/numObs 
   return(accuRatio)
 }
-
 
 for(n in 1:N){
   print(Sys.time())
@@ -61,10 +56,14 @@ for(n in 1:N){
   D <- rdist(expand.grid(1:sqrootM, 1:sqrootM))
   Frho <- exp(-rho*D)
   Hpsi <- exp(-psi*TimeDist)
-  Eta <- rmvnorm(1, mean=rep(0, Nu*K), sigma=kronecker(Hpsi, Upsilon)) ### actual Eta (c(Eta_1,...,Eta_T)) (vec of length Nu*K)
+  Eta <- rmvnorm(1, mean=rep(0, Nu*K), sigma=kronecker(Hpsi, Upsilon)) # actual Eta (c(Eta_1,...,Eta_T)) (vec of length Nu*K)
   Lambda <- matrix(5, M * O, K)
   theta2j <- c(10, -10)
-  spatGroupOverall <- sample(2, size=M, prob=c(0.5, 0.5), replace = TRUE)
+  rowColInd <- expand.grid(2:8, 2:8)
+  whichGroup1 <- mapply(calcGroup1, rowColInd[,2], rowColInd[,1], sqrootM = sqrootM)
+  spatGroupOverall <- rep(2,M)
+  spatGroupOverall[whichGroup1] <- 1
+  #matrix(spatGroupOverall, 10, 10)
   Lambda[,2] = theta2j[spatGroupOverall]
   Hypers <- list(Sigma2 = list(A = 1, B = 1), Rho = list(ARho=0.1, BRho=1),
                  Kappa = list(SmallUpsilon = O + 1, BigTheta = diag(O)),
@@ -96,6 +95,7 @@ for(n in 1:N){
                               storeSpatPredPara = TRUE,
                               storeWeights = TRUE,
                               alphasWeightsToFiles = FALSE) 
+  #save(regFixedL.simu, file = paste("regFixedL.simu", n, "RData", sep = "."))
   clusFixedL10 <- clusteringFixedL(regFixedL.simu, o = 1, nkeep = 10, nCent = numSpatOverallGroups)
   clusFixedL100 <- clusteringFixedL(regFixedL.simu, o = 1, nkeep = 100, nCent = numSpatOverallGroups)
   clusFixedL1000 <- clusteringFixedL(regFixedL.simu, o = 1, nkeep = 1000, nCent = numSpatOverallGroups)
@@ -125,6 +125,7 @@ for(n in 1:N){
                                     storeSpatPredPara = TRUE,
                                     storeWeights = TRUE,
                                     alphasWeightsToFiles = FALSE) 
+  #save(regFixedL.simu.block, file = paste("regFixedL.simu.block", n, "RData", sep = "."))
   clusFixedLblock10 <- clusteringFixedL(regFixedL.simu.block, o = 1, nkeep = 10, nCent = numSpatOverallGroups)
   clusFixedLblock100 <- clusteringFixedL(regFixedL.simu.block, o = 1, nkeep = 100, nCent = numSpatOverallGroups)
   clusFixedLblock1000 <- clusteringFixedL(regFixedL.simu.block, o = 1, nkeep = 1000, nCent = numSpatOverallGroups)
@@ -154,6 +155,7 @@ for(n in 1:N){
                                      storeSpatPredPara = TRUE,
                                      storeWeights = TRUE,
                                      alphasWeightsToFiles = FALSE) 
+  #save(regFixedL.simu.sequen, file = paste("regFixedL.simu.sequen", n, "RData", sep = "."))
   clusFixedLsequen10 <- clusteringFixedL(regFixedL.simu.sequen, o = 1, nkeep = 10, nCent = numSpatOverallGroups)
   clusFixedLsequen100 <- clusteringFixedL(regFixedL.simu.sequen, o = 1, nkeep = 100, nCent = numSpatOverallGroups)
   clusFixedLsequen1000 <- clusteringFixedL(regFixedL.simu.sequen, o = 1, nkeep = 1000, nCent = numSpatOverallGroups)
@@ -181,6 +183,7 @@ for(n in 1:N){
                                          h = 15,
                                          storeSpatPredPara = TRUE, 
                                          storeWeights = TRUE) 
+  #save(regVaryLj.simu.sequen, file = paste("regVaryLj.simu.sequen", n, "RData", sep = "."))
   clusVaryLj10 <- clusteringVaryLj(regVaryLj.simu.sequen, o = 1, nkeep = 10, nCent = numSpatOverallGroups)
   clusVaryLj100 <- clusteringVaryLj(regVaryLj.simu.sequen, o = 1, nkeep = 100, nCent = numSpatOverallGroups)
   clusVaryLj1000 <- clusteringVaryLj(regVaryLj.simu.sequen, o = 1, nkeep = 1000, nCent = numSpatOverallGroups)
@@ -197,31 +200,3 @@ save(nkeep1000RandIndex, file = "nkeep1000RandIndexMat_designedClustering.RData"
 save(nkeep10AccuRatio, file = "nkeep10AccuRatioMat_designedClustering.RData")
 save(nkeep100AccuRatio, file = "nkeep100AccuRatioMat_designedClustering.RData")
 save(nkeep1000AccuRatio, file = "nkeep1000AccuRatioMat_designedClustering.RData")
-
-
-# install.packages("spatempBFA_1.0.tar.gz", repos = NULL, type = "source", dependencies = TRUE)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

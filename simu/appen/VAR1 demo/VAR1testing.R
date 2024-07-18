@@ -90,7 +90,7 @@ MCMC <- list(NBurn = 100, NSims = 100, NThin = 2, NPilot = 5)
 Sys.time()
 VAR1regVaryLj.simu.sequen <- VAR1bfaVaryingLjs(Y ~ 0, data = dat, dist = D, Nu, K, LjVec, 
                                                family = "normal", spatial.structure = "continuous",
-                                               starting = NULL, hypers = NULL, tuning = NULL, mcmc = NULL, seed = 27,
+                                               starting = NULL, hypers = NULL, tuning = NULL, mcmc = MCMC, seed = 27,
                                                gamma.shrinkage = TRUE, include.space = TRUE, 
                                                spatApprox = TRUE, alphaSequen = TRUE, h = 15,
                                                storeSpatPredPara = FALSE, storeWeights = FALSE) 
@@ -102,7 +102,7 @@ Deviance.VAR1sequenVaryLj.sequen <- as.mcmc(Diags.VAR1sequenVaryLj.sequen$devian
 Sys.time()
 VAR1bfaFixedL.simu <- VAR1bfaFixedL(Y ~ 0, data = dat, dist = D, Nu, K, L = 20, 
                                     family = "normal", spatial.structure = "continuous",
-                                    starting = NULL, hypers = NULL, tuning = NULL, mcmc = NULL, seed = 27,
+                                    starting = NULL, hypers = NULL, tuning = NULL, mcmc = MCMC, seed = 27,
                                     gamma.shrinkage = TRUE, include.space = TRUE, 
                                     spatApprox = FALSE, alphaMethod = "block", h = 15,
                                     storeSpatPredPara = FALSE, storeWeights = FALSE) 
@@ -114,7 +114,7 @@ Deviance.VAR1fixedL <- as.mcmc(Diags.VAR1fixedL$deviance)
 Sys.time()
 VAR1bfaFixedL.simu.block <- VAR1bfaFixedL(Y ~ 0, data = dat, dist = D, Nu, K, L = 20, 
                                           family = "normal", spatial.structure = "continuous",
-                                          starting = NULL, hypers = NULL, tuning = NULL, mcmc = NULL, seed = 27,
+                                          starting = NULL, hypers = NULL, tuning = NULL, mcmc = MCMC, seed = 27,
                                           gamma.shrinkage = TRUE, include.space = TRUE, 
                                           spatApprox = TRUE, alphaMethod = "block", h = 15,
                                           storeSpatPredPara = FALSE, storeWeights = FALSE) 
@@ -126,7 +126,7 @@ Deviance.VAR1fixedL.block <- as.mcmc(Diags.VAR1fixedL.block$deviance)
 Sys.time()
 VAR1bfaFixedL.simu.sequen <- VAR1bfaFixedL(Y ~ 0, data = dat, dist = D, Nu, K, L = 20, 
                                            family = "normal", spatial.structure = "continuous",
-                                           starting = NULL, hypers = NULL, tuning = NULL, mcmc = NULL, seed = 27,
+                                           starting = NULL, hypers = NULL, tuning = NULL, mcmc = MCMC, seed = 27,
                                            gamma.shrinkage = TRUE, include.space = TRUE, 
                                            spatApprox = TRUE, alphaMethod = "sequential", h = 15,
                                            storeSpatPredPara = FALSE, storeWeights = FALSE) 
