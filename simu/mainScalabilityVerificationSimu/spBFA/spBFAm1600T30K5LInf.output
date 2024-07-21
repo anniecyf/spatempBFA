@@ -139,5 +139,5 @@ Try help(fields) to get started.
 +                         include.space = TRUE,
 +                         clustering = TRUE) 
 Burn-in progress:  0%..  10%.. 20%.. 30%.. 40%.. 50%.. 60%.. 70%.. 80%.. 90%.. 100%!
-Sampler progress:  0%.. 10%.. 20%.. 30%.. 40%.. 
-last updated 20240718 5:03:06 am
+Sampler progress:  0%.. 10%.. 20%.. 30%.. 40%.. 50%.. 60%.. 70%.. 80%.. 
+last updated 20240721 9:27:13 am

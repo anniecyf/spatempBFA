@@ -23,15 +23,6 @@ NKeep <- 10000
 #                               NNGPsequenFixedL = as.vector(Deviance.sequen))
 postDeviancesDF <- data.frame(MCMCiter = 1:NKeep, fullGPfixedL = as.vector(Deviance), NNGPblockFixedL = as.vector(Deviance.block),
                               NNGPsequenFixedL = as.vector(Deviance.sequen), NNGPsequenVaryLj = as.vector(Deviance.sequenVaryLj))
-# fullGPfixedLpostDeviances <- ggplot(postDeviancesDF) + geom_line(aes(x = MCMCiter, y = fullGPfixedL), 
-#                                        col = rgb(0.27, 0.35, 0.27)) + 
-#   labs(x = "MCMC Iteration", y = "Posterior Deviance") +
-#   theme(axis.title.x = element_text(size = 12),
-#         axis.title.y = element_text(size = 12),
-#         axis.text.x = element_text(size = 10, color = "black"),
-#         axis.text.y = element_text(size = 10, color = "black"),
-#         panel.background = element_rect(fill = "white"),
-#         panel.border = element_rect(color = "black", fill=NA))
 fullGPfixedLpostDeviances <- ggplot(postDeviancesDF) + geom_line(aes(x = MCMCiter, y = fullGPfixedL)) + 
   labs(x = "MCMC Iteration", y = "Posterior Deviance") +
   theme(axis.title.x = element_text(size = 12),
@@ -60,6 +51,8 @@ ggarrange(fullGPfixedLpostDeviances, NNGPblockFixedLpostDeviances, NNGPsequenFix
           labels = c("A", "B", "C"), align = "h",
           ncol = 3, nrow = 1)
 ggsave("O2T50M400postDeviancesFixedL.png", width = 24, height = 8, units = "cm")
+# posterior deviances NNGPsequenFixedL slightly better than NNGPblockFixedL better than fullGPfixedL 
+# Diags.sequen better than Diags.block better than (except for dic, pd, g) Diags
 NNGPsequenVaryLjpostDeviances <- ggplot(postDeviancesDF) + geom_line(aes(x = MCMCiter, y = NNGPsequenVaryLj)) + 
   labs(x = "MCMC Iteration", y = "Posterior Deviance") +
   theme(axis.title.x = element_text(size = 12),

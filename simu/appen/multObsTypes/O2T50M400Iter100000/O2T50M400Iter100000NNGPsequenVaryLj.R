@@ -12,7 +12,7 @@ Nu <- 50
 Time <- 1:Nu
 TimeDist <- as.matrix(dist(Time))
 APsi = 0.1; BPsi = 4.5
-set.seed(29)
+set.seed(19)
 ### 1) actual sigma^2(i,o) values
 sigma2 <- 0.01
 ### 2) actual psi value
@@ -93,7 +93,7 @@ regVaryLj.simu.sequen <- bfaVaryingLjs(Y ~ 0, data = dat, dist = D, time = Time,
                                        family = "normal",
                                        temporal.structure = "exponential",
                                        spatial.structure = "continuous",
-                                       seed = 29, 
+                                       seed = 19, 
                                        gamma.shrinkage = TRUE,
                                        include.time = TRUE,
                                        include.space = TRUE,

@@ -6,17 +6,17 @@ setwd(paste(projDirec, "simu/mainScalabilityVerificationSimu/toy example", sep =
 setwd("spBFA")
 # library(spBFA)
 # Nu = 60; trainingT = 50
-# load("toyExspBFAL50.RData"); reg.simu$runtime # 6.72 hours
-# temppredspBFAL50 <- predict(reg.simu, (trainingT+1):Nu, seed = 29) # from spBFA
-# #save(temppredspBFAL50, file = "toyExspBFAL50temppred.RData")
+# load("toyExspBFAL10.RData"); reg.simu$runtime # 6.72 hours
+# temppredspBFAL10 <- predict(reg.simu, (trainingT+1):Nu, seed = 29) # from spBFA
+# #save(temppredspBFAL10, file = "toyExspBFAL10temppred.RData")
 # rm(reg.simu)
 # load("toyExspBFALInf.RData"); reg.simu.LInf$runtime # 8.21 hours
 # temppredspBFALInf <- predict(reg.simu.LInf, (trainingT+1):Nu, seed = 29)
 # #save(temppredspBFALInf, file = "toyExspBFALInftemppred.RData")
-rm(reg.simu.LInf)
-load("toyExspBFAL50Diags.RData")
-load("toyExspBFAL50Deviance.RData")
-load("toyExspBFAL50temppred.RData")
+# rm(reg.simu.LInf)
+load("toyExspBFAL10Diags.RData")
+load("toyExspBFAL10Deviance.RData")
+load("toyExspBFAL10temppred.RData")
 load("toyExspBFALInfDiags.RData")
 load("toyExspBFALInfDeviance.RData")
 load("toyExspBFALInftemppred.RData")
@@ -67,7 +67,7 @@ setwd("..")
 NKeep <- 5000
 postDeviancesDF <- data.frame(MCMCiter = 1:NKeep, fullGPfixedL = as.vector(Deviance), NNGPblockFixedL = as.vector(Deviance.block),
                               NNGPsequenFixedL = as.vector(Deviance.sequen), NNGPsequenVaryLj = as.vector(Deviance.sequenVaryLj),
-                              spBFAL50 = as.vector(spBFADeviance), spBFALInf = as.vector(spBFADevianceLInf))
+                              spBFAL10 = as.vector(spBFADeviance), spBFALInf = as.vector(spBFADevianceLInf))
 fullGPfixedLpostDeviances <- ggplot(postDeviancesDF) + geom_line(aes(x = MCMCiter, y = fullGPfixedL)) + 
   labs(x = "MCMC Iteration", y = "Posterior Deviance") +
   theme(axis.title.x = element_text(size = 12),
@@ -105,14 +105,14 @@ ggarrange(fullGPfixedLpostDeviances, NNGPblockFixedLpostDeviances,
           labels = c("A", "B", "C", "D"), align = "hv",
           ncol = 2, nrow = 2)
 #ggsave("toyExPostDeviances.png", width = 16, height = 16, units = "cm")
-spBFAL50Deviances <- ggplot(postDeviancesDF) + geom_line(aes(x = MCMCiter, y = spBFAL50)) + 
+spBFAL10Deviances <- ggplot(postDeviancesDF) + geom_line(aes(x = MCMCiter, y = spBFAL10)) + 
   labs(x = "MCMC Iteration", y = "Posterior Deviance") +
   theme(axis.title.x = element_text(size = 12),
         axis.title.y = element_text(size = 12),
         axis.text.x = element_text(size = 10, color = "black"),
         axis.text.y = element_text(size = 10, color = "black"),
         axis.ticks.x = element_blank(), axis.ticks.y = element_blank())
-spBFAL50Deviances
+spBFAL10Deviances
 spBFALInfDeviances <- ggplot(postDeviancesDF) + geom_line(aes(x = MCMCiter, y = spBFALInf)) + 
   labs(x = "MCMC Iteration", y = "Posterior Deviance") +
   theme(axis.title.x = element_text(size = 12),
@@ -123,11 +123,11 @@ spBFALInfDeviances <- ggplot(postDeviancesDF) + geom_line(aes(x = MCMCiter, y = 
 spBFALInfDeviances
 ggarrange(fullGPfixedLpostDeviances, NNGPblockFixedLpostDeviances, 
           NNGPsequenFixedLpostDeviances, NNGPsequenVaryLjpostDeviances,
-          spBFAL50Deviances, spBFALInfDeviances,
+          spBFAL10Deviances, spBFALInfDeviances,
           labels = c("A", "B", "C", "D", "E", "F"), align = "h",
           ncol = 2, nrow = 3)
 #ggsave("toyExPostDeviances.png", width = 16, height = 24, units = "cm")
-ggarrange(fullGPfixedLpostDeviances, NNGPsequenFixedLpostDeviances, spBFAL50Deviances,
+ggarrange(fullGPfixedLpostDeviances, NNGPsequenFixedLpostDeviances, spBFAL10Deviances,
           NNGPblockFixedLpostDeviances, NNGPsequenVaryLjpostDeviances, spBFALInfDeviances,
           labels = c("A", "C", "E", "B", "D", "F"), align = "v",
           ncol = 3, nrow = 2)
@@ -252,30 +252,36 @@ calcAccuRatio <- function(predictedCluster, actualGroup, numObs){
   accuRatio <- max(sum(predictedCluster==actualGroupsPoss1), sum(predictedCluster==actualGroupsPoss2))/numObs 
   return(accuRatio)
 }
-calcAccuRatio(fittedClusGpMat.fullGPfixedL[,1], spatGroupOverallTraining, m) # 1
-calcAccuRatio(fittedClusGpMat.fullGPfixedL[,2], spatGroupOverallTraining, m) # 1
-calcAccuRatio(fittedClusGpMat.fullGPfixedL[,3], spatGroupOverallTraining, m) # 1
-calcAccuRatio(fittedClusGpMat.NNGPblockFixedL[,1], spatGroupOverallTraining, m) # 1
-calcAccuRatio(fittedClusGpMat.NNGPblockFixedL[,2], spatGroupOverallTraining, m) # 1
-calcAccuRatio(fittedClusGpMat.NNGPblockFixedL[,3], spatGroupOverallTraining, m) # 1
-calcAccuRatio(fittedClusGpMat.NNGPsequenFixedL[,1], spatGroupOverallTraining, m) # 1
-calcAccuRatio(fittedClusGpMat.NNGPsequenFixedL[,2], spatGroupOverallTraining, m) # 1
-calcAccuRatio(fittedClusGpMat.NNGPsequenFixedL[,3], spatGroupOverallTraining, m) # 1
-calcAccuRatio(fittedClusGpMat.NNGPsequenVaryLj[,1], spatGroupOverallTraining, m) # 0.9857955
-calcAccuRatio(fittedClusGpMat.NNGPsequenVaryLj[,2], spatGroupOverallTraining, m) # 0.9886364
-calcAccuRatio(fittedClusGpMat.NNGPsequenVaryLj[,3], spatGroupOverallTraining, m) # 0.9886364
-calcRandIndex(fittedClusGpMat.fullGPfixedL[,1], spatGroupOverallTraining, m) # 1
-calcRandIndex(fittedClusGpMat.fullGPfixedL[,2], spatGroupOverallTraining, m) # 1
-calcRandIndex(fittedClusGpMat.fullGPfixedL[,3], spatGroupOverallTraining, m) # 1
-calcRandIndex(fittedClusGpMat.NNGPblockFixedL[,1], spatGroupOverallTraining, m) # 1
-calcRandIndex(fittedClusGpMat.NNGPblockFixedL[,2], spatGroupOverallTraining, m) # 1
-calcRandIndex(fittedClusGpMat.NNGPblockFixedL[,3], spatGroupOverallTraining, m) # 1
-calcRandIndex(fittedClusGpMat.NNGPsequenFixedL[,1], spatGroupOverallTraining, m) # 1
-calcRandIndex(fittedClusGpMat.NNGPsequenFixedL[,2], spatGroupOverallTraining, m) # 1
-calcRandIndex(fittedClusGpMat.NNGPsequenFixedL[,3], spatGroupOverallTraining, m) # 1
-calcRandIndex(fittedClusGpMat.NNGPsequenVaryLj[,1], spatGroupOverallTraining, m) # 0.9719147
-calcRandIndex(fittedClusGpMat.NNGPsequenVaryLj[,2], spatGroupOverallTraining, m) # 0.977467
-calcRandIndex(fittedClusGpMat.NNGPsequenVaryLj[,3], spatGroupOverallTraining, m) # 0.977467
+fittedClusGpMat <- cbind(fittedClusGpMat.fullGPfixedL, fittedClusGpMat.NNGPblockFixedL,
+                         fittedClusGpMat.NNGPsequenFixedL, fittedClusGpMat.NNGPsequenVaryLj)
+# fittedClusGpMatList <- lapply(apply(fittedClusGpMat, 2, list), function(x) x[[1]])
+# sapply(fittedClusGpMatList, calcAccuRatio, actualGroup = spatGroupOverallTraining, numObs = m)
+apply(fittedClusGpMat, 2, calcAccuRatio, actualGroup = spatGroupOverallTraining, numObs = m)
+apply(fittedClusGpMat, 2, calcRandIndex, actualGroup = spatGroupOverallTraining, numObs = m)
+# calcAccuRatio(fittedClusGpMat.fullGPfixedL[,1], spatGroupOverallTraining, m) # 1
+# calcAccuRatio(fittedClusGpMat.fullGPfixedL[,2], spatGroupOverallTraining, m) # 1
+# calcAccuRatio(fittedClusGpMat.fullGPfixedL[,3], spatGroupOverallTraining, m) # 1
+# calcAccuRatio(fittedClusGpMat.NNGPblockFixedL[,1], spatGroupOverallTraining, m) # 1
+# calcAccuRatio(fittedClusGpMat.NNGPblockFixedL[,2], spatGroupOverallTraining, m) # 1
+# calcAccuRatio(fittedClusGpMat.NNGPblockFixedL[,3], spatGroupOverallTraining, m) # 1
+# calcAccuRatio(fittedClusGpMat.NNGPsequenFixedL[,1], spatGroupOverallTraining, m) # 1
+# calcAccuRatio(fittedClusGpMat.NNGPsequenFixedL[,2], spatGroupOverallTraining, m) # 1
+# calcAccuRatio(fittedClusGpMat.NNGPsequenFixedL[,3], spatGroupOverallTraining, m) # 1
+# calcAccuRatio(fittedClusGpMat.NNGPsequenVaryLj[,1], spatGroupOverallTraining, m) # 0.9857955
+# calcAccuRatio(fittedClusGpMat.NNGPsequenVaryLj[,2], spatGroupOverallTraining, m) # 0.9886364
+# calcAccuRatio(fittedClusGpMat.NNGPsequenVaryLj[,3], spatGroupOverallTraining, m) # 0.9886364
+# calcRandIndex(fittedClusGpMat.fullGPfixedL[,1], spatGroupOverallTraining, m) # 1
+# calcRandIndex(fittedClusGpMat.fullGPfixedL[,2], spatGroupOverallTraining, m) # 1
+# calcRandIndex(fittedClusGpMat.fullGPfixedL[,3], spatGroupOverallTraining, m) # 1
+# calcRandIndex(fittedClusGpMat.NNGPblockFixedL[,1], spatGroupOverallTraining, m) # 1
+# calcRandIndex(fittedClusGpMat.NNGPblockFixedL[,2], spatGroupOverallTraining, m) # 1
+# calcRandIndex(fittedClusGpMat.NNGPblockFixedL[,3], spatGroupOverallTraining, m) # 1
+# calcRandIndex(fittedClusGpMat.NNGPsequenFixedL[,1], spatGroupOverallTraining, m) # 1
+# calcRandIndex(fittedClusGpMat.NNGPsequenFixedL[,2], spatGroupOverallTraining, m) # 1
+# calcRandIndex(fittedClusGpMat.NNGPsequenFixedL[,3], spatGroupOverallTraining, m) # 1
+# calcRandIndex(fittedClusGpMat.NNGPsequenVaryLj[,1], spatGroupOverallTraining, m) # 0.9719147
+# calcRandIndex(fittedClusGpMat.NNGPsequenVaryLj[,2], spatGroupOverallTraining, m) # 0.977467
+# calcRandIndex(fittedClusGpMat.NNGPsequenVaryLj[,3], spatGroupOverallTraining, m) # 0.977467
 xcoordTraining <- xcoord[-whichTesting]; ycoordTraining = ycoord[-whichTesting]
 fittedNNGPsequenVaryLjspatGpDF <- data.frame(x = xcoordTraining, y = ycoordTraining, 
                                              nkeep10 = as.factor(fittedClusGpMat.NNGPsequenVaryLj[,1]),
@@ -381,7 +387,7 @@ summary(abs(YtestingTemp))
 tempPredMetricMat <- matrix(0, 3, 6, 
                             dimnames = list(c("postMeanMSE", "postMSE", "postVar"),
                                             c("fullGPfixedL", "NNGPblockFixedL", "NNGPsequenFixedL", "NNGPsequenVaryLj",
-                                              "spBFAL50", "spBFALInf")))
+                                              "spBFAL10", "spBFALInf")))
 # testingT = 10
 ytempPredList = temppredFixedL$Y
 ytempPred <- t(matrix(unlist(ytempPredList), ncol = testingT * m * O)) # (testingT x m x O) x NKeep 
@@ -411,7 +417,7 @@ tempPredMetricMat[1, 4] <- mean((ytempPredMean - ytempPred)^2)
 diffMat <- sweep(ytempPred, 1, YtestingTemp, "-")
 tempPredMetricMat[2, 4] = mean(rowMeans(diffMat^2))
 tempPredMetricMat[3, 4] = mean(apply(ytempPred, 1, var))
-ytempPredList = temppredspBFAL50$Y
+ytempPredList = temppredspBFAL10$Y
 ytempPred <- t(matrix(unlist(ytempPredList), ncol = testingT * m * O)) # (testingT x m x O) x NKeep 
 ytempPredMean <- apply(ytempPred, 1, mean) # of length N = testingT x O x m (rowMeans) note that O = 1 here
 tempPredMetricMat[1, 5] <- mean((ytempPredMean - ytempPred)^2)

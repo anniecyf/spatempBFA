@@ -3,18 +3,18 @@ library(tidyverse)
 library(ggpubr)
 projDirec <- "C:/Users/annie/OneDrive - National University of Singapore/Documents/PhD/research/first paper/spatempBFA"
 setwd(paste0(projDirec, "/simu/appen/VAR1 demo/VAR1demo"))
-#load("regFixedL50simuT200M225Iter100000.RData"); VAR1bfaFixedL.simu$runtime; #7.02 hours rm(VAR1bfaFixedL.simu)
-load("regFixedL50simuT200M225Iter100000Diags.RData") # DiagsVAR1
-load("regFixedL50simuT200M225Iter100000Deviance.RData") # DevianceVAR1
-#load("regFixedL50simuBlockT200M225Iter100000.RData"); VAR1bfaFixedL.simu.block$runtime; #6.61 hours rm(VAR1bfaFixedL.simu.block)
-load("regFixedL50simuBlockT200M225Iter100000Diags.RData") # Diags.VAR1fixedL.block
-load("regFixedL50simuBlockT200M225Iter100000Deviance.RData") # Deviance.VAR1fixedL.block
-#load("regFixedL50simuSequenT200M225Iter100000.RData"); VAR1bfaFixedL.simu.sequen$runtime; #6.95 hours rm(VAR1bfaFixedL.simu.sequen)
-load("regFixedL50simuSequenT200M225Iter100000Diags.RData") # Diags.VAR1fixedL.sequen
-load("regFixedL50simuSequenT200M225Iter100000Deviance.RData") # Deviance.VAR1fixedL.sequen
-#load("regVaryLjSimuSequenT200M225Iter100000.RData"); VAR1regVaryLj.simu.sequen$runtime; #4.63 hours hours rm(VAR1regVaryLj.simu.sequen)
-load("regVaryLjSimuSequenT200M225Iter100000Diags.RData") # Diags.VAR1regVaryLj.simu.sequen
-load("regVaryLjSimuSequenT200M225Iter100000Deviance.RData") # Deviance.VAR1regVaryLj.simu.sequen
+#load("regFixedL50simuT200M225Iter20000.RData"); VAR1bfaFixedL.simu$runtime; #7.02 hours rm(VAR1bfaFixedL.simu)
+load("regFixedL50simuT200M225Iter20000Diags.RData") # DiagsVAR1
+load("regFixedL50simuT200M225Iter20000Deviance.RData") # DevianceVAR1
+#load("regFixedL50simuBlockT200M225Iter20000.RData"); VAR1bfaFixedL.simu.block$runtime; #6.61 hours rm(VAR1bfaFixedL.simu.block)
+load("regFixedL50simuBlockT200M225Iter20000Diags.RData") # Diags.VAR1fixedL.block
+load("regFixedL50simuBlockT200M225Iter20000Deviance.RData") # Deviance.VAR1fixedL.block
+#load("regFixedL50simuSequenT200M225Iter20000.RData"); VAR1bfaFixedL.simu.sequen$runtime; #6.95 hours rm(VAR1bfaFixedL.simu.sequen)
+load("regFixedL50simuSequenT200M225Iter20000Diags.RData") # Diags.VAR1fixedL.sequen
+load("regFixedL50simuSequenT200M225Iter20000Deviance.RData") # Deviance.VAR1fixedL.sequen
+#load("regVaryLjSimuSequenT200M225Iter20000.RData"); VAR1regVaryLj.simu.sequen$runtime; #4.63 hours rm(VAR1regVaryLj.simu.sequen)
+load("regVaryLjSimuSequenT200M225Iter20000Diags.RData") # Diags.VAR1regVaryLj.simu.sequen
+load("regVaryLjSimuSequenT200M225Iter20000Deviance.RData") # Deviance.VAR1regVaryLj.simu.sequen
 NKeep <- 10000
 postDeviancesDF <- data.frame(MCMCiter = 1:NKeep, fullGPfixedL = as.vector(DevianceVAR1), 
                               NNGPblockFixedL = as.vector(Deviance.VAR1fixedL.block),
