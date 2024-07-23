@@ -45,11 +45,11 @@ Try help(fields) to get started.
 > library(spatempBFA)
 > K <- 5
 > O <- 1
-> L <- 30
-> M <- 64
-> LjVec <- rep(min(30, M), K)
-> sqrootM <- 8
-> Nu <- 500
+> L <- 50
+> M <- 1600
+> LjVec <- rep(min(50, M), K)
+> sqrootM <- 40
+> Nu <- 50
 > Time <- 1:Nu
 > TimeDist <- as.matrix(dist(Time))
 > APsi = 0.1; BPsi = 4.5
@@ -127,23 +127,42 @@ Try help(fields) to get started.
 > MCMC <- list(NBurn = 20000, NSims = 10000, NThin = 2, NPilot = 5)
 > 
 > Sys.time()
-[1] "2024-06-28 11:53:44 +08"
-> regVaryLj.simu.sequen <- bfaVaryingLjs(Y ~ 0, data = dat, dist = D, time = Time,  K = K, LjVec = LjVec,
-+                                        starting = NULL, hypers = Hypers, tuning = NULL, mcmc = MCMC,
-+                                        family = "normal",
-+                                        temporal.structure = "exponential",
-+                                        spatial.structure = "continuous",
-+                                        seed = 29, 
-+                                        gamma.shrinkage = TRUE,
-+                                        include.time = TRUE,
-+                                        include.space = TRUE,
-+                                        seasonPeriod = 1, 
-+                                        equalTimeDist = FALSE,
-+                                        spatApprox = TRUE, 
-+                                        alphaSequen = TRUE, 
-+                                        h = 15,
-+                                        storeSpatPredPara = FALSE, 
-+                                        storeWeights = FALSE) 
+[1] "2024-07-22 09:38:51 +08"
+> regFixedL.simu <- bfaFixedL(Y ~ 0, data = dat, dist = D, time = Time,  K = K, 
++                             starting = NULL, hypers = Hypers, tuning = NULL, mcmc = MCMC,
++                             L = L,
++                             family = "normal",
++                             temporal.structure = "exponential",
++                             spatial.structure = "continuous",
++                             seed = 29, 
++                             gamma.shrinkage = TRUE,
++                             include.time = TRUE,
++                             include.space = TRUE,
++                             clustering = TRUE,
++                             seasonPeriod = 1, 
++                             equalTimeDist = TRUE,
++                             spatApprox = FALSE, 
++                             alphaMethod = "block", 
++                             h = 15, 
++                             storeSpatPredPara = FALSE,
++                             storeWeights = FALSE,
++                             alphasWeightsToFiles = FALSE) 
 Burn-in progress:  0%..  10%.. 20%.. 30%.. 40%.. 50%.. 60%.. 70%.. 80%.. 90%.. 100%!
-Sampler progress:  0%.. 10%.. 20%.. 30%.. 40%.. 50%.. 60%.. 
-last updated 20240723 8:41:35 pm
+Sampler progress:  0%.. 10%.. 20%.. 30%.. 40%.. 50%.. 60%.. 70%.. 80%.. 90%.. 100%!> Sys.time()
+[1] "2024-07-24 02:22:04 +08"
+> regFixedL.simu$runtime
+[1] "Model runtime: 1.7 days"
+> save(regFixedL.simu, file="regFixedL50simuT50M1600Iter30000.RData")
+> library(coda)
+> Diags <- diagnostics(regFixedL.simu, diags = c("dic", "dinf", "meanIC", "waic"), keepDeviance = TRUE)
+Calculating Log-Lik: 0%.. 25%.. 50%.. 75%.. 100%.. Done!
+Calculating PPD: 0%.. 25%.. 50%.. 75%.. 100%.. Done!
+> save(Diags, file = "regFixedL50simuT50M1600Iter30000Diags.RData")
+> Deviance <- as.mcmc(Diags$deviance)
+> save(Deviance, file = "regFixedL50simuT50M1600Iter30000Deviance.RData")
+> 
+> 
+> 
+> proc.time()
+      user     system    elapsed 
+142431.794   4851.593 147295.825 

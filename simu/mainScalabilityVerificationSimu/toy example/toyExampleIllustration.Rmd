@@ -1,7 +1,6 @@
 ---
 title: "`spatempBFA` Toy Example Illustration"
 author: Yifan CHENG $\quad$ [\textcolor{blue}{y.cheng@u.nus.edu}](mailto:y.cheng@u.nus.edu)  
-date: "2024-07-20"
 output: pdf_document
 header-includes: 
  - \usepackage{bm}
@@ -27,7 +26,7 @@ Nu <- 60
 trainingT <- 50 # training set T = 50
 testingT <- 10
 Time <- 1:trainingT
-TimeDist <- as.matrix(dist(1:60))
+TimeDist <- as.matrix(dist(1:Nu))
 APsi = 0.1; BPsi = 4.5
 set.seed(29)
 calcGroup <- function(row, col, sqrootM){
@@ -99,7 +98,7 @@ actualSpatPlotBW <- ggplot(spatGpDF) + ggtitle("2 Actual Spatial Groups") +
 ggarrange(trainingTestingPlotBW, actualSpatPlotBW, align = "h", ncol = 2, nrow = 1, 
           labels = c("A", "B"))
 ```
-The entire simulated data set consists of $y_t(\bm{s}_i)$'s from `r Nu` time points and `r M` spatial locations, which belong to 2 actual spatial groups (**B**). `r m` out of the `r M` locations (**A**) are training ones, and the 9 remaining black locations (**A**) are testing ones. The training data set used to fit all 6 models (our 4 models `fullGPfixedL`, `NNGPblockFixedL`, `NNGPsequenFixedL`, and `NNGPsequenVaryLj` $\&$ `spBFAL10`, `spBFALInf` from the R package `spBFA`) are data corresponding to the `r m` white locations (**A**) and the first `r trainingT` time points. $y_t(\bm{s}_i)$'s corresponding to the 9 testing locations for the first `r trainingT` time points are used to assess our 4 models' spatial prediction performances. Similarly, $y_t(\bm{s}_i)$'s corresponding to the `r m` training locations for the last `r testingT` time points are used to assess all 6 models' temporal prediction performances.
+The entire simulated data set consists of $y_t(\bm{s}_i)$'s from `r Nu` time points and `r M` spatial locations, which belong to 2 actual spatial groups (**B**). `r m` out of the `r M` locations (**A**) are training ones, and the 9 remaining black locations (**A**) are testing ones. The training data set used to fit all 6 models (our 4 models `fullGPfixedL`, `NNGPblockFixedL`, `NNGPsequenFixedL`, and `NNGPsequenVaryLj` $\&$ `spBFAL10`, `spBFALInf` from the R package `spBFA`) consists of data at the `r m` white locations (**A**) and the first `r trainingT` time points. $y_t(\bm{s}_i)$'s at the `r M-m` testing locations for the first `r trainingT` time points are used to assess our 4 models' spatial prediction performances. Similarly, $y_t(\bm{s}_i)$'s at the `r m` training locations for the last `r testingT` time points are used to assess all 6 models' temporal prediction performances.
 ```{r eval = FALSE, echo = -(1:3)}
 library(devtools)
 setwd("C:/Users/annie/OneDrive - National University of Singapore/Documents/PhD/research/server/spatempBFA") # the version that records main model fitting and spatial prediction step time 
@@ -496,14 +495,14 @@ All 6 models' diagnostics and converged posterior deviances are comparable.
 
 ## Predictions for all 352 Training Locations at the 10 Future Time Points
 ```{r warning = FALSE}
-summary(YtestingTemp)
-summary(abs(YtestingTemp))
 YtestingTempDF <- data.frame(YtestingTemp = YtestingTemp)
 ggplot(YtestingTempDF) + geom_histogram(aes(x = YtestingTemp), bins = 50) +
   labs(y = "Count", x = "Actual Future Time y") + 
   theme(axis.ticks.x = element_blank(), axis.ticks.y = element_blank(),
         plot.title = element_text(hjust = 0.5)) +
   ggtitle("Actual Distribution of y at All 352 Training Locations and Time 51:60")
+summary(YtestingTemp)
+summary(abs(YtestingTemp))
 tempPredMetricMat <- matrix(0, 3, 6, 
                             dimnames = list(c("postMeanMSE", "postMSE", "postVar"),
                                             c("fullGPfixedL", "NNGPblockFixedL", 
@@ -513,75 +512,349 @@ tempPredMetricMat <- matrix(0, 3, 6,
 # testingT = 10
 ytempPredList = temppredFixedL$Y
 ytempPred <- t(matrix(unlist(ytempPredList), ncol = testingT * m * O)) 
-# (testingT x m x O) x NKeep 
+# (testingT * m * O) * NKeep 
 ytempPredMean <- apply(ytempPred, 1, mean) 
-# of length N = testingT x O x m (rowMeans) note that O = 1 here
+# of length N = testingT * O * m (rowMeans) note that O = 1 here
 tempPredMetricMat[1, 1] <- mean((ytempPredMean - ytempPred)^2)
 diffMat <- sweep(ytempPred, 1, YtestingTemp, "-")
 tempPredMetricMat[2, 1] = mean(rowMeans(diffMat^2))
 tempPredMetricMat[3, 1] = mean(apply(ytempPred, 1, var))
 ytempPredList = temppredFixedLblock$Y
 ytempPred <- t(matrix(unlist(ytempPredList), ncol = testingT * m * O)) 
-# (testingT x m x O) x NKeep 
+# (testingT * m * O) * NKeep 
 ytempPredMean <- apply(ytempPred, 1, mean) 
-# of length N = testingT x O x m (rowMeans) note that O = 1 here
+# of length N = testingT * O * m (rowMeans) note that O = 1 here
 tempPredMetricMat[1, 2] <- mean((ytempPredMean - ytempPred)^2)
 diffMat <- sweep(ytempPred, 1, YtestingTemp, "-")
 tempPredMetricMat[2, 2] = mean(rowMeans(diffMat^2))
 tempPredMetricMat[3, 2] = mean(apply(ytempPred, 1, var))
 ytempPredList = temppredFixedLsequen$Y
 ytempPred <- t(matrix(unlist(ytempPredList), ncol = testingT * m * O)) 
-# (testingT x m x O) x NKeep 
+# (testingT * m * O) * NKeep 
 ytempPredMean <- apply(ytempPred, 1, mean) 
-# of length N = testingT x O x m (rowMeans) note that O = 1 here
+# of length N = testingT * O * m (rowMeans) note that O = 1 here
 tempPredMetricMat[1, 3] <- mean((ytempPredMean - ytempPred)^2)
 diffMat <- sweep(ytempPred, 1, YtestingTemp, "-")
 tempPredMetricMat[2, 3] = mean(rowMeans(diffMat^2))
 tempPredMetricMat[3, 3] = mean(apply(ytempPred, 1, var))
 ytempPredList = temppredVaryLj$Y
 ytempPred <- t(matrix(unlist(ytempPredList), ncol = testingT * m * O)) 
-# (testingT x m x O) x NKeep 
+# (testingT * m * O) * NKeep 
 ytempPredMean <- apply(ytempPred, 1, mean) 
-# of length N = testingT x O x m (rowMeans) note that O = 1 here
+# of length N = testingT * O * m (rowMeans) note that O = 1 here
 tempPredMetricMat[1, 4] <- mean((ytempPredMean - ytempPred)^2)
 diffMat <- sweep(ytempPred, 1, YtestingTemp, "-")
 tempPredMetricMat[2, 4] = mean(rowMeans(diffMat^2))
 tempPredMetricMat[3, 4] = mean(apply(ytempPred, 1, var))
 ytempPredList = temppredspBFAL10$Y
 ytempPred <- t(matrix(unlist(ytempPredList), ncol = testingT * m * O)) 
-# (testingT x m x O) x NKeep 
+# (testingT * m * O) * NKeep 
 ytempPredMean <- apply(ytempPred, 1, mean) 
-# of length N = testingT x O x m (rowMeans) note that O = 1 here
+# of length N = testingT * O * m (rowMeans) note that O = 1 here
 tempPredMetricMat[1, 5] <- mean((ytempPredMean - ytempPred)^2)
 diffMat <- sweep(ytempPred, 1, YtestingTemp, "-")
 tempPredMetricMat[2, 5] = mean(rowMeans(diffMat^2))
 tempPredMetricMat[3, 5] = mean(apply(ytempPred, 1, var))
 ytempPredList = temppredspBFALInf$Y
-ytempPred <- t(matrix(unlist(ytempPredList), ncol = testingT * m * O)) # (testingT x m x O) x NKeep 
+ytempPred <- t(matrix(unlist(ytempPredList), ncol = testingT * m * O)) 
+# (testingT * m * O) * NKeep 
 ytempPredMean <- apply(ytempPred, 1, mean) 
-# of length N = testingT x O x m (rowMeans) note that O = 1 here
+# of length N = testingT * O * m (rowMeans) note that O = 1 here
 tempPredMetricMat[1, 6] <- mean((ytempPredMean - ytempPred)^2)
 diffMat <- sweep(ytempPred, 1, YtestingTemp, "-")
 tempPredMetricMat[2, 6] = mean(rowMeans(diffMat^2))
 tempPredMetricMat[3, 6] = mean(apply(ytempPred, 1, var))
 rm(temppredFixedL, temppredFixedLblock, temppredFixedLsequen, temppredVaryLj)
-tempPredMetricMat
 rm(temppredspBFAL10, temppredspBFALInf)
+tempPredMetricMat
 ```
-Temporal prediction results from our models `NNGPsequenFixedL` and `fullGPfixedL` are comparable to their `spBFA` model counterparts.
-
+Temporal prediction results from our models `NNGPsequenFixedL` and `fullGPfixedL` are comparable to their `spBFA` model counterparts. Similar conclusions can be drawn from future-time prediction metrics calculated from temporal prediction objects generated using 3 other random seeds presented below.
+```{r eval = FALSE, echo = FALSE}
+setwd("fullGPfixedL")
+load("toyExfullGPfixedL.RData")
+temppredFixedL <- predictNewTime(regFixedL.simu, (trainingT+1):Nu, seed = 27)
+save(temppredFixedL, file = "s27toyExNNGPtemppredFixedL.RData")
+temppredFixedL <- predictNewTime(regFixedL.simu, (trainingT+1):Nu, seed = 19)
+save(temppredFixedL, file = "s19toyExNNGPtemppredFixedL.RData")
+temppredFixedL <- predictNewTime(regFixedL.simu, (trainingT+1):Nu, seed = 31)
+save(temppredFixedL, file = "s31toyExNNGPtemppredFixedL.RData")
+setwd("../NNGPblockFixedL")
+load("toyExNNGPblockFixedL.RData")
+temppredFixedLblock <- predictNewTime(regFixedL.simu.block, (trainingT+1):Nu, seed = 27)
+save(temppredFixedLblock, file = "s27toyExNNGPtemppredFixedLblock.RData")
+temppredFixedLblock <- predictNewTime(regFixedL.simu.block, (trainingT+1):Nu, seed = 19)
+save(temppredFixedLblock, file = "s19toyExNNGPtemppredFixedLblock.RData")
+temppredFixedLblock <- predictNewTime(regFixedL.simu.block, (trainingT+1):Nu, seed = 31)
+save(temppredFixedLblock, file = "s31toyExNNGPtemppredFixedLblock.RData")
+setwd("../NNGPsequenFixedL")
+load("toyExNNGPsequenFixedL.RData")
+temppredFixedLsequen <- predictNewTime(regFixedL.simu.sequen, (trainingT+1):Nu, seed = 27)
+save(temppredFixedLsequen, file = "s27toyExNNGPtemppredFixedLsequen.RData")
+temppredFixedLsequen <- predictNewTime(regFixedL.simu.sequen, (trainingT+1):Nu, seed = 19)
+save(temppredFixedLsequen, file = "s19toyExNNGPtemppredFixedLsequen.RData")
+temppredFixedLsequen <- predictNewTime(regFixedL.simu.sequen, (trainingT+1):Nu, seed = 31)
+save(temppredFixedLsequen, file = "s31toyExNNGPtemppredFixedLsequen.RData")
+setwd("../NNGPsequenVaryLj")
+load("toyExNNGPsequenVaryLj.RData")
+temppredVaryLj <- predictNewTime(regVaryLj.simu.sequen, (trainingT+1):Nu, seed = 27)
+save(temppredVaryLj, file = "s27toyExNNGPtemppredVaryLj.RData")
+temppredVaryLj <- predictNewTime(regVaryLj.simu.sequen, (trainingT+1):Nu, seed = 19)
+save(temppredVaryLj, file = "s19toyExNNGPtemppredVaryLj.RData")
+temppredVaryLj <- predictNewTime(regVaryLj.simu.sequen, (trainingT+1):Nu, seed = 31)
+save(temppredVaryLj, file = "s31toyExNNGPtemppredVaryLj.RData")
+setwd("../spBFA")
+load("toyExspBFAL10.RData")
+load("toyExspBFALInf.RData")
+temppredspBFAL10 <- predict(reg.simu, (trainingT+1):Nu, seed = 19)
+save(temppredspBFAL10, file = "s19toyExspBFAL10temppred.RData")
+temppredspBFAL10 <- predict(reg.simu, (trainingT+1):Nu, seed = 27)
+save(temppredspBFAL10, file = "s27toyExspBFAL10temppred.RData")
+temppredspBFAL10 <- predict(reg.simu, (trainingT+1):Nu, seed = 31)
+save(temppredspBFAL10, file = "s31toyExspBFAL10temppred.RData")
+temppredspBFALInf <- predict(reg.simu.LInf, (trainingT+1):Nu, seed = 19)
+save(temppredspBFALInf, file = "s19toyExspBFALInftemppred.RData")
+temppredspBFALInf <- predict(reg.simu.LInf, (trainingT+1):Nu, seed = 27)
+save(temppredspBFALInf, file = "s27toyExspBFALInftemppred.RData")
+temppredspBFALInf <- predict(reg.simu.LInf, (trainingT+1):Nu, seed = 31)
+save(temppredspBFALInf, file = "s31toyExspBFALInftemppred.RData")
+setwd("..")
+```
+```{r echo = FALSE}
+setwd("fullGPfixedL")#eval = FALSE, 
+load("s19toyExNNGPtemppredFixedL.RData")
+setwd("../NNGPblockFixedL")
+load("s19toyExNNGPtemppredFixedLblock.RData")
+setwd("../NNGPsequenFixedL")
+load("s19toyExNNGPtemppredFixedLsequen.RData")
+setwd("../NNGPsequenVaryLj")
+load("s19toyExNNGPtemppredVaryLj.RData")
+setwd("../spBFA")
+load("s19toyExspBFAL10temppred.RData")
+load("s19toyExspBFALInftemppred.RData")
+setwd("..")
+tempPredMetricMat <- matrix(0, 3, 6, 
+                            dimnames = list(c("postMeanMSE", "postMSE", "postVar"),
+                                            c("fullGPfixedL", "NNGPblockFixedL", 
+                                              "NNGPsequenFixedL", 
+                                              "NNGPsequenVaryLj",
+                                              "spBFAL10", "spBFALInf")))
+# testingT = 10
+ytempPredList = temppredFixedL$Y
+ytempPred <- t(matrix(unlist(ytempPredList), ncol = testingT * m * O)) 
+# (testingT * m * O) * NKeep 
+ytempPredMean <- apply(ytempPred, 1, mean) 
+# of length N = testingT * O * m (rowMeans) note that O = 1 here
+tempPredMetricMat[1, 1] <- mean((ytempPredMean - ytempPred)^2)
+diffMat <- sweep(ytempPred, 1, YtestingTemp, "-")
+tempPredMetricMat[2, 1] = mean(rowMeans(diffMat^2))
+tempPredMetricMat[3, 1] = mean(apply(ytempPred, 1, var))
+ytempPredList = temppredFixedLblock$Y
+ytempPred <- t(matrix(unlist(ytempPredList), ncol = testingT * m * O)) 
+# (testingT * m * O) * NKeep 
+ytempPredMean <- apply(ytempPred, 1, mean) 
+# of length N = testingT * O * m (rowMeans) note that O = 1 here
+tempPredMetricMat[1, 2] <- mean((ytempPredMean - ytempPred)^2)
+diffMat <- sweep(ytempPred, 1, YtestingTemp, "-")
+tempPredMetricMat[2, 2] = mean(rowMeans(diffMat^2))
+tempPredMetricMat[3, 2] = mean(apply(ytempPred, 1, var))
+ytempPredList = temppredFixedLsequen$Y
+ytempPred <- t(matrix(unlist(ytempPredList), ncol = testingT * m * O)) 
+# (testingT * m * O) * NKeep 
+ytempPredMean <- apply(ytempPred, 1, mean) 
+# of length N = testingT * O * m (rowMeans) note that O = 1 here
+tempPredMetricMat[1, 3] <- mean((ytempPredMean - ytempPred)^2)
+diffMat <- sweep(ytempPred, 1, YtestingTemp, "-")
+tempPredMetricMat[2, 3] = mean(rowMeans(diffMat^2))
+tempPredMetricMat[3, 3] = mean(apply(ytempPred, 1, var))
+ytempPredList = temppredVaryLj$Y
+ytempPred <- t(matrix(unlist(ytempPredList), ncol = testingT * m * O)) 
+# (testingT * m * O) * NKeep 
+ytempPredMean <- apply(ytempPred, 1, mean) 
+# of length N = testingT * O * m (rowMeans) note that O = 1 here
+tempPredMetricMat[1, 4] <- mean((ytempPredMean - ytempPred)^2)
+diffMat <- sweep(ytempPred, 1, YtestingTemp, "-")
+tempPredMetricMat[2, 4] = mean(rowMeans(diffMat^2))
+tempPredMetricMat[3, 4] = mean(apply(ytempPred, 1, var))
+ytempPredList = temppredspBFAL10$Y
+ytempPred <- t(matrix(unlist(ytempPredList), ncol = testingT * m * O)) 
+# (testingT * m * O) * NKeep 
+ytempPredMean <- apply(ytempPred, 1, mean) 
+# of length N = testingT * O * m (rowMeans) note that O = 1 here
+tempPredMetricMat[1, 5] <- mean((ytempPredMean - ytempPred)^2)
+diffMat <- sweep(ytempPred, 1, YtestingTemp, "-")
+tempPredMetricMat[2, 5] = mean(rowMeans(diffMat^2))
+tempPredMetricMat[3, 5] = mean(apply(ytempPred, 1, var))
+ytempPredList = temppredspBFALInf$Y
+ytempPred <- t(matrix(unlist(ytempPredList), ncol = testingT * m * O)) 
+# (testingT * m * O) * NKeep
+ytempPredMean <- apply(ytempPred, 1, mean) 
+# of length N = testingT * O * m (rowMeans) note that O = 1 here
+tempPredMetricMat[1, 6] <- mean((ytempPredMean - ytempPred)^2)
+diffMat <- sweep(ytempPred, 1, YtestingTemp, "-")
+tempPredMetricMat[2, 6] = mean(rowMeans(diffMat^2))
+tempPredMetricMat[3, 6] = mean(apply(ytempPred, 1, var))
+tempPredMetricMat
+setwd("fullGPfixedL")
+load("s27toyExNNGPtemppredFixedL.RData")
+setwd("../NNGPblockFixedL")
+load("s27toyExNNGPtemppredFixedLblock.RData")
+setwd("../NNGPsequenFixedL")
+load("s27toyExNNGPtemppredFixedLsequen.RData")
+setwd("../NNGPsequenVaryLj")
+load("s27toyExNNGPtemppredVaryLj.RData")
+setwd("../spBFA")
+load("s27toyExspBFAL10temppred.RData")
+load("s27toyExspBFALInftemppred.RData")
+setwd("..")
+tempPredMetricMat <- matrix(0, 3, 6, 
+                            dimnames = list(c("postMeanMSE", "postMSE", "postVar"),
+                                            c("fullGPfixedL", "NNGPblockFixedL", 
+                                              "NNGPsequenFixedL", 
+                                              "NNGPsequenVaryLj",
+                                              "spBFAL10", "spBFALInf")))
+# testingT = 10
+ytempPredList = temppredFixedL$Y
+ytempPred <- t(matrix(unlist(ytempPredList), ncol = testingT * m * O)) 
+# (testingT * m * O) * NKeep 
+ytempPredMean <- apply(ytempPred, 1, mean) 
+# of length N = testingT * O * m (rowMeans) note that O = 1 here
+tempPredMetricMat[1, 1] <- mean((ytempPredMean - ytempPred)^2)
+diffMat <- sweep(ytempPred, 1, YtestingTemp, "-")
+tempPredMetricMat[2, 1] = mean(rowMeans(diffMat^2))
+tempPredMetricMat[3, 1] = mean(apply(ytempPred, 1, var))
+ytempPredList = temppredFixedLblock$Y
+ytempPred <- t(matrix(unlist(ytempPredList), ncol = testingT * m * O)) 
+# (testingT * m * O) * NKeep 
+ytempPredMean <- apply(ytempPred, 1, mean) 
+# of length N = testingT * O * m (rowMeans) note that O = 1 here
+tempPredMetricMat[1, 2] <- mean((ytempPredMean - ytempPred)^2)
+diffMat <- sweep(ytempPred, 1, YtestingTemp, "-")
+tempPredMetricMat[2, 2] = mean(rowMeans(diffMat^2))
+tempPredMetricMat[3, 2] = mean(apply(ytempPred, 1, var))
+ytempPredList = temppredFixedLsequen$Y
+ytempPred <- t(matrix(unlist(ytempPredList), ncol = testingT * m * O)) 
+# (testingT * m * O) * NKeep
+ytempPredMean <- apply(ytempPred, 1, mean) 
+# of length N = testingT * O * m (rowMeans) note that O = 1 here
+tempPredMetricMat[1, 3] <- mean((ytempPredMean - ytempPred)^2)
+diffMat <- sweep(ytempPred, 1, YtestingTemp, "-")
+tempPredMetricMat[2, 3] = mean(rowMeans(diffMat^2))
+tempPredMetricMat[3, 3] = mean(apply(ytempPred, 1, var))
+ytempPredList = temppredVaryLj$Y
+ytempPred <- t(matrix(unlist(ytempPredList), ncol = testingT * m * O)) 
+# (testingT * m * O) * NKeep 
+ytempPredMean <- apply(ytempPred, 1, mean) 
+# of length N = testingT * O * m (rowMeans) note that O = 1 here
+tempPredMetricMat[1, 4] <- mean((ytempPredMean - ytempPred)^2)
+diffMat <- sweep(ytempPred, 1, YtestingTemp, "-")
+tempPredMetricMat[2, 4] = mean(rowMeans(diffMat^2))
+tempPredMetricMat[3, 4] = mean(apply(ytempPred, 1, var))
+ytempPredList = temppredspBFAL10$Y
+ytempPred <- t(matrix(unlist(ytempPredList), ncol = testingT * m * O)) 
+# (testingT * m * O) * NKeep 
+ytempPredMean <- apply(ytempPred, 1, mean) 
+# of length N = testingT * O * m (rowMeans) note that O = 1 here
+tempPredMetricMat[1, 5] <- mean((ytempPredMean - ytempPred)^2)
+diffMat <- sweep(ytempPred, 1, YtestingTemp, "-")
+tempPredMetricMat[2, 5] = mean(rowMeans(diffMat^2))
+tempPredMetricMat[3, 5] = mean(apply(ytempPred, 1, var))
+ytempPredList = temppredspBFALInf$Y
+ytempPred <- t(matrix(unlist(ytempPredList), ncol = testingT * m * O)) 
+# (testingT * m * O) * NKeep
+ytempPredMean <- apply(ytempPred, 1, mean) 
+# of length N = testingT * O * m (rowMeans) note that O = 1 here
+tempPredMetricMat[1, 6] <- mean((ytempPredMean - ytempPred)^2)
+diffMat <- sweep(ytempPred, 1, YtestingTemp, "-")
+tempPredMetricMat[2, 6] = mean(rowMeans(diffMat^2))
+tempPredMetricMat[3, 6] = mean(apply(ytempPred, 1, var))
+tempPredMetricMat
+setwd("fullGPfixedL")
+load("s31toyExNNGPtemppredFixedL.RData")
+setwd("../NNGPblockFixedL")
+load("s31toyExNNGPtemppredFixedLblock.RData")
+setwd("../NNGPsequenFixedL")
+load("s31toyExNNGPtemppredFixedLsequen.RData")
+setwd("../NNGPsequenVaryLj")
+load("s31toyExNNGPtemppredVaryLj.RData")
+setwd("../spBFA")
+load("s31toyExspBFAL10temppred.RData")
+load("s31toyExspBFALInftemppred.RData")
+setwd("..")
+tempPredMetricMat <- matrix(0, 3, 6, 
+                            dimnames = list(c("postMeanMSE", "postMSE", "postVar"),
+                                            c("fullGPfixedL", "NNGPblockFixedL", 
+                                              "NNGPsequenFixedL", 
+                                              "NNGPsequenVaryLj",
+                                              "spBFAL10", "spBFALInf")))
+# testingT = 10
+ytempPredList = temppredFixedL$Y
+ytempPred <- t(matrix(unlist(ytempPredList), ncol = testingT * m * O)) 
+# (testingT * m * O) * NKeep 
+ytempPredMean <- apply(ytempPred, 1, mean) 
+# of length N = testingT * O * m (rowMeans) note that O = 1 here
+tempPredMetricMat[1, 1] <- mean((ytempPredMean - ytempPred)^2)
+diffMat <- sweep(ytempPred, 1, YtestingTemp, "-")
+tempPredMetricMat[2, 1] = mean(rowMeans(diffMat^2))
+tempPredMetricMat[3, 1] = mean(apply(ytempPred, 1, var))
+ytempPredList = temppredFixedLblock$Y
+ytempPred <- t(matrix(unlist(ytempPredList), ncol = testingT * m * O)) 
+# (testingT * m * O) * NKeep 
+ytempPredMean <- apply(ytempPred, 1, mean) 
+# of length N = testingT * O * m (rowMeans) note that O = 1 here
+tempPredMetricMat[1, 2] <- mean((ytempPredMean - ytempPred)^2)
+diffMat <- sweep(ytempPred, 1, YtestingTemp, "-")
+tempPredMetricMat[2, 2] = mean(rowMeans(diffMat^2))
+tempPredMetricMat[3, 2] = mean(apply(ytempPred, 1, var))
+ytempPredList = temppredFixedLsequen$Y
+ytempPred <- t(matrix(unlist(ytempPredList), ncol = testingT * m * O)) 
+# (testingT * m * O) * NKeep 
+ytempPredMean <- apply(ytempPred, 1, mean) 
+# of length N = testingT * O * m (rowMeans) note that O = 1 here
+tempPredMetricMat[1, 3] <- mean((ytempPredMean - ytempPred)^2)
+diffMat <- sweep(ytempPred, 1, YtestingTemp, "-")
+tempPredMetricMat[2, 3] = mean(rowMeans(diffMat^2))
+tempPredMetricMat[3, 3] = mean(apply(ytempPred, 1, var))
+ytempPredList = temppredVaryLj$Y
+ytempPred <- t(matrix(unlist(ytempPredList), ncol = testingT * m * O)) 
+# (testingT * m * O) * NKeep 
+ytempPredMean <- apply(ytempPred, 1, mean) 
+# of length N = testingT * O * m (rowMeans) note that O = 1 here
+tempPredMetricMat[1, 4] <- mean((ytempPredMean - ytempPred)^2)
+diffMat <- sweep(ytempPred, 1, YtestingTemp, "-")
+tempPredMetricMat[2, 4] = mean(rowMeans(diffMat^2))
+tempPredMetricMat[3, 4] = mean(apply(ytempPred, 1, var))
+ytempPredList = temppredspBFAL10$Y
+ytempPred <- t(matrix(unlist(ytempPredList), ncol = testingT * m * O)) 
+# (testingT * m * O) * NKeep 
+ytempPredMean <- apply(ytempPred, 1, mean) 
+# of length N = testingT * O * m (rowMeans) note that O = 1 here
+tempPredMetricMat[1, 5] <- mean((ytempPredMean - ytempPred)^2)
+diffMat <- sweep(ytempPred, 1, YtestingTemp, "-")
+tempPredMetricMat[2, 5] = mean(rowMeans(diffMat^2))
+tempPredMetricMat[3, 5] = mean(apply(ytempPred, 1, var))
+ytempPredList = temppredspBFALInf$Y
+ytempPred <- t(matrix(unlist(ytempPredList), ncol = testingT * m * O)) 
+# (testingT * m * O) * NKeep
+ytempPredMean <- apply(ytempPred, 1, mean) 
+# of length N = testingT * O * m (rowMeans) note that O = 1 here
+tempPredMetricMat[1, 6] <- mean((ytempPredMean - ytempPred)^2)
+diffMat <- sweep(ytempPred, 1, YtestingTemp, "-")
+tempPredMetricMat[2, 6] = mean(rowMeans(diffMat^2))
+tempPredMetricMat[3, 6] = mean(apply(ytempPred, 1, var))
+tempPredMetricMat
+```
 # Spatial Prediction and Clustering by `spatempBFA` 
 ## Predictions for all 50 Training Time Points at the 9 Testing Locations
 ### Spatial Prediction Metrics
 ```{r warning = FALSE}
-summary(YtestingSpat)
-summary(abs(YtestingSpat))
 YtestingSpatDF <- data.frame(YtestingSpat = YtestingSpat)
 ggplot(YtestingSpatDF) + geom_histogram(aes(x = YtestingSpat), bins = 50) +
   labs(y = "Count", x = "Actual Testing Location y") + 
   theme(axis.ticks.x = element_blank(), axis.ticks.y = element_blank(),
         plot.title = element_text(hjust = 0.5)) +
   ggtitle("Actual Distribution of y at 9 Testing Locations and Time 1:50")
+summary(YtestingSpat)
+summary(abs(YtestingSpat))
 spatPredMetricMat <- matrix(0, 3, 4, 
                             dimnames = list(c("postMeanMSE", "postMSE", "postVar"),
                                             c("fullGPfixedL", "NNGPblockFixedL", 
@@ -589,36 +862,36 @@ spatPredMetricMat <- matrix(0, 3, 4,
 testingLocNum <- M - m
 ylocPredList = spatpredFixedL$Y
 ylocPred <- t(matrix(unlist(ylocPredList), ncol = testingLocNum * trainingT * O)) 
-#(testingLocNum x trainingT x O) x NKeep 
+#(testingLocNum * trainingT * O) * NKeep 
 ylocPredMean <- apply(ylocPred, 1, mean) 
-# of length N = testingLocNum x O x trainingT (rowMeans) note that O = 1 here
+# of length N = testingLocNum * O * trainingT (rowMeans) note that O = 1 here
 spatPredMetricMat[1, 1] <- mean((ylocPredMean - YtestingSpat)^2)
 diffMat <- sweep(ylocPred, 1, YtestingSpat, "-")
 spatPredMetricMat[2, 1] = mean(rowMeans(diffMat^2))
 spatPredMetricMat[3, 1] = mean(apply(ylocPred, 1, var))
 ylocPredList = spatpredFixedLblock$Y
 ylocPred <- t(matrix(unlist(ylocPredList), ncol = testingLocNum * trainingT * O)) 
-#(testingLocNum x trainingT x O) x NKeep 
+#(testingLocNum * trainingT * O) * NKeep 
 ylocPredMean <- apply(ylocPred, 1, mean) 
-# of length N = testingLocNum x O x trainingT (rowMeans) note that O = 1 here
+# of length N = testingLocNum * O * trainingT (rowMeans) note that O = 1 here
 spatPredMetricMat[1, 2] <- mean((ylocPredMean - YtestingSpat)^2)
 diffMat <- sweep(ylocPred, 1, YtestingSpat, "-")
 spatPredMetricMat[2, 2] = mean(rowMeans(diffMat^2))
 spatPredMetricMat[3, 2] = mean(apply(ylocPred, 1, var))
 ylocPredList = spatpredFixedLsequen$Y
 ylocPred <- t(matrix(unlist(ylocPredList), ncol = testingLocNum * trainingT * O)) 
-#(testingLocNum x trainingT x O) x NKeep 
+#(testingLocNum * trainingT * O) * NKeep 
 ylocPredMean <- apply(ylocPred, 1, mean) 
-# of length N = testingLocNum x O x trainingT (rowMeans) note that O = 1 here
+# of length N = testingLocNum * O * trainingT (rowMeans) note that O = 1 here
 spatPredMetricMat[1, 3] <- mean((ylocPredMean - YtestingSpat)^2)
 diffMat <- sweep(ylocPred, 1, YtestingSpat, "-")
 spatPredMetricMat[2, 3] = mean(rowMeans(diffMat^2))
 spatPredMetricMat[3, 3] = mean(apply(ylocPred, 1, var))
 ylocPredList = spatpredVaryLj$Y
 ylocPred <- t(matrix(unlist(ylocPredList), ncol = testingLocNum * trainingT * O)) 
-#(testingLocNum x trainingT x O) x NKeep 
+#(testingLocNum * trainingT * O) * NKeep 
 ylocPredMean <- apply(ylocPred, 1, mean) 
-# of length N = testingLocNum x O x trainingT (rowMeans) note that O = 1 here
+# of length N = testingLocNum * O * trainingT (rowMeans) note that O = 1 here
 spatPredMetricMat[1, 4] <- mean((ylocPredMean - YtestingSpat)^2)
 diffMat <- sweep(ylocPred, 1, YtestingSpat, "-")
 spatPredMetricMat[2, 4] = mean(rowMeans(diffMat^2))
@@ -761,7 +1034,7 @@ spatPredMetricMat <- matrix(0, 3, 4,
 testingLocNum <- M - m
 ylocPredList = spatpredFixedL$Y
 ylocPred <- t(matrix(unlist(ylocPredList), ncol = testingLocNum * trainingT * O)) 
-#(testingLocNum x trainingT x O) x NKeep 
+#(testingLocNum * trainingT * O) * NKeep 
 ylocPredMean <- apply(ylocPred, 1, mean) 
 # of length N = testingLocNum x O x trainingT (rowMeans) note that O = 1 here
 spatPredMetricMat[1, 1] <- mean((ylocPredMean - YtestingSpat)^2)
@@ -770,7 +1043,7 @@ spatPredMetricMat[2, 1] = mean(rowMeans(diffMat^2))
 spatPredMetricMat[3, 1] = mean(apply(ylocPred, 1, var))
 ylocPredList = spatpredFixedLblock$Y
 ylocPred <- t(matrix(unlist(ylocPredList), ncol = testingLocNum * trainingT * O)) 
-#(testingLocNum x trainingT x O) x NKeep 
+#(testingLocNum * trainingT * O) * NKeep 
 ylocPredMean <- apply(ylocPred, 1, mean) 
 # of length N = testingLocNum x O x trainingT (rowMeans) note that O = 1 here
 spatPredMetricMat[1, 2] <- mean((ylocPredMean - YtestingSpat)^2)
@@ -779,7 +1052,7 @@ spatPredMetricMat[2, 2] = mean(rowMeans(diffMat^2))
 spatPredMetricMat[3, 2] = mean(apply(ylocPred, 1, var))
 ylocPredList = spatpredFixedLsequen$Y
 ylocPred <- t(matrix(unlist(ylocPredList), ncol = testingLocNum * trainingT * O)) 
-#(testingLocNum x trainingT x O) x NKeep 
+#(testingLocNum * trainingT * O) * NKeep 
 ylocPredMean <- apply(ylocPred, 1, mean) 
 # of length N = testingLocNum x O x trainingT (rowMeans) note that O = 1 here
 spatPredMetricMat[1, 3] <- mean((ylocPredMean - YtestingSpat)^2)
@@ -788,7 +1061,7 @@ spatPredMetricMat[2, 3] = mean(rowMeans(diffMat^2))
 spatPredMetricMat[3, 3] = mean(apply(ylocPred, 1, var))
 ylocPredList = spatpredVaryLj$Y
 ylocPred <- t(matrix(unlist(ylocPredList), ncol = testingLocNum * trainingT * O)) 
-#(testingLocNum x trainingT x O) x NKeep 
+#(testingLocNum * trainingT * O) * NKeep 
 ylocPredMean <- apply(ylocPred, 1, mean) 
 # of length N = testingLocNum x O x trainingT (rowMeans) note that O = 1 here
 spatPredMetricMat[1, 4] <- mean((ylocPredMean - YtestingSpat)^2)
@@ -825,36 +1098,36 @@ spatPredMetricMat <- matrix(0, 3, 4,
 testingLocNum <- M - m
 ylocPredList = spatpredFixedL$Y
 ylocPred <- t(matrix(unlist(ylocPredList), ncol = testingLocNum * trainingT * O)) 
-#(testingLocNum x trainingT x O) x NKeep 
+#(testingLocNum * trainingT * O) * NKeep 
 ylocPredMean <- apply(ylocPred, 1, mean) 
-# of length N = testingLocNum x O x trainingT (rowMeans) note that O = 1 here
+# of length N = testingLocNum * O * trainingT (rowMeans) note that O = 1 here
 spatPredMetricMat[1, 1] <- mean((ylocPredMean - YtestingSpat)^2)
 diffMat <- sweep(ylocPred, 1, YtestingSpat, "-")
 spatPredMetricMat[2, 1] = mean(rowMeans(diffMat^2))
 spatPredMetricMat[3, 1] = mean(apply(ylocPred, 1, var))
 ylocPredList = spatpredFixedLblock$Y
 ylocPred <- t(matrix(unlist(ylocPredList), ncol = testingLocNum * trainingT * O)) 
-#(testingLocNum x trainingT x O) x NKeep 
+#(testingLocNum * trainingT * O) * NKeep 
 ylocPredMean <- apply(ylocPred, 1, mean) 
-# of length N = testingLocNum x O x trainingT (rowMeans) note that O = 1 here
+# of length N = testingLocNum * O * trainingT (rowMeans) note that O = 1 here
 spatPredMetricMat[1, 2] <- mean((ylocPredMean - YtestingSpat)^2)
 diffMat <- sweep(ylocPred, 1, YtestingSpat, "-")
 spatPredMetricMat[2, 2] = mean(rowMeans(diffMat^2))
 spatPredMetricMat[3, 2] = mean(apply(ylocPred, 1, var))
 ylocPredList = spatpredFixedLsequen$Y
 ylocPred <- t(matrix(unlist(ylocPredList), ncol = testingLocNum * trainingT * O)) 
-#(testingLocNum x trainingT x O) x NKeep 
+#(testingLocNum * trainingT * O) * NKeep 
 ylocPredMean <- apply(ylocPred, 1, mean) 
-# of length N = testingLocNum x O x trainingT (rowMeans) note that O = 1 here
+# of length N = testingLocNum * O * trainingT (rowMeans) note that O = 1 here
 spatPredMetricMat[1, 3] <- mean((ylocPredMean - YtestingSpat)^2)
 diffMat <- sweep(ylocPred, 1, YtestingSpat, "-")
 spatPredMetricMat[2, 3] = mean(rowMeans(diffMat^2))
 spatPredMetricMat[3, 3] = mean(apply(ylocPred, 1, var))
 ylocPredList = spatpredVaryLj$Y
 ylocPred <- t(matrix(unlist(ylocPredList), ncol = testingLocNum * trainingT * O)) 
-#(testingLocNum x trainingT x O) x NKeep 
+#(testingLocNum * trainingT * O) * NKeep 
 ylocPredMean <- apply(ylocPred, 1, mean) 
-# of length N = testingLocNum x O x trainingT (rowMeans) note that O = 1 here
+# of length N = testingLocNum * O * trainingT (rowMeans) note that O = 1 here
 spatPredMetricMat[1, 4] <- mean((ylocPredMean - YtestingSpat)^2)
 diffMat <- sweep(ylocPred, 1, YtestingSpat, "-")
 spatPredMetricMat[2, 4] = mean(rowMeans(diffMat^2))
@@ -889,36 +1162,36 @@ spatPredMetricMat <- matrix(0, 3, 4,
 testingLocNum <- M - m
 ylocPredList = spatpredFixedL$Y
 ylocPred <- t(matrix(unlist(ylocPredList), ncol = testingLocNum * trainingT * O)) 
-#(testingLocNum x trainingT x O) x NKeep 
+#(testingLocNum * trainingT * O) * NKeep 
 ylocPredMean <- apply(ylocPred, 1, mean) 
-# of length N = testingLocNum x O x trainingT (rowMeans) note that O = 1 here
+# of length N = testingLocNum * O * trainingT (rowMeans) note that O = 1 here
 spatPredMetricMat[1, 1] <- mean((ylocPredMean - YtestingSpat)^2)
 diffMat <- sweep(ylocPred, 1, YtestingSpat, "-")
 spatPredMetricMat[2, 1] = mean(rowMeans(diffMat^2))
 spatPredMetricMat[3, 1] = mean(apply(ylocPred, 1, var))
 ylocPredList = spatpredFixedLblock$Y
 ylocPred <- t(matrix(unlist(ylocPredList), ncol = testingLocNum * trainingT * O)) 
-#(testingLocNum x trainingT x O) x NKeep 
+#(testingLocNum * trainingT * O) * NKeep 
 ylocPredMean <- apply(ylocPred, 1, mean) 
-# of length N = testingLocNum x O x trainingT (rowMeans) note that O = 1 here
+# of length N = testingLocNum * O * trainingT (rowMeans) note that O = 1 here
 spatPredMetricMat[1, 2] <- mean((ylocPredMean - YtestingSpat)^2)
 diffMat <- sweep(ylocPred, 1, YtestingSpat, "-")
 spatPredMetricMat[2, 2] = mean(rowMeans(diffMat^2))
 spatPredMetricMat[3, 2] = mean(apply(ylocPred, 1, var))
 ylocPredList = spatpredFixedLsequen$Y
 ylocPred <- t(matrix(unlist(ylocPredList), ncol = testingLocNum * trainingT * O)) 
-#(testingLocNum x trainingT x O) x NKeep 
+#(testingLocNum * trainingT * O) * NKeep 
 ylocPredMean <- apply(ylocPred, 1, mean) 
-# of length N = testingLocNum x O x trainingT (rowMeans) note that O = 1 here
+# of length N = testingLocNum * O * trainingT (rowMeans) note that O = 1 here
 spatPredMetricMat[1, 3] <- mean((ylocPredMean - YtestingSpat)^2)
 diffMat <- sweep(ylocPred, 1, YtestingSpat, "-")
 spatPredMetricMat[2, 3] = mean(rowMeans(diffMat^2))
 spatPredMetricMat[3, 3] = mean(apply(ylocPred, 1, var))
 ylocPredList = spatpredVaryLj$Y
 ylocPred <- t(matrix(unlist(ylocPredList), ncol = testingLocNum * trainingT * O)) 
-#(testingLocNum x trainingT x O) x NKeep 
+#(testingLocNum * trainingT * O) * NKeep 
 ylocPredMean <- apply(ylocPred, 1, mean) 
-# of length N = testingLocNum x O x trainingT (rowMeans) note that O = 1 here
+# of length N = testingLocNum * O * trainingT (rowMeans) note that O = 1 here
 spatPredMetricMat[1, 4] <- mean((ylocPredMean - YtestingSpat)^2)
 diffMat <- sweep(ylocPred, 1, YtestingSpat, "-")
 spatPredMetricMat[2, 4] = mean(rowMeans(diffMat^2))
@@ -953,40 +1226,41 @@ spatPredMetricMat <- matrix(0, 3, 4,
 testingLocNum <- M - m
 ylocPredList = spatpredFixedL$Y
 ylocPred <- t(matrix(unlist(ylocPredList), ncol = testingLocNum * trainingT * O)) 
-#(testingLocNum x trainingT x O) x NKeep 
+#(testingLocNum * trainingT * O) * NKeep 
 ylocPredMean <- apply(ylocPred, 1, mean) 
-# of length N = testingLocNum x O x trainingT (rowMeans) note that O = 1 here
+# of length N = testingLocNum * O * trainingT (rowMeans) note that O = 1 here
 spatPredMetricMat[1, 1] <- mean((ylocPredMean - YtestingSpat)^2)
 diffMat <- sweep(ylocPred, 1, YtestingSpat, "-")
 spatPredMetricMat[2, 1] = mean(rowMeans(diffMat^2))
 spatPredMetricMat[3, 1] = mean(apply(ylocPred, 1, var))
 ylocPredList = spatpredFixedLblock$Y
 ylocPred <- t(matrix(unlist(ylocPredList), ncol = testingLocNum * trainingT * O)) 
-#(testingLocNum x trainingT x O) x NKeep 
+#(testingLocNum * trainingT * O) * NKeep 
 ylocPredMean <- apply(ylocPred, 1, mean) 
-# of length N = testingLocNum x O x trainingT (rowMeans) note that O = 1 here
+# of length N = testingLocNum * O * trainingT (rowMeans) note that O = 1 here
 spatPredMetricMat[1, 2] <- mean((ylocPredMean - YtestingSpat)^2)
 diffMat <- sweep(ylocPred, 1, YtestingSpat, "-")
 spatPredMetricMat[2, 2] = mean(rowMeans(diffMat^2))
 spatPredMetricMat[3, 2] = mean(apply(ylocPred, 1, var))
 ylocPredList = spatpredFixedLsequen$Y
 ylocPred <- t(matrix(unlist(ylocPredList), ncol = testingLocNum * trainingT * O)) 
-#(testingLocNum x trainingT x O) x NKeep 
+#(testingLocNum * trainingT * O) * NKeep 
 ylocPredMean <- apply(ylocPred, 1, mean) 
-# of length N = testingLocNum x O x trainingT (rowMeans) note that O = 1 here
+# of length N = testingLocNum * O * trainingT (rowMeans) note that O = 1 here
 spatPredMetricMat[1, 3] <- mean((ylocPredMean - YtestingSpat)^2)
 diffMat <- sweep(ylocPred, 1, YtestingSpat, "-")
 spatPredMetricMat[2, 3] = mean(rowMeans(diffMat^2))
 spatPredMetricMat[3, 3] = mean(apply(ylocPred, 1, var))
 ylocPredList = spatpredVaryLj$Y
 ylocPred <- t(matrix(unlist(ylocPredList), ncol = testingLocNum * trainingT * O)) 
-#(testingLocNum x trainingT x O) x NKeep 
+#(testingLocNum * trainingT * O) * NKeep 
 ylocPredMean <- apply(ylocPred, 1, mean) 
-# of length N = testingLocNum x O x trainingT (rowMeans) note that O = 1 here
+# of length N = testingLocNum * O * trainingT (rowMeans) note that O = 1 here
 spatPredMetricMat[1, 4] <- mean((ylocPredMean - YtestingSpat)^2)
 diffMat <- sweep(ylocPred, 1, YtestingSpat, "-")
 spatPredMetricMat[2, 4] = mean(rowMeans(diffMat^2))
 spatPredMetricMat[3, 4] = mean(apply(ylocPred, 1, var))
+rm(spatpredFixedL, spatpredFixedLblock, spatpredFixedLsequen, spatpredVaryLj)
 spatPredMetricMat
 ```
 ## Spatial Clustering of Temporal Trends for all 352 Training Spatial Locations

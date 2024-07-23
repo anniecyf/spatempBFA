@@ -139,5 +139,48 @@ Try help(fields) to get started.
 +                         include.space = TRUE,
 +                         clustering = TRUE) 
 Burn-in progress:  0%..  10%.. 20%.. 30%.. 40%.. 50%.. 60%.. 70%.. 80%.. 90%.. 100%!
-Sampler progress:  0%.. 10%.. 20%.. 30%.. 40%.. 50%.. 60%.. 70%.. 80%.. 
-last updated 20240721 9:27:13 am
+Sampler progress:  0%.. 10%.. 20%.. 30%.. 40%.. 50%.. 60%.. 70%.. 80%.. 90%.. 100%!> save(reg.simu.LInf, file="spBFALInfsimuT30M1600Iter30000.RData")
+> Sys.time()
+[1] "2024-07-22 20:07:46 +08"
+> reg.simu.LInf$runtime
+[1] "Model runtime: 24.34 days"
+> library(coda)
+> Diags.LInf <- spBFA::diagnostics(reg.simu.LInf, diags = c("dic", "dinf", "waic"), keepDeviance = TRUE)
+2
+Calculating Log-Lik: 0%.. 25%.. 50%.. 75%.. 100%.. Done!
+Calculating PPD: 0%.. 25%.. 50%.. 75%.. 100%.. Done!
+> save(Diags.LInf, file="spBFALInfsimuT30M1600Iter30000Diags.RData")
+> Deviance.LInf <- as.mcmc(Diags.LInf$deviance)
+> #save(Deviance, file = "spBFALInfsimuT30M1600Iter30000Deviance.RData")
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> proc.time()
+      user     system    elapsed 
+2071656.81   31756.53 2103747.83 
