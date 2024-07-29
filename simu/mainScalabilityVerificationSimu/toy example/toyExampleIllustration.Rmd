@@ -568,7 +568,7 @@ rm(temppredFixedL, temppredFixedLblock, temppredFixedLsequen, temppredVaryLj)
 rm(temppredspBFAL10, temppredspBFALInf)
 tempPredMetricMat
 ```
-Temporal prediction results from our models `NNGPsequenFixedL` and `fullGPfixedL` are comparable to their `spBFA` model counterparts. Similar conclusions can be drawn from future-time prediction metrics calculated from temporal prediction objects generated using 3 other random seeds presented below.
+Temporal prediction results from our models `NNGPsequenFixedL` and `fullGPfixedL` are comparable to their `spBFA` model counterparts. Similar conclusions can be drawn from future-time prediction metrics calculated from temporal prediction objects generated using 3 other random seeds presented below. Future-time prediction performances of `NNGPblockFixedL` and `NNGPsequenVaryLj` can be greatly improved by increasing the number of training time points.
 ```{r eval = FALSE, echo = FALSE}
 setwd("fullGPfixedL")
 load("toyExfullGPfixedL.RData")
@@ -842,6 +842,8 @@ diffMat <- sweep(ytempPred, 1, YtestingTemp, "-")
 tempPredMetricMat[2, 6] = mean(rowMeans(diffMat^2))
 tempPredMetricMat[3, 6] = mean(apply(ytempPred, 1, var))
 tempPredMetricMat
+rm(temppredFixedL, temppredFixedLblock, temppredFixedLsequen, temppredVaryLj)
+rm(temppredspBFAL10, temppredspBFALInf)
 ```
 # Spatial Prediction and Clustering by `spatempBFA` 
 ## Predictions for all 50 Training Time Points at the 9 Testing Locations
@@ -898,7 +900,7 @@ spatPredMetricMat[2, 4] = mean(rowMeans(diffMat^2))
 spatPredMetricMat[3, 4] = mean(apply(ylocPred, 1, var))
 spatPredMetricMat
 ```
-All spatial prediction metrics are appropriately small in light of the magnitudes of the actual $y_t(\bm{s}_i)$'s at the 9 testing locations and time $t=1,2,\dots,50$.
+All spatial prediction metrics are appropriately small in light of the magnitudes of the actual $y_t(\bm{s}_i)$'s at the 9 testing locations and time $t=1,2,\dots,50$. The relative new-location prediction performances of `NNGPsequenVaryLj` can be significantly improved by increasing the number of training time points.
 
 ### Spatial Prediction Time Breakdown for Our 4 Models
 ```{r}

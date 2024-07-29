@@ -67,14 +67,14 @@ xcoord <- rep(1:sqrootM, sqrootM)
 ycoord <- rep(seq(sqrootM, 1, by = -1), each = sqrootM)
 trainingTestingSpatGp <- rep(1, M); trainingTestingSpatGp[whichTesting] = 2
 spatGroupOverall <- rep(2, M); spatGroupOverall[whichGroup1] <- 1
-spatGpDF <- data.frame(x = xcoord, y = ycoord, actualGp <- as.factor(spatGroupOverall), 
-                       trainingTestingSpatGp <- as.factor(trainingTestingSpatGp))
-actualSpatPlot <- ggplot(spatGpDF) + geom_point(aes(x = x, y = y, col = actualGp), size = 7, show.legend = FALSE) + 
-  theme_void() + scale_color_manual(values = c("#55CC11", "#1177CC")) 
-actualSpatPlot
-trainingTestingPlot <- ggplot(spatGpDF) + geom_point(aes(x = x, y = y, col = trainingTestingSpatGp), size = 7, show.legend = FALSE) + 
-  theme_void() + scale_color_manual(values = c("#55CC11", "#1177CC")) 
-trainingTestingPlot
+# spatGpDF <- data.frame(x = xcoord, y = ycoord, actualGp <- as.factor(spatGroupOverall), 
+#                        trainingTestingSpatGp <- as.factor(trainingTestingSpatGp))
+# actualSpatPlot <- ggplot(spatGpDF) + geom_point(aes(x = x, y = y, col = actualGp), size = 7, show.legend = FALSE) + 
+#   theme_void() + scale_color_manual(values = c("#55CC11", "#1177CC")) 
+# actualSpatPlot
+# trainingTestingPlot <- ggplot(spatGpDF) + geom_point(aes(x = x, y = y, col = trainingTestingSpatGp), size = 7, show.legend = FALSE) + 
+#   theme_void() + scale_color_manual(values = c("#55CC11", "#1177CC")) 
+# trainingTestingPlot
 
 MCMC <- list(NBurn = 80000, NSims = 20000, NThin = 4, NPilot = 5)
 regFixedL.simu.block <- bfaFixedL(Y ~ 0, data = dat, dist = Dtraining, time = Time,  K = K, 

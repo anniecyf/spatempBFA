@@ -17,7 +17,7 @@ load("GibbsStepTimeFixedLsequen.RData")
 load("regVaryLjSimuSequenO2T50M400Iter100000Diags.RData")
 load("regVaryLjSimuSequenO2T50M400Iter100000Deviance.RData")
 load("GibbsStepTimeVaryLjSequen.RData")
-# load("regVaryLjSimuSequenO2T50M400Iter100000.RData"); regVaryLj.simu.sequen$runtime # slower package version; rm(regVaryLj.simu.sequen)
+# load("regVaryLjSimuSequenO2T50M400Iter100000.RData"); regVaryLj.simu.sequen$runtime # slower package version 8.09 days; rm(regVaryLj.simu.sequen)
 NKeep <- 10000
 # postDeviancesDF <- data.frame(MCMCiter = 1:NKeep, fullGPfixedL = as.vector(Deviance), NNGPblockFixedL = as.vector(Deviance.block),
 #                               NNGPsequenFixedL = as.vector(Deviance.sequen))
@@ -47,10 +47,10 @@ NNGPsequenFixedLpostDeviances <- ggplot(postDeviancesDF) + geom_line(aes(x = MCM
         axis.text.y = element_text(size = 10, color = "black"),
         axis.ticks.x = element_blank(), axis.ticks.y = element_blank())
 NNGPsequenFixedLpostDeviances
-ggarrange(fullGPfixedLpostDeviances, NNGPblockFixedLpostDeviances, NNGPsequenFixedLpostDeviances, 
-          labels = c("A", "B", "C"), align = "h",
-          ncol = 3, nrow = 1)
-ggsave("O2T50M400postDeviancesFixedL.png", width = 24, height = 8, units = "cm")
+# ggarrange(fullGPfixedLpostDeviances, NNGPblockFixedLpostDeviances, NNGPsequenFixedLpostDeviances, 
+#           labels = c("A", "B", "C"), align = "h",
+#           ncol = 3, nrow = 1)
+# ggsave("O2T50M400postDeviancesFixedL.png", width = 24, height = 8, units = "cm")
 # posterior deviances NNGPsequenFixedL slightly better than NNGPblockFixedL better than fullGPfixedL 
 # Diags.sequen better than Diags.block better than (except for dic, pd, g) Diags
 NNGPsequenVaryLjpostDeviances <- ggplot(postDeviancesDF) + geom_line(aes(x = MCMCiter, y = NNGPsequenVaryLj)) + 
@@ -66,6 +66,8 @@ ggarrange(fullGPfixedLpostDeviances, NNGPblockFixedLpostDeviances,
           labels = c("A", "B", "C", "D"), align = "hv",
           ncol = 2, nrow = 2)
 ggsave("O2T50M400postDeviances.png", width = 16, height = 16, units = "cm")
+# posterior deviances NNGPsequenFixedL slightly better than NNGPblockFixedL better than fullGPfixedL better than NNGPsequenVaryLj
+# Diags.sequen better than Diags.block better than (except for dic, pd, g) Diags better than Diags.sequenVaryLj
 apply(GibbsStepTimeFixedLfullGP, 2, summary)
 apply(GibbsStepTimeFixedLblock, 2, summary)
 apply(GibbsStepTimeFixedLsequen, 2, summary)

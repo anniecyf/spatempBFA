@@ -145,5 +145,35 @@ Try help(fields) to get started.
 +                                        storeSpatPredPara = FALSE, 
 +                                        storeWeights = FALSE) 
 Burn-in progress:  0%..  10%.. 20%.. 30%.. 40%.. 50%.. 60%.. 70%.. 80%.. 90%.. 100%!
-Sampler progress:  0%.. 10%.. 20%.. 30%.. 40%.. 50%.. 60%.. 
-last updated 20240723 8:41:35 pm
+Sampler progress:  0%.. 10%.. 20%.. 30%.. 40%.. 50%.. 60%.. 70%.. 80%.. 90%.. 100%!> Sys.time()
+[1] "2024-07-27 05:42:27 +08"
+> save(regVaryLj.simu.sequen, file="regVaryLjsimuSequenT500M64Iter30000specifyEqualTimeDistFnostorealphaweight.RData")
+> regVaryLj.simu.sequen$runtime
+[1] "Model runtime: 28.74 days"
+> library(coda)
+> Diags.sequenVaryLj <- diagnostics(regVaryLj.simu.sequen, diags = c("dic", "dinf", "meanIC", "waic"), keepDeviance = TRUE)
+Calculating Log-Lik: 0%.. 25%.. 50%.. 75%.. 100%.. Done!
+Calculating PPD: 0%.. 25%.. 50%.. 75%.. 100%.. Done!
+> save(Diags.sequenVaryLj, file = "regVaryLjsimuSequenT500M64Iter30000specifyEqualTimeDistFDiagsNostorealphaweight.RData")
+> Deviance.sequenVaryLj <- as.mcmc(Diags.sequenVaryLj$deviance)
+> save(Deviance.sequenVaryLj, file = "regVaryLjsimuSequenT500M64Iter30000specifyEqualTimeDistFDevianceNostorealphaweight.RData")
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> proc.time()
+      user     system    elapsed 
+2469789.75   15322.11 2486286.11 

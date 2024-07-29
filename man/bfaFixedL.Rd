@@ -40,7 +40,7 @@ must indicate the covariates to be included in the fixed effects. If no covariat
 \item{data}{A required \code{data.frame} containing the variables (\code{Y}, additional \code{x} coviariate(s) if there is/are, and a \code{trials} variable if there
 is/are observation type(s) from \code{family "binomial"}) in the model. The data frame must contain \code{M x O x Nu} rows.
 Here, \code{M} represents the number of spatial locations, \code{O} the number of different observation types
-and \code{Nu} the number of temporal visits. The observations must be first be
+and \code{Nu} the number of temporal visits. The observations must be first
 ordered spatially, second by observation type and then temporally. This means that the first \code{M x O} observations come from the first time point and
 the first \code{M} observations come the first spatial observation type.
 If there is/are observation type(s) from \code{family "binomial"}, then \code{trials} contains the numbers of trials as positive integers for each of the binomial observations.

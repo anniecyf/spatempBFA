@@ -148,5 +148,5 @@ Try help(fields) to get started.
 +                                   storeWeights = FALSE,
 +                                   alphasWeightsToFiles = FALSE) 
 Burn-in progress:  0%..  10%.. 20%.. 30%.. 40%.. 50%.. 60%.. 70%.. 80%.. 90%.. 100%!
-Sampler progress:  0%.. 10%.. 20%.. 
-last updated 20240723 7:59:35 pm
+Sampler progress:  0%.. 10%.. 20%.. 30%.. 40%.. 50%.. 60%.. 70%.. 80%.. 
+last updated 20240729 12:08:49 am
