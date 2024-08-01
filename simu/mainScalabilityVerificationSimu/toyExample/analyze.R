@@ -4,7 +4,7 @@ library(ggpubr)
 projDirec <- "C:/Users/annie/OneDrive - National University of Singapore/Documents/PhD/research/first paper/spatempBFA"
 setwd(paste(projDirec, "simu/mainScalabilityVerificationSimu/toyExample", sep = "/"))
 setwd("spBFA")
-# load("toyExspBFAL10.RData"); reg.simu$runtime #  hours
+# load("toyExspBFAL10.RData"); reg.simu$runtime #  7.24 days
 # rm(reg.simu)
 # load("toyExspBFALInf.RData"); reg.simu.LInf$runtime #  3.08 days
 # rm(reg.simu.LInf)

@@ -25,8 +25,8 @@ distNewNew <- rdist(expand.grid(testingRowSeq, testingRowSeq))
 distOrigNew <- rdist(expand.grid(1:sqrootM, 1:sqrootM), expand.grid(testingRowSeq, testingRowSeq))
 spatpredTimeVec <- alphaKrigTimeVec <- 
   weightsXiLambdaKrigTimeVec <- rep(0, N1 * N2)
-postGmat <- postMSEmat <- postVarMat <- matrix(0, nSeed, N1)
-rownames(postGmat) <- rownames(postMSEmat) <- rownames(postVarMat) <- paste0("seed", seeds)
+postGmat <- postMSEmat <- postVarMat <- 
+  matrix(0, nSeed, N1, dimnames = list(paste0("seed", seeds), paste0("sample", 1:N1)))
 set.seed(29)
 sigma2 <- 0.01
 kappa <- 0.7
@@ -147,6 +147,20 @@ save(postMSEmat, file = "NNGPsequenVaryLjpostMSEmat_spatPredMetricSimu.RData")
 save(postVarMat, file = "NNGPsequenVaryLjpostVarMat_spatPredMetricSimu.RData")
 
 
-
-
-
+# projDirec <- "C:/Users/annie/OneDrive - National University of Singapore/Documents/PhD/research/first paper/spatempBFA"
+# setwd(paste(projDirec, "simu/spatPred", sep = "/"))
+# load("NNGPsequenVaryLjspatpredTimeVec.RData")
+# summary(spatpredTimeVec)
+# load("NNGPsequenVaryLjalphaKrigTimeVec.RData")
+# summary(alphaKrigTimeVec)
+# load("NNGPsequenVaryLjweightsXiLambdaKrigTimeVec.RData")
+# summary(weightsXiLambdaKrigTimeVec)
+# load("NNGPsequenVaryLjpostGmat_spatPredMetricSimu.RData")
+# load("NNGPsequenVaryLjpostMSEmat_spatPredMetricSimu.RData")
+# load("NNGPsequenVaryLjpostVarMat_spatPredMetricSimu.RData")
+# N1 <- 3
+# colnames(postGmat) <- colnames(postMSEmat) <- 
+#   colnames(postVarMat) <- paste0("sample", 1:N1)
+# save(postGmat, file = "NNGPsequenVaryLjpostGmat_spatPredMetricSimu.RData")
+# save(postMSEmat, file = "NNGPsequenVaryLjpostMSEmat_spatPredMetricSimu.RData")
+# save(postVarMat, file = "NNGPsequenVaryLjpostVarMat_spatPredMetricSimu.RData")

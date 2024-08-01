@@ -41,7 +41,8 @@ rho <- 0.8
 D <- rdist(expand.grid(1:sqrootM, 1:sqrootM))
 Frho <- exp(-rho*D)
 Hpsi <- exp(-psi*TimeDist)
-Eta <- rmvnorm(1, mean=rep(0, Nu*K), sigma=kronecker(Hpsi, Upsilon)) # actual Eta (c(Eta_1,...,Eta_T)) (vec of length Nu*K)
+Eta <- rmvnorm(1, mean=rep(0, Nu*K), sigma=kronecker(Hpsi, Upsilon)) 
+# actual Eta (c(Eta_1,...,Eta_T)) (vec of length Nu*K)
 Lambda <- matrix(5, M * O, K)
 theta2j <- c(10, -10)
 rowColInd <- rbind(expand.grid(1:10, 1:9), expand.grid(10:19, 11:19))
@@ -80,7 +81,8 @@ trainingTestingSpatGp <- rep(1, M); trainingTestingSpatGp[whichTesting] = 2
 spatGpDF <- data.frame(x = xcoord, y = ycoord, actualGp <- as.factor(spatGroupOverall), 
                        trainingTestingSpatGp <- as.factor(trainingTestingSpatGp))
 trainingTestingPlotBW <- ggplot(spatGpDF) + ggtitle("Training / Testing Spatial Points") +
-  geom_point(aes(x = x, y = y, col = trainingTestingSpatGp), size = 7, show.legend = FALSE) +
+  geom_point(aes(x = x, y = y, col = trainingTestingSpatGp), 
+             size = 7, show.legend = FALSE) +
   scale_color_manual(values = c("white", "black")) + labs(x = "", y = "") + 
   theme(plot.title = element_text(hjust = 0.5), 
         axis.text.x = element_blank(), axis.text.y = element_blank(),
@@ -379,7 +381,8 @@ spatpredVaryLj <- predictNewLocVaryLj(regVaryLj.simu.sequen, 9, distOrigNew, dis
                                       NewX = NULL, NewTrials = NULL, Verbose = TRUE, 
                                       seed = 19)
 save(spatpredVaryLj, file = "s19toyExNNGPspatpredVaryLj.RData")
-library(spBFA) # to compare overall runtime, Diags, Deviances, and future time prediction results
+library(spBFA) 
+# to compare overall runtime, Diags, Deviances, and future time prediction results
 reg.simu <- bfa_sp(Y ~ 0, data = dat, dist = Dtraining, time = Time,  K = K, 
                    starting = NULL, hypers = NULL, tuning = NULL, mcmc = MCMC,
                    L = L,
@@ -437,7 +440,7 @@ save(temppredspBFALInf, file = "s31toyExspBFALInftemppred.RData")
 projDirec <- "C:/Users/annie/OneDrive - National University of Singapore/Documents/PhD/research/first paper/spatempBFA"
 setwd(paste(projDirec, "simu/mainScalabilityVerificationSimu/toyExample", sep = "/"))
 setwd("spBFA")
-load("toyExspBFAL10.RData"); reg.simu$runtime #
+load("toyExspBFAL10.RData"); reg.simu$runtime # 7.24 days
 load("toyExspBFALInf.RData"); reg.simu.LInf$runtime # 3.08 days
 load("toyExspBFAL10Diags.RData")
 load("toyExspBFAL10Deviance.RData")
@@ -581,18 +584,18 @@ rm(fullGPfixedLpostDeviances, NNGPblockFixedLpostDeviances)
 rm(NNGPsequenFixedLpostDeviances, NNGPsequenVaryLjpostDeviances)
 rm(postDeviancesDF, spBFAL10Deviances, spBFALInfDeviances)
 ```
-All our 4 models' diagnostics and converged posterior deviances are comparable and clearly better than their `spBFALInf` counterparts.
+All our 4 models' diagnostics and converged posterior deviances are comparable their `spBFAL10` counterparts and clearly better than their `spBFALInf` counterparts.
 
 ## Predictions for all 352 Training Locations at the 10 Future Time Points
 ```{r warning = FALSE}
+summary(YtestingTemp)
+summary(abs(YtestingTemp))
 YtestingTempDF <- data.frame(YtestingTemp = YtestingTemp)
 ggplot(YtestingTempDF) + geom_histogram(aes(x = YtestingTemp), bins = 50) +
   labs(y = "Count", x = "Actual Future Time y") + 
   theme(axis.ticks.x = element_blank(), axis.ticks.y = element_blank(),
         plot.title = element_text(hjust = 0.5)) +
   ggtitle("Actual Distribution of y at All 352 Training Locations and Time 301:310")
-summary(YtestingTemp)
-summary(abs(YtestingTemp))
 tempPredMetricMat <- matrix(0, 3, 6, 
                             dimnames = list(c("postMeanMSE", "postMSE", "postVar"),
                                             c("fullGPfixedL", "NNGPblockFixedL", 
@@ -656,7 +659,7 @@ tempPredMetricMat[2, 6] = mean(rowMeans(diffMat^2))
 tempPredMetricMat[3, 6] = mean(apply(ytempPred, 1, var))
 tempPredMetricMat
 ```
-Temporal prediction results from all our 4 models are close and significantly better than their `spBFALInf` model counterparts. Among our 4 models, `NNGPsequenFixedL` appears to be the best, followed by `fullGPfixedL`, `NNGPblockFixedL`, and finally `NNGPsequenVaryLj`. Similar conclusions can be drawn from future-time prediction metrics calculated from temporal prediction objects generated using 3 other random seeds, as presented below.
+Temporal prediction results from all our 4 models are close and significantly better than their `spBFALInf` model counterparts. Among our 4 models and `spBFAL10`, `NNGPsequenFixedL` appears to be the best, followed by `fullGPfixedL`, `NNGPblockFixedL`, `spBFAL10`, and finally `NNGPsequenVaryLj`. Similar conclusions can be drawn from future-time prediction metrics calculated from temporal prediction objects generated using 3 other random seeds, as presented below.
 ```{r}
 setwd("fullGPfixedL")
 load("s19toyExNNGPtemppredFixedL.RData")
@@ -1259,7 +1262,7 @@ calcRandIndex <- function(predictedCluster, actualGroup, numObs){
   numerator <- denominator
   for (i in 1:(numObs-1)){
     for (j in (i + 1):numObs){
-      if ( (predictedCluster[i]==predictedCluster[j]) + (actualGroup[i]==actualGroup[j]) == 1) 
+      if ((predictedCluster[i]==predictedCluster[j])+(actualGroup[i]==actualGroup[j]) == 1) 
         numerator = numerator - 1
     }
   }
@@ -1274,7 +1277,8 @@ calcAccuRatio <- function(predictedCluster, actualGroup, numObs){
   return(accuRatio)
 }
 fittedClusGpMat <- cbind(fittedClusGpMat.fullGPfixedL, fittedClusGpMat.NNGPblockFixedL,
-                         fittedClusGpMat.NNGPsequenFixedL, fittedClusGpMat.NNGPsequenVaryLj)
+                         fittedClusGpMat.NNGPsequenFixedL, 
+                         fittedClusGpMat.NNGPsequenVaryLj)
 modelVec <- c("fullGPfixedL", "NNGPblockFixedL", "NNGPsequenFixedL", "NNGPsequenVaryLj")
 clusIterWeightsVec <- colnames(fittedClusGpMat.fullGPfixedL) 
 # paste(c(10, 100, 1000), "iterWeights", sep = " ")

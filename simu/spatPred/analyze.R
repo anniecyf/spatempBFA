@@ -72,12 +72,14 @@ spatpredtimeBoxBW
 alphaKrigTimeBoxBW <- ggplot(spatpredtimeDF) + labs(y = "", x = "Time (in seconds)") + 
   geom_boxplot(aes(x = alphaKrigTime, y = model)) +
   theme(axis.text.x = element_text(size = 10, color = "black"), 
+        axis.text.y = element_blank(),
         axis.ticks.x = element_blank(), axis.ticks.y = element_blank())
 alphaKrigTimeBoxBW
 weightsXiLambdaKrigTimeBoxBW <- ggplot(spatpredtimeDF) + 
   labs(y = "", x = "Time (in milliseconds)") + 
   geom_boxplot(aes(x = weightsXiLambdaKrigTime, y = model)) +
   theme(axis.text.x = element_text(size = 10, color = "black"), 
+        axis.text.y = element_blank(),
         axis.ticks.x = element_blank(), axis.ticks.y = element_blank())
 weightsXiLambdaKrigTimeBoxBW
 combinedSpatPredBoxBW <- ggarrange(spatpredtimeBoxBW, alphaKrigTimeBoxBW, 
@@ -89,29 +91,30 @@ ggsave("combinedSpatPredBoxBW.png", width = 24, height = 8, units = "cm")
 
 
 spatpredMetricMat <- matrix(0, 4, 3, 
-                            dimnames = c(c("fullGPfixedL", "NNGPblockFixedL", "NNGPsequenFixedL", "NNGPsequenVaryLj"),
-                                         c("meanMedianPostMeanMSE", "meanMedianPostMSE", "meanMedianPostVar")))
+                            dimnames = list(c("fullGPfixedL", "NNGPblockFixedL", "NNGPsequenFixedL", "NNGPsequenVaryLj"),
+                                            c("meanMedianPostMeanMSE", "meanMedianPostMSE", "meanMedianPostVar")))
 load("fullGPfixedLpostGmat_spatPredMetricSimu.RData")
 load("fullGPfixedLpostMSEmat_spatPredMetricSimu.RData")
 load("fullGPfixedLpostVarMat_spatPredMetricSimu.RData")
-spatpredMetric[1, 1] <- mean(apply(postGmat, 2, median))
-spatpredMetric[1, 2] <- mean(apply(postMSEmat, 2, median))
-spatpredMetric[1, 3] <- mean(apply(postVarMat, 2, median))
+spatpredMetricMat[1, 1] <- mean(apply(postGmat, 2, median))
+spatpredMetricMat[1, 2] <- mean(apply(postMSEmat, 2, median))
+spatpredMetricMat[1, 3] <- mean(apply(postVarMat, 2, median))
 load("NNGPblockFixedLpostGmat_spatPredMetricSimu.RData")
 load("NNGPblockFixedLpostMSEmat_spatPredMetricSimu.RData")
 load("NNGPblockFixedLpostVarMat_spatPredMetricSimu.RData")
-spatpredMetric[2, 1] <- mean(apply(postGmat, 2, median))
-spatpredMetric[2, 2] <- mean(apply(postMSEmat, 2, median))
-spatpredMetric[2, 3] <- mean(apply(postVarMat, 2, median))
+spatpredMetricMat[2, 1] <- mean(apply(postGmat, 2, median))
+spatpredMetricMat[2, 2] <- mean(apply(postMSEmat, 2, median))
+spatpredMetricMat[2, 3] <- mean(apply(postVarMat, 2, median))
 load("NNGPsequenFixedLpostGmat_spatPredMetricSimu.RData")
 load("NNGPsequenFixedLpostMSEmat_spatPredMetricSimu.RData")
 load("NNGPsequenFixedLpostVarMat_spatPredMetricSimu.RData")
-spatpredMetric[3, 1] <- mean(apply(postGmat, 2, median))
-spatpredMetric[3, 2] <- mean(apply(postMSEmat, 2, median))
-spatpredMetric[3, 3] <- mean(apply(postVarMat, 2, median))
+spatpredMetricMat[3, 1] <- mean(apply(postGmat, 2, median))
+spatpredMetricMat[3, 2] <- mean(apply(postMSEmat, 2, median))
+spatpredMetricMat[3, 3] <- mean(apply(postVarMat, 2, median))
 load("NNGPsequenVaryLjpostGmat_spatPredMetricSimu.RData")
 load("NNGPsequenVaryLjpostMSEmat_spatPredMetricSimu.RData")
 load("NNGPsequenVaryLjpostVarMat_spatPredMetricSimu.RData")
-spatpredMetric[4, 1] <- mean(apply(postGmat, 2, median))
-spatpredMetric[4, 2] <- mean(apply(postMSEmat, 2, median))
-spatpredMetric[4, 3] <- mean(apply(postVarMat, 2, median))
+spatpredMetricMat[4, 1] <- median(apply(postGmat, 2, mean))
+spatpredMetricMat[4, 2] <- median(apply(postMSEmat, 2, mean))
+spatpredMetricMat[4, 3] <- mean(apply(postVarMat, 2, median))
+save(spatpredMetricMat, file = "spatpredMetric.RData")
