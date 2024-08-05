@@ -105,9 +105,9 @@ Deviance <- as.mcmc(Diags$deviance)
 save(Deviance, file = "toyExfullGPfixedLDeviance.RData")
 spatpredFixedL <- predictNewLocFixedL(regFixedL.simu, 9, distOrigNew, distNewNew, 
                                       NewX = NULL, NewTrials = NULL, Verbose = TRUE, seed = 29)
-save(spatpredFixedL, file = "toyExNNGPspatpredFixedL.RData")
+save(spatpredFixedL, file = "toyExFullGPspatpredFixedL.RData")
 temppredFixedL <- predictNewTime(regFixedL.simu, (trainingT+1):Nu, seed = 29)
-save(temppredFixedL, file = "toyExNNGPtemppredFixedL.RData")
+save(temppredFixedL, file = "toyExFullGPtemppredFixedL.RData")
 fittedClusGpMat <- matrix(0, m, 3)
 clusFixedL10 <- clusteringFixedL(regFixedL.simu, o = 1, nkeep = 10, nCent = numSpatOverallGroups)
 fittedClusGpMat[,1] <- clusFixedL10$cluster
@@ -120,20 +120,20 @@ colnames(fittedClusGpMat) <- paste(weightsNumIter, "iterWeights")
 save(fittedClusGpMat, file = "fullGPfixedLtoyExfittedClusGpMat.RData")
 
 temppredFixedL <- predictNewTime(regFixedL.simu, (trainingT+1):Nu, seed = 27)
-save(temppredFixedL, file = "s27toyExNNGPtemppredFixedL.RData")
+save(temppredFixedL, file = "s27toyExFullGPtemppredFixedL.RData")
 temppredFixedL <- predictNewTime(regFixedL.simu, (trainingT+1):Nu, seed = 19)
-save(temppredFixedL, file = "s19toyExNNGPtemppredFixedL.RData")
+save(temppredFixedL, file = "s19toyExFullGPtemppredFixedL.RData")
 temppredFixedL <- predictNewTime(regFixedL.simu, (trainingT+1):Nu, seed = 31)
-save(temppredFixedL, file = "s31toyExNNGPtemppredFixedL.RData")
+save(temppredFixedL, file = "s31toyExFullGPtemppredFixedL.RData")
 spatpredFixedL <- predictNewLocFixedL(regFixedL.simu, 9, distOrigNew, distNewNew, 
                                       NewX = NULL, NewTrials = NULL, Verbose = TRUE, 
                                       seed = 27)
-save(spatpredFixedL, file = "s27toyExNNGPspatpredFixedL.RData")
+save(spatpredFixedL, file = "s27toyExFullGPspatpredFixedL.RData")
 spatpredFixedL <- predictNewLocFixedL(regFixedL.simu, 9, distOrigNew, distNewNew, 
                                       NewX = NULL, NewTrials = NULL, Verbose = TRUE, 
                                       seed = 31)
-save(spatpredFixedL, file = "s31toyExNNGPspatpredFixedL.RData")
+save(spatpredFixedL, file = "s31toyExFullGPspatpredFixedL.RData")
 spatpredFixedL <- predictNewLocFixedL(regFixedL.simu, 9, distOrigNew, distNewNew, 
                                       NewX = NULL, NewTrials = NULL, Verbose = TRUE, 
                                       seed = 19)
-save(spatpredFixedL, file = "s19toyExNNGPspatpredFixedL.RData")
+save(spatpredFixedL, file = "s19toyExFullGPspatpredFixedL.RData")

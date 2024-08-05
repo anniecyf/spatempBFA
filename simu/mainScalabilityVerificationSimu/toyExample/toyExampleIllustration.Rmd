@@ -139,9 +139,9 @@ save(Deviance, file = "toyExfullGPfixedLDeviance.RData")
 spatpredFixedL <- predictNewLocFixedL(regFixedL.simu, 9, distOrigNew, distNewNew, 
                                       NewX = NULL, NewTrials = NULL, Verbose = TRUE, 
                                       seed = 29)
-save(spatpredFixedL, file = "toyExNNGPspatpredFixedL.RData")
+save(spatpredFixedL, file = "toyExFullGPspatpredFixedL.RData")
 temppredFixedL <- predictNewTime(regFixedL.simu, (trainingT+1):Nu, seed = 29)
-save(temppredFixedL, file = "toyExNNGPtemppredFixedL.RData")
+save(temppredFixedL, file = "toyExFullGPtemppredFixedL.RData")
 fittedClusGpMat <- matrix(0, m, 3)
 clusFixedL10 <- clusteringFixedL(regFixedL.simu, o = 1, nkeep = 10, 
                                  nCent = numSpatOverallGroups)
@@ -156,23 +156,23 @@ weightsNumIter <- c(10, 100, 1000)
 colnames(fittedClusGpMat) <- paste(weightsNumIter, "iterWeights")
 save(fittedClusGpMat, file = "fullGPfixedLtoyExfittedClusGpMat.RData")
 temppredFixedL <- predictNewTime(regFixedL.simu, (trainingT+1):Nu, seed = 27)
-save(temppredFixedL, file = "s27toyExNNGPtemppredFixedL.RData")
+save(temppredFixedL, file = "s27toyExFullGPtemppredFixedL.RData")
 temppredFixedL <- predictNewTime(regFixedL.simu, (trainingT+1):Nu, seed = 19)
-save(temppredFixedL, file = "s19toyExNNGPtemppredFixedL.RData")
+save(temppredFixedL, file = "s19toyExFullGPtemppredFixedL.RData")
 temppredFixedL <- predictNewTime(regFixedL.simu, (trainingT+1):Nu, seed = 31)
-save(temppredFixedL, file = "s31toyExNNGPtemppredFixedL.RData")
+save(temppredFixedL, file = "s31toyExFullGPtemppredFixedL.RData")
 spatpredFixedL <- predictNewLocFixedL(regFixedL.simu, 9, distOrigNew, distNewNew, 
                                       NewX = NULL, NewTrials = NULL, Verbose = TRUE, 
                                       seed = 27)
-save(spatpredFixedL, file = "s27toyExNNGPspatpredFixedL.RData")
+save(spatpredFixedL, file = "s27toyExFullGPspatpredFixedL.RData")
 spatpredFixedL <- predictNewLocFixedL(regFixedL.simu, 9, distOrigNew, distNewNew, 
                                       NewX = NULL, NewTrials = NULL, Verbose = TRUE, 
                                       seed = 31)
-save(spatpredFixedL, file = "s31toyExNNGPspatpredFixedL.RData")
+save(spatpredFixedL, file = "s31toyExFullGPspatpredFixedL.RData")
 spatpredFixedL <- predictNewLocFixedL(regFixedL.simu, 9, distOrigNew, distNewNew, 
                                       NewX = NULL, NewTrials = NULL, Verbose = TRUE, 
                                       seed = 19)
-save(spatpredFixedL, file = "s19toyExNNGPspatpredFixedL.RData")
+save(spatpredFixedL, file = "s19toyExFullGPspatpredFixedL.RData")
 regFixedL.simu.block <- bfaFixedL(Y ~ 0, data = dat, dist = Dtraining, time = Time,  
                                   K = K, 
                                   starting = NULL, hypers = NULL, tuning = NULL, 
@@ -456,8 +456,8 @@ load("toyExfullGPfixedL.RData"); regFixedL.simu$runtime # 15.77 hours
 load("toyExfullGPfixedLDiags.RData")
 load("toyExfullGPfixedLDeviance.RData")
 load("GibbsStepTimeFixedLfullGP.RData")
-load("toyExNNGPtemppredFixedL.RData")
-load("toyExNNGPspatpredFixedL.RData")
+load("toyExFullGPtemppredFixedL.RData")
+load("toyExFullGPspatpredFixedL.RData")
 load("fullGPfixedLtoyExfittedClusGpMat.RData")
 fittedClusGpMat.fullGPfixedL <- fittedClusGpMat
 setwd("../NNGPblockFixedL")
@@ -662,7 +662,7 @@ tempPredMetricMat
 Temporal prediction results from all our 4 models are close and significantly better than their `spBFALInf` model counterparts. Among our 4 models and `spBFAL10`, `NNGPsequenFixedL` appears to be the best, followed by `fullGPfixedL`, `NNGPblockFixedL`, `spBFAL10`, and finally `NNGPsequenVaryLj`. Similar conclusions can be drawn from future-time prediction metrics calculated from temporal prediction objects generated using 3 other random seeds, as presented below.
 ```{r}
 setwd("fullGPfixedL")
-load("s19toyExNNGPtemppredFixedL.RData")
+load("s19toyExFullGPtemppredFixedL.RData")
 setwd("../NNGPblockFixedL")
 load("s19toyExNNGPtemppredFixedLblock.RData")
 setwd("../NNGPsequenFixedL")
@@ -736,7 +736,7 @@ tempPredMetricMat[2, 6] = mean(rowMeans(diffMat^2))
 tempPredMetricMat[3, 6] = mean(apply(ytempPred, 1, var))
 tempPredMetricMat
 setwd("fullGPfixedL")
-load("s27toyExNNGPtemppredFixedL.RData")
+load("s27toyExFullGPtemppredFixedL.RData")
 setwd("../NNGPblockFixedL")
 load("s27toyExNNGPtemppredFixedLblock.RData")
 setwd("../NNGPsequenFixedL")
@@ -810,7 +810,7 @@ tempPredMetricMat[2, 6] = mean(rowMeans(diffMat^2))
 tempPredMetricMat[3, 6] = mean(apply(ytempPred, 1, var))
 tempPredMetricMat
 setwd("fullGPfixedL")
-load("s31toyExNNGPtemppredFixedL.RData")
+load("s31toyExFullGPtemppredFixedL.RData")
 setwd("../NNGPblockFixedL")
 load("s31toyExNNGPtemppredFixedLblock.RData")
 setwd("../NNGPsequenFixedL")
@@ -971,7 +971,7 @@ load("toyExfullGPfixedL.RData")
 spatpredFixedL <- predictNewLocFixedL(regFixedL.simu, 9, distOrigNew, distNewNew, 
                                       NewX = NULL, NewTrials = NULL, Verbose = TRUE, 
                                       seed = 29)
-save(spatpredFixedL, file = "s29toyExNNGPspatpredFixedL.RData")
+save(spatpredFixedL, file = "s29toyExFullGPspatpredFixedL.RData")
 setwd("../NNGPblockFixedL")
 load("toyExNNGPblockFixedL.RData")
 spatpredFixedLblock <- predictNewLocFixedL(regFixedL.simu.block, 9, 
@@ -996,7 +996,7 @@ setwd("..")
 ```
 ```{r eval = FALSE, echo = FALSE}
 setwd("fullGPfixedL")
-load("s29toyExNNGPspatpredFixedL.RData") # another s29 instance (same metrics but different breakdown time)
+load("s29toyExFullGPspatpredFixedL.RData") # another s29 instance (same metrics but different breakdown time)
 setwd("../NNGPblockFixedL")
 load("s29toyExNNGPspatpredFixedLblock.RData")
 setwd("../NNGPsequenFixedL")
@@ -1062,7 +1062,7 @@ spatPredMetricMat
 ```
 ```{r}
 setwd("fullGPfixedL")
-load("s27toyExNNGPspatpredFixedL.RData")
+load("s27toyExFullGPspatpredFixedL.RData")
 setwd("../NNGPblockFixedL")
 load("s27toyExNNGPspatpredFixedLblock.RData")
 setwd("../NNGPsequenFixedL")
@@ -1126,7 +1126,7 @@ spatPredMetricMat[2, 4] = mean(rowMeans(diffMat^2))
 spatPredMetricMat[3, 4] = mean(apply(ylocPred, 1, var))
 spatPredMetricMat
 setwd("fullGPfixedL")
-load("s31toyExNNGPspatpredFixedL.RData")
+load("s31toyExFullGPspatpredFixedL.RData")
 setwd("../NNGPblockFixedL")
 load("s31toyExNNGPspatpredFixedLblock.RData")
 setwd("../NNGPsequenFixedL")
@@ -1190,7 +1190,7 @@ spatPredMetricMat[2, 4] = mean(rowMeans(diffMat^2))
 spatPredMetricMat[3, 4] = mean(apply(ylocPred, 1, var))
 spatPredMetricMat
 setwd("fullGPfixedL")
-load("s19toyExNNGPspatpredFixedL.RData")
+load("s19toyExFullGPspatpredFixedL.RData")
 setwd("../NNGPblockFixedL")
 load("s19toyExNNGPspatpredFixedLblock.RData")
 setwd("../NNGPsequenFixedL")

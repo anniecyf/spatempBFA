@@ -22,8 +22,8 @@ setwd("../fullGPfixedL")
 load("toyExfullGPfixedLDiags.RData")
 load("toyExfullGPfixedLDeviance.RData")
 load("GibbsStepTimeFixedLfullGP.RData")
-load("toyExNNGPtemppredFixedL.RData")
-load("toyExNNGPspatpredFixedL.RData")
+load("toyExFullGPtemppredFixedL.RData")
+load("toyExFullGPspatpredFixedL.RData")
 load("fullGPfixedLtoyExfittedClusGpMat.RData")
 fittedClusGpMat.fullGPfixedL <- fittedClusGpMat
 setwd("../NNGPblockFixedL")
@@ -366,7 +366,7 @@ tempPredMetricMat
 # spatpredFixedL <- predictNewLocFixedL(regFixedL.simu, 9, distOrigNew, distNewNew, 
 #                                       NewX = NULL, NewTrials = NULL, Verbose = TRUE, 
 #                                       seed = 29)
-# save(spatpredFixedL, file = "s29toyExNNGPspatpredFixedL.RData")
+# save(spatpredFixedL, file = "s29toyExFullGPspatpredFixedL.RData")
 # setwd("../NNGPblockFixedL")
 # load("toyExNNGPblockFixedL.RData")
 # spatpredFixedLblock <- predictNewLocFixedL(regFixedL.simu.block, 9, 

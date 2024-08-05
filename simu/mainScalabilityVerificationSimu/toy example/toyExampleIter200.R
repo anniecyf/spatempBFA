@@ -105,9 +105,9 @@ Deviance <- as.mcmc(Diags$deviance)
 save(Deviance, file = "toyExfullGPfixedLDeviance.RData")
 spatpredFixedL <- predictNewLocFixedL(regFixedL.simu, 9, distOrigNew, distNewNew, 
                                       NewX = NULL, NewTrials = NULL, Verbose = TRUE, seed = 29)
-save(spatpredFixedL, file = "toyExNNGPspatpredFixedL.RData")
+save(spatpredFixedL, file = "toyExFullGPspatpredFixedL.RData")
 temppredFixedL <- predictNewTime(regFixedL.simu, (trainingT+1):Nu, seed = 29)
-save(temppredFixedL, file = "toyExNNGPtemppredFixedL.RData")
+save(temppredFixedL, file = "toyExFullGPtemppredFixedL.RData")
 fittedClusGpMat <- matrix(0, m, 3)
 clusFixedL10 <- clusteringFixedL(regFixedL.simu, o = 1, nkeep = 10, nCent = numSpatOverallGroups)
 fittedClusGpMat[,1] <- clusFixedL10$cluster
