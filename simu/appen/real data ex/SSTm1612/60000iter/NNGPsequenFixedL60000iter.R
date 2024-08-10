@@ -25,7 +25,7 @@ Hypers <- list(Sigma2 = list(A = 1, B = 1), Rho = list(ARho = 0.1, BRho = 1),
                Kappa = list(SmallUpsilon = O + 1, BigTheta = diag(O)),
                Psi = list(APsi = APsi, BPsi = BPsi),
                Upsilon = list(Zeta = K + 1, Omega = diag(K)))
-MCMC <- list(NBurn = 100000, NSims = 20000, NThin = 20, NPilot = 5)
+MCMC <- list(NBurn = 50000, NSims = 10000, NThin = 10, NPilot = 5)
 library(spatempBFA)
 library(coda)
 Sys.time()

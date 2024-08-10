@@ -584,7 +584,7 @@ rm(fullGPfixedLpostDeviances, NNGPblockFixedLpostDeviances)
 rm(NNGPsequenFixedLpostDeviances, NNGPsequenVaryLjpostDeviances)
 rm(postDeviancesDF, spBFAL10Deviances, spBFALInfDeviances)
 ```
-All our 4 models' diagnostics and converged posterior deviances are comparable their `spBFAL10` counterparts and clearly better than their `spBFALInf` counterparts.
+All our 4 models' diagnostics and converged posterior deviances are comparable to their `spBFAL10` counterparts and clearly better than their `spBFALInf` counterparts.
 
 ## Predictions for all 352 Training Locations at the 10 Future Time Points
 ```{r warning = FALSE}
@@ -608,7 +608,7 @@ ytempPred <- t(matrix(unlist(ytempPredList), ncol = testingT * m * O))
 # (testingT * m * O) * NKeep 
 ytempPredMean <- apply(ytempPred, 1, mean) 
 # of length N = testingT * O * m (rowMeans) note that O = 1 here
-tempPredMetricMat[1, 1] <- mean((ytempPredMean - ytempPred)^2)
+tempPredMetricMat[1, 1] <- mean((ytempPredMean - YtestingTemp)^2)
 diffMat <- sweep(ytempPred, 1, YtestingTemp, "-")
 tempPredMetricMat[2, 1] = mean(rowMeans(diffMat^2))
 tempPredMetricMat[3, 1] = mean(apply(ytempPred, 1, var))
@@ -617,7 +617,7 @@ ytempPred <- t(matrix(unlist(ytempPredList), ncol = testingT * m * O))
 # (testingT * m * O) * NKeep 
 ytempPredMean <- apply(ytempPred, 1, mean) 
 # of length N = testingT * O * m (rowMeans) note that O = 1 here
-tempPredMetricMat[1, 2] <- mean((ytempPredMean - ytempPred)^2)
+tempPredMetricMat[1, 2] <- mean((ytempPredMean - YtestingTemp)^2)
 diffMat <- sweep(ytempPred, 1, YtestingTemp, "-")
 tempPredMetricMat[2, 2] = mean(rowMeans(diffMat^2))
 tempPredMetricMat[3, 2] = mean(apply(ytempPred, 1, var))
@@ -626,7 +626,7 @@ ytempPred <- t(matrix(unlist(ytempPredList), ncol = testingT * m * O))
 # (testingT * m * O) * NKeep
 ytempPredMean <- apply(ytempPred, 1, mean) 
 # of length N = testingT * O * m (rowMeans) note that O = 1 here
-tempPredMetricMat[1, 3] <- mean((ytempPredMean - ytempPred)^2)
+tempPredMetricMat[1, 3] <- mean((ytempPredMean - YtestingTemp)^2)
 diffMat <- sweep(ytempPred, 1, YtestingTemp, "-")
 tempPredMetricMat[2, 3] = mean(rowMeans(diffMat^2))
 tempPredMetricMat[3, 3] = mean(apply(ytempPred, 1, var))
@@ -635,7 +635,7 @@ ytempPred <- t(matrix(unlist(ytempPredList), ncol = testingT * m * O))
 # (testingT * m * O) * NKeep 
 ytempPredMean <- apply(ytempPred, 1, mean) 
 # of length N = testingT * O * m (rowMeans) note that O = 1 here
-tempPredMetricMat[1, 4] <- mean((ytempPredMean - ytempPred)^2)
+tempPredMetricMat[1, 4] <- mean((ytempPredMean - YtestingTemp)^2)
 diffMat <- sweep(ytempPred, 1, YtestingTemp, "-")
 tempPredMetricMat[2, 4] = mean(rowMeans(diffMat^2))
 tempPredMetricMat[3, 4] = mean(apply(ytempPred, 1, var))
@@ -644,7 +644,7 @@ ytempPred <- t(matrix(unlist(ytempPredList), ncol = testingT * m * O))
 # (testingT * m * O) * NKeep 
 ytempPredMean <- apply(ytempPred, 1, mean) 
 # of length N = testingT * O * m (rowMeans) note that O = 1 here
-tempPredMetricMat[1, 5] <- mean((ytempPredMean - ytempPred)^2)
+tempPredMetricMat[1, 5] <- mean((ytempPredMean - YtestingTemp)^2)
 diffMat <- sweep(ytempPred, 1, YtestingTemp, "-")
 tempPredMetricMat[2, 5] = mean(rowMeans(diffMat^2))
 tempPredMetricMat[3, 5] = mean(apply(ytempPred, 1, var))
@@ -653,13 +653,13 @@ ytempPred <- t(matrix(unlist(ytempPredList), ncol = testingT * m * O))
 # (testingT * m * O) * NKeep
 ytempPredMean <- apply(ytempPred, 1, mean) 
 # of length N = testingT * O * m (rowMeans) note that O = 1 here
-tempPredMetricMat[1, 6] <- mean((ytempPredMean - ytempPred)^2)
+tempPredMetricMat[1, 6] <- mean((ytempPredMean - YtestingTemp)^2)
 diffMat <- sweep(ytempPred, 1, YtestingTemp, "-")
 tempPredMetricMat[2, 6] = mean(rowMeans(diffMat^2))
 tempPredMetricMat[3, 6] = mean(apply(ytempPred, 1, var))
 tempPredMetricMat
 ```
-Temporal prediction results from all our 4 models are close and significantly better than their `spBFALInf` model counterparts. Among our 4 models and `spBFAL10`, `NNGPsequenFixedL` appears to be the best, followed by `fullGPfixedL`, `NNGPblockFixedL`, `spBFAL10`, and finally `NNGPsequenVaryLj`. Similar conclusions can be drawn from future-time prediction metrics calculated from temporal prediction objects generated using 3 other random seeds, as presented below.
+Temporal prediction results from all our 4 models are close and significantly better than their `spBFALInf` model counterparts. Among our 4 models and `spBFAL10`, `NNGPsequenFixedL` appears to be the best, followed by `fullGPfixedL`, `NNGPblockFixedL`, and finally `NNGPsequenVaryLj` and `spBFAL10`. Similar conclusions can be drawn from future-time prediction metrics calculated from temporal prediction objects generated using 3 other random seeds, as presented below.
 ```{r}
 setwd("fullGPfixedL")
 load("s19toyExFullGPtemppredFixedL.RData")
@@ -685,7 +685,7 @@ ytempPred <- t(matrix(unlist(ytempPredList), ncol = testingT * m * O))
 # (testingT * m * O) * NKeep 
 ytempPredMean <- apply(ytempPred, 1, mean) 
 # of length N = testingT * O * m (rowMeans) note that O = 1 here
-tempPredMetricMat[1, 1] <- mean((ytempPredMean - ytempPred)^2)
+tempPredMetricMat[1, 1] <- mean((ytempPredMean - YtestingTemp)^2)
 diffMat <- sweep(ytempPred, 1, YtestingTemp, "-")
 tempPredMetricMat[2, 1] = mean(rowMeans(diffMat^2))
 tempPredMetricMat[3, 1] = mean(apply(ytempPred, 1, var))
@@ -694,7 +694,7 @@ ytempPred <- t(matrix(unlist(ytempPredList), ncol = testingT * m * O))
 # (testingT * m * O) * NKeep 
 ytempPredMean <- apply(ytempPred, 1, mean) 
 # of length N = testingT * O * m (rowMeans) note that O = 1 here
-tempPredMetricMat[1, 2] <- mean((ytempPredMean - ytempPred)^2)
+tempPredMetricMat[1, 2] <- mean((ytempPredMean - YtestingTemp)^2)
 diffMat <- sweep(ytempPred, 1, YtestingTemp, "-")
 tempPredMetricMat[2, 2] = mean(rowMeans(diffMat^2))
 tempPredMetricMat[3, 2] = mean(apply(ytempPred, 1, var))
@@ -703,7 +703,7 @@ ytempPred <- t(matrix(unlist(ytempPredList), ncol = testingT * m * O))
 # (testingT * m * O) * NKeep
 ytempPredMean <- apply(ytempPred, 1, mean) 
 # of length N = testingT * O * m (rowMeans) note that O = 1 here
-tempPredMetricMat[1, 3] <- mean((ytempPredMean - ytempPred)^2)
+tempPredMetricMat[1, 3] <- mean((ytempPredMean - YtestingTemp)^2)
 diffMat <- sweep(ytempPred, 1, YtestingTemp, "-")
 tempPredMetricMat[2, 3] = mean(rowMeans(diffMat^2))
 tempPredMetricMat[3, 3] = mean(apply(ytempPred, 1, var))
@@ -712,7 +712,7 @@ ytempPred <- t(matrix(unlist(ytempPredList), ncol = testingT * m * O))
 # (testingT * m * O) * NKeep 
 ytempPredMean <- apply(ytempPred, 1, mean) 
 # of length N = testingT * O * m (rowMeans) note that O = 1 here
-tempPredMetricMat[1, 4] <- mean((ytempPredMean - ytempPred)^2)
+tempPredMetricMat[1, 4] <- mean((ytempPredMean - YtestingTemp)^2)
 diffMat <- sweep(ytempPred, 1, YtestingTemp, "-")
 tempPredMetricMat[2, 4] = mean(rowMeans(diffMat^2))
 tempPredMetricMat[3, 4] = mean(apply(ytempPred, 1, var))
@@ -721,7 +721,7 @@ ytempPred <- t(matrix(unlist(ytempPredList), ncol = testingT * m * O))
 # (testingT * m * O) * NKeep 
 ytempPredMean <- apply(ytempPred, 1, mean) 
 # of length N = testingT * O * m (rowMeans) note that O = 1 here
-tempPredMetricMat[1, 5] <- mean((ytempPredMean - ytempPred)^2)
+tempPredMetricMat[1, 5] <- mean((ytempPredMean - YtestingTemp)^2)
 diffMat <- sweep(ytempPred, 1, YtestingTemp, "-")
 tempPredMetricMat[2, 5] = mean(rowMeans(diffMat^2))
 tempPredMetricMat[3, 5] = mean(apply(ytempPred, 1, var))
@@ -730,7 +730,7 @@ ytempPred <- t(matrix(unlist(ytempPredList), ncol = testingT * m * O))
 # (testingT * m * O) * NKeep
 ytempPredMean <- apply(ytempPred, 1, mean) 
 # of length N = testingT * O * m (rowMeans) note that O = 1 here
-tempPredMetricMat[1, 6] <- mean((ytempPredMean - ytempPred)^2)
+tempPredMetricMat[1, 6] <- mean((ytempPredMean - YtestingTemp)^2)
 diffMat <- sweep(ytempPred, 1, YtestingTemp, "-")
 tempPredMetricMat[2, 6] = mean(rowMeans(diffMat^2))
 tempPredMetricMat[3, 6] = mean(apply(ytempPred, 1, var))
@@ -759,7 +759,7 @@ ytempPred <- t(matrix(unlist(ytempPredList), ncol = testingT * m * O))
 # (testingT * m * O) * NKeep 
 ytempPredMean <- apply(ytempPred, 1, mean) 
 # of length N = testingT * O * m (rowMeans) note that O = 1 here
-tempPredMetricMat[1, 1] <- mean((ytempPredMean - ytempPred)^2)
+tempPredMetricMat[1, 1] <- mean((ytempPredMean - YtestingTemp)^2)
 diffMat <- sweep(ytempPred, 1, YtestingTemp, "-")
 tempPredMetricMat[2, 1] = mean(rowMeans(diffMat^2))
 tempPredMetricMat[3, 1] = mean(apply(ytempPred, 1, var))
@@ -768,7 +768,7 @@ ytempPred <- t(matrix(unlist(ytempPredList), ncol = testingT * m * O))
 # (testingT * m * O) * NKeep 
 ytempPredMean <- apply(ytempPred, 1, mean) 
 # of length N = testingT * O * m (rowMeans) note that O = 1 here
-tempPredMetricMat[1, 2] <- mean((ytempPredMean - ytempPred)^2)
+tempPredMetricMat[1, 2] <- mean((ytempPredMean - YtestingTemp)^2)
 diffMat <- sweep(ytempPred, 1, YtestingTemp, "-")
 tempPredMetricMat[2, 2] = mean(rowMeans(diffMat^2))
 tempPredMetricMat[3, 2] = mean(apply(ytempPred, 1, var))
@@ -777,7 +777,7 @@ ytempPred <- t(matrix(unlist(ytempPredList), ncol = testingT * m * O))
 # (testingT * m * O) * NKeep
 ytempPredMean <- apply(ytempPred, 1, mean) 
 # of length N = testingT * O * m (rowMeans) note that O = 1 here
-tempPredMetricMat[1, 3] <- mean((ytempPredMean - ytempPred)^2)
+tempPredMetricMat[1, 3] <- mean((ytempPredMean - YtestingTemp)^2)
 diffMat <- sweep(ytempPred, 1, YtestingTemp, "-")
 tempPredMetricMat[2, 3] = mean(rowMeans(diffMat^2))
 tempPredMetricMat[3, 3] = mean(apply(ytempPred, 1, var))
@@ -786,7 +786,7 @@ ytempPred <- t(matrix(unlist(ytempPredList), ncol = testingT * m * O))
 # (testingT * m * O) * NKeep 
 ytempPredMean <- apply(ytempPred, 1, mean) 
 # of length N = testingT * O * m (rowMeans) note that O = 1 here
-tempPredMetricMat[1, 4] <- mean((ytempPredMean - ytempPred)^2)
+tempPredMetricMat[1, 4] <- mean((ytempPredMean - YtestingTemp)^2)
 diffMat <- sweep(ytempPred, 1, YtestingTemp, "-")
 tempPredMetricMat[2, 4] = mean(rowMeans(diffMat^2))
 tempPredMetricMat[3, 4] = mean(apply(ytempPred, 1, var))
@@ -795,7 +795,7 @@ ytempPred <- t(matrix(unlist(ytempPredList), ncol = testingT * m * O))
 # (testingT * m * O) * NKeep 
 ytempPredMean <- apply(ytempPred, 1, mean) 
 # of length N = testingT * O * m (rowMeans) note that O = 1 here
-tempPredMetricMat[1, 5] <- mean((ytempPredMean - ytempPred)^2)
+tempPredMetricMat[1, 5] <- mean((ytempPredMean - YtestingTemp)^2)
 diffMat <- sweep(ytempPred, 1, YtestingTemp, "-")
 tempPredMetricMat[2, 5] = mean(rowMeans(diffMat^2))
 tempPredMetricMat[3, 5] = mean(apply(ytempPred, 1, var))
@@ -804,7 +804,7 @@ ytempPred <- t(matrix(unlist(ytempPredList), ncol = testingT * m * O))
 # (testingT * m * O) * NKeep
 ytempPredMean <- apply(ytempPred, 1, mean) 
 # of length N = testingT * O * m (rowMeans) note that O = 1 here
-tempPredMetricMat[1, 6] <- mean((ytempPredMean - ytempPred)^2)
+tempPredMetricMat[1, 6] <- mean((ytempPredMean - YtestingTemp)^2)
 diffMat <- sweep(ytempPred, 1, YtestingTemp, "-")
 tempPredMetricMat[2, 6] = mean(rowMeans(diffMat^2))
 tempPredMetricMat[3, 6] = mean(apply(ytempPred, 1, var))
@@ -833,7 +833,7 @@ ytempPred <- t(matrix(unlist(ytempPredList), ncol = testingT * m * O))
 # (testingT * m * O) * NKeep 
 ytempPredMean <- apply(ytempPred, 1, mean) 
 # of length N = testingT * O * m (rowMeans) note that O = 1 here
-tempPredMetricMat[1, 1] <- mean((ytempPredMean - ytempPred)^2)
+tempPredMetricMat[1, 1] <- mean((ytempPredMean - YtestingTemp)^2)
 diffMat <- sweep(ytempPred, 1, YtestingTemp, "-")
 tempPredMetricMat[2, 1] = mean(rowMeans(diffMat^2))
 tempPredMetricMat[3, 1] = mean(apply(ytempPred, 1, var))
@@ -842,7 +842,7 @@ ytempPred <- t(matrix(unlist(ytempPredList), ncol = testingT * m * O))
 # (testingT * m * O) * NKeep 
 ytempPredMean <- apply(ytempPred, 1, mean) 
 # of length N = testingT * O * m (rowMeans) note that O = 1 here
-tempPredMetricMat[1, 2] <- mean((ytempPredMean - ytempPred)^2)
+tempPredMetricMat[1, 2] <- mean((ytempPredMean - YtestingTemp)^2)
 diffMat <- sweep(ytempPred, 1, YtestingTemp, "-")
 tempPredMetricMat[2, 2] = mean(rowMeans(diffMat^2))
 tempPredMetricMat[3, 2] = mean(apply(ytempPred, 1, var))
@@ -851,7 +851,7 @@ ytempPred <- t(matrix(unlist(ytempPredList), ncol = testingT * m * O))
 # (testingT * m * O) * NKeep
 ytempPredMean <- apply(ytempPred, 1, mean) 
 # of length N = testingT * O * m (rowMeans) note that O = 1 here
-tempPredMetricMat[1, 3] <- mean((ytempPredMean - ytempPred)^2)
+tempPredMetricMat[1, 3] <- mean((ytempPredMean - YtestingTemp)^2)
 diffMat <- sweep(ytempPred, 1, YtestingTemp, "-")
 tempPredMetricMat[2, 3] = mean(rowMeans(diffMat^2))
 tempPredMetricMat[3, 3] = mean(apply(ytempPred, 1, var))
@@ -860,7 +860,7 @@ ytempPred <- t(matrix(unlist(ytempPredList), ncol = testingT * m * O))
 # (testingT * m * O) * NKeep 
 ytempPredMean <- apply(ytempPred, 1, mean) 
 # of length N = testingT * O * m (rowMeans) note that O = 1 here
-tempPredMetricMat[1, 4] <- mean((ytempPredMean - ytempPred)^2)
+tempPredMetricMat[1, 4] <- mean((ytempPredMean - YtestingTemp)^2)
 diffMat <- sweep(ytempPred, 1, YtestingTemp, "-")
 tempPredMetricMat[2, 4] = mean(rowMeans(diffMat^2))
 tempPredMetricMat[3, 4] = mean(apply(ytempPred, 1, var))
@@ -869,7 +869,7 @@ ytempPred <- t(matrix(unlist(ytempPredList), ncol = testingT * m * O))
 # (testingT * m * O) * NKeep 
 ytempPredMean <- apply(ytempPred, 1, mean) 
 # of length N = testingT * O * m (rowMeans) note that O = 1 here
-tempPredMetricMat[1, 5] <- mean((ytempPredMean - ytempPred)^2)
+tempPredMetricMat[1, 5] <- mean((ytempPredMean - YtestingTemp)^2)
 diffMat <- sweep(ytempPred, 1, YtestingTemp, "-")
 tempPredMetricMat[2, 5] = mean(rowMeans(diffMat^2))
 tempPredMetricMat[3, 5] = mean(apply(ytempPred, 1, var))
@@ -878,7 +878,7 @@ ytempPred <- t(matrix(unlist(ytempPredList), ncol = testingT * m * O))
 # (testingT * m * O) * NKeep
 ytempPredMean <- apply(ytempPred, 1, mean) 
 # of length N = testingT * O * m (rowMeans) note that O = 1 here
-tempPredMetricMat[1, 6] <- mean((ytempPredMean - ytempPred)^2)
+tempPredMetricMat[1, 6] <- mean((ytempPredMean - YtestingTemp)^2)
 diffMat <- sweep(ytempPred, 1, YtestingTemp, "-")
 tempPredMetricMat[2, 6] = mean(rowMeans(diffMat^2))
 tempPredMetricMat[3, 6] = mean(apply(ytempPred, 1, var))

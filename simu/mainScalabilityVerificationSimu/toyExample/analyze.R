@@ -8,6 +8,13 @@ setwd("spBFA")
 # rm(reg.simu)
 # load("toyExspBFALInf.RData"); reg.simu.LInf$runtime #  3.08 days
 # rm(reg.simu.LInf)
+## use the spatempBFA package version with the DIAG_diagnostics.R 3 lines if ( ! ( is.FixedLbfa(object) | is.varyLjBFA(object) | is.FixedLbfaVAR1(object) | is.VAR1varyLjBFA(object) ) ) {
+#stop('"object" must be of class FixedLbfa or varyLjBFA or FixedLbfaVAR1 or VAR1varyLjBFA')
+#} commented out
+# spBFADiagsComplete <- diagnostics(reg.simu)
+# save(spBFADiagsComplete, file = "toyExspBFAL10DiagsComplete.RData")
+# spBFADiagsLInfComplete <- diagnostics(reg.simu.LInf)
+# save(spBFADiagsLInfComplete, file = "toyExspBFALInfDiagsComplete.RData")
 load("toyExspBFAL10Diags.RData")
 load("toyExspBFAL10Deviance.RData")
 load("toyExspBFAL10temppred.RData")
@@ -387,3 +394,25 @@ tempPredMetricMat
 #                                       NewX = NULL, NewTrials = NULL, Verbose = TRUE, 
 #                                       seed = 29)
 # save(spatpredVaryLj, file = "s29toyExNNGPspatpredVaryLj.RData")
+actualTrainingSpatPlotBW <- ggplot(spatTrainingGpDF) + 
+  geom_point(aes(x = x, y = y, col = actualTrainingSpatGp), 
+             size = 7, show.legend = FALSE) + 
+  scale_color_manual(values = c("black", "white")) + labs(x = "", y = "") +
+  theme(plot.title = element_text(hjust = 0.5),
+        axis.text.x = element_blank(), axis.text.y = element_blank(),
+        axis.ticks.x = element_blank(), axis.ticks.y = element_blank(),
+        panel.grid.major = element_line(color="grey"), 
+        panel.grid.minor = element_line(color="grey"))
+actualTrainingSpatPlotBW
+ggarrange(actualSpatPlotBW, trainingTestingPlotBW, actualTrainingSpatPlotBW,
+          labels = c("A", "B", "C"), align = "h", ncol = 3, nrow = 1, 
+          common.legend = TRUE, legend = "top")
+ggsave("toyExActualSpatPlots.png", width = 24, height = 8, units = "cm")
+
+#setwd("C:/Users/annie/OneDrive - National University of Singapore/Documents/PhD/research/first paper/spatempBFA/simu/mainScalabilityVerificationSimu/toyExample")
+library(rmarkdown)
+library(knitr)
+render("toyExampleIllustration.Rmd", 
+       output_format = "pdf_document", 
+       output_options = list(keep_tex = TRUE),
+       output_file = "toyExampleIllustrationEdited.tex")

@@ -1,7 +1,7 @@
 rm(list=ls())
 library(fields)
 projDirec <- "C:/Users/annie/OneDrive - National University of Singapore/Documents/PhD/research/first paper/spatempBFA"
-#setwd(paste(projDirec, "simu/appen/real data ex/SSTm1912", sep = "/"))
+#setwd(paste(projDirec, "simu/appen/real data ex/SSTm1612", sep = "/"))
 load("SSTtrainingDF2023.RData")
 K <- 5
 O <- 1

@@ -114,3 +114,4 @@ Diags.sequenVaryLj <- diagnostics(regVaryLj.simu.sequen, diags = c("dic", "dinf"
 save(Diags.sequenVaryLj, file = "regVaryLjSimuSequenO2T50M400Iter100000Diags.RData")
 Deviance.sequenVaryLj <- as.mcmc(Diags.sequenVaryLj$deviance)
 save(Deviance.sequenVaryLj, file = "regVaryLjSimuSequenO2T50M400Iter100000Deviance.RData")
+# likely rtmvnormRcpp slow

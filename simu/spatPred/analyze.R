@@ -40,7 +40,8 @@ spatpredtimeBox <- ggplot(spatpredtimeDF) + labs(y = "", x = "Time (in seconds)"
   theme(axis.text.x = element_text(size = 10, color = "black"), 
         axis.text.y = element_blank(),
         axis.ticks.x = element_blank(), axis.ticks.y = element_blank(),
-        legend.position = "top", legend.title = element_text(face = "bold", size = 12))
+        legend.position = "top", legend.title = element_text(face = "bold", size = 12),
+        legend.key = element_blank())
 spatpredtimeBox
 alphaKrigTimeBox <- ggplot(spatpredtimeDF) + labs(y = "", x = "Time (in seconds)") + 
   geom_boxplot(aes(x = alphaKrigTime, y = model, fill = model)) +
@@ -48,7 +49,8 @@ alphaKrigTimeBox <- ggplot(spatpredtimeDF) + labs(y = "", x = "Time (in seconds)
   theme(axis.text.x = element_text(size = 10, color = "black"), 
         axis.text.y = element_blank(),
         axis.ticks.x = element_blank(), axis.ticks.y = element_blank(),
-        legend.position = "top", legend.title = element_text(face = "bold", size = 12))
+        legend.position = "top", legend.title = element_text(face = "bold", size = 12),
+        legend.key = element_blank())
 alphaKrigTimeBox
 weightsXiLambdaKrigTimeBox <- ggplot(spatpredtimeDF) + 
   labs(y = "", x = "Time (in milliseconds)") + 
@@ -57,7 +59,8 @@ weightsXiLambdaKrigTimeBox <- ggplot(spatpredtimeDF) +
   theme(axis.text.x = element_text(size = 10, color = "black"), 
         axis.text.y = element_blank(),
         axis.ticks.x = element_blank(), axis.ticks.y = element_blank(),
-        legend.position = "top", legend.title = element_text(face = "bold", size = 12))
+        legend.position = "top", legend.title = element_text(face = "bold", size = 12),
+        legend.key = element_blank())
 weightsXiLambdaKrigTimeBox
 combinedSpatPredBox <- ggarrange(spatpredtimeBox, alphaKrigTimeBox, weightsXiLambdaKrigTimeBox,
                                  labels = c("A", "B", "C"), align = "h",
