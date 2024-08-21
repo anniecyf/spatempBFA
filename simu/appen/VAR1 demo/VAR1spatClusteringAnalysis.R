@@ -25,6 +25,9 @@ NNGPsequenVaryLjDF <- data.frame(nkeep1000accu = nkeep1000AccuRatio[,4],
                                  nkeep1000rand = nkeep1000RandIndex[,4], 
                                  nkeep100rand = nkeep100RandIndex[,4], 
                                  nkeep10rand = nkeep10RandIndex[,4])
+colMeans(NNGPsequenVaryLjDF)
+# nkeep1000accu  nkeep100accu   nkeep10accu nkeep1000rand  nkeep100rand   nkeep10rand 
+# 0.9722222     0.9511111     0.9538889     0.9523008     0.9288215     0.9334119 
 NNGPsequenVaryLjHistAccu1000 <- ggplot(NNGPsequenVaryLjDF) + geom_histogram(aes(x = nkeep1000accu), bins = 25, origin = 0) +
   labs(y = "Count", x = "Accuracy Ratio") + theme(axis.ticks.x = element_blank(), axis.ticks.y = element_blank()) 
 NNGPsequenVaryLjHistAccu100 <- ggplot(NNGPsequenVaryLjDF) + geom_histogram(aes(x = nkeep100accu), bins = 25, origin = 0) +
