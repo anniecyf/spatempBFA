@@ -166,6 +166,10 @@ diffMat <- sweep(ylocPred, 1, YtestingSpat, "-")
 spatPredMetricMat[2, 2] = mean(rowMeans(diffMat^2))
 spatPredMetricMat[3, 2] = mean(apply(ylocPred, 1, var))
 spatPredMetricMat
+# NNGPsequenFixedL NNGPsequenVaryLj
+# postMeanMSE         1.056436        0.8881475
+# postMSE            19.192943       15.5725018
+# postVar            18.154662       14.6990533
 spatPredKrigTime <- matrix(0, 2, 2, 
                             dimnames = list(c("alpha", "weightsXiLambda"),
                                             c("NNGPsequenFixedL", "NNGPsequenVaryLj")))
@@ -314,6 +318,10 @@ diffMat <- sweep(ytempPred, 1, YtestingTemp, "-")
 tempPredMetricMat[2, 2] = mean(rowMeans(diffMat^2))
 tempPredMetricMat[3, 2] = mean(apply(ytempPred, 1, var))
 tempPredMetricMat
+# NNGPsequenFixedL NNGPsequenVaryLj
+# postMeanMSE         176.8944         176.4250
+# postMSE             280.3932         283.0353
+# postVar             177.0715         176.6016
 ggarrange(SSTtraininglocDFday351actual, SSTtraininglocDFday351predicted.sequenFixedL, 
           SSTtraininglocDFday351predicted.sequenVaryLj, 
           labels = c("A", "B", "C"), label.x = 0.08, align = "h", ncol = 3, nrow = 1, 
