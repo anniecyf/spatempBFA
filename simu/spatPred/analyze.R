@@ -117,7 +117,12 @@ spatpredMetricMat[3, 3] <- mean(apply(postVarMat, 2, median))
 load("NNGPsequenVaryLjpostGmat_spatPredMetricSimu.RData")
 load("NNGPsequenVaryLjpostMSEmat_spatPredMetricSimu.RData")
 load("NNGPsequenVaryLjpostVarMat_spatPredMetricSimu.RData")
-spatpredMetricMat[4, 1] <- median(apply(postGmat, 2, mean))
-spatpredMetricMat[4, 2] <- median(apply(postMSEmat, 2, mean))
+spatpredMetricMat[4, 1] <- mean(apply(postGmat, 2, median))
+spatpredMetricMat[4, 2] <- mean(apply(postMSEmat, 2, median))
 spatpredMetricMat[4, 3] <- mean(apply(postVarMat, 2, median))
 save(spatpredMetricMat, file = "spatpredMetric.RData")
+# meanMedianPostMeanMSE meanMedianPostMSE meanMedianPostVar
+# fullGPfixedL                 0.9598582          6.451407          5.502430
+# NNGPblockFixedL              0.9456473          6.430559          5.499377
+# NNGPsequenFixedL             0.9571644          6.446343          5.495316
+# NNGPsequenVaryLj            14.4662967         24.340983          9.832205
