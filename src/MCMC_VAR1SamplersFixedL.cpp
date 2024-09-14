@@ -3,7 +3,7 @@
 #include <fstream>
 #include <string>
 #include <RcppArmadillo.h>
-#include "MCMC_bfaSpatTemp.h"
+#include "MCMC_bfaSpatemp.h"
 
 //Function to sample latent polya-gamma process using Gibbs sampling step------------------------------------------------
 arma::mat SampleOmega(int f, VAR1datobjFixedL DatObj, VAR1paraFixedL Para) {

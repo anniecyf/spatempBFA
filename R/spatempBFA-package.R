@@ -1,7 +1,7 @@
 #' spatempBFA 
 #'
 #' @name spatempBFA
-#' @docType package
+#' @docType _PACKAGE
 #' @import Rcpp
 #' @importFrom stats quantile rnorm runif median model.frame model.matrix
 #' @importFrom graphics abline axis layout par plot points polygon title segments symbols rect text lines

@@ -2,7 +2,7 @@
 #include <iostream>
 #include <RcppArmadillo.h>
 #include <RcppArmadilloExtensions/sample.h>
-#include "MCMC_bfaSpatTemp.h"
+#include "MCMC_bfaSpatemp.h"
 
 //Sample from a categorical distribution---------------------------------------------------
 arma::vec sampleRcpp(arma::Col<int> const& x, int size, bool replace, arma::vec const& prob) {

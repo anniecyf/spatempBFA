@@ -1,6 +1,6 @@
 #define ARMA_DONT_PRINT_ERRORS //So the cholesky warning is suppressed
 #include <RcppArmadillo.h>
-#include "MCMC_bfaSpatTemp.h"
+#include "MCMC_bfaSpatemp.h"
 
 //Function to sample latent polya-gamma process using Gibbs sampling step------------------------------------------------
 arma::mat SampleOmega(int f, datobjVaryLj DatObj, paraVaryLj Para) {

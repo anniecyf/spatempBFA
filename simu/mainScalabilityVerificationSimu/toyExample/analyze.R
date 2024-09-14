@@ -229,6 +229,9 @@ actualSpatPlotBW <- ggplot(spatGpDF) + geom_point(aes(x = x, y = y, col = actual
         panel.grid.major = element_line(color="grey"), panel.grid.minor = element_line(color="grey"))
 actualSpatPlotBW
 #ggsave("toyExActualSpatClusterBW.png", width=10, height=10, units="cm")
+ggarrange(trainingTestingPlotBW, actualSpatPlotBW, align = "h", ncol = 2, nrow = 1, 
+          labels = c("A", "B"))
+#ggsave("toyExBW.png", width=24, height=12, units="cm")
 calcRandIndex <- function(predictedCluster, actualGroup, numObs){
   denominator <- numObs * (numObs-1) / 2
   numerator <- denominator
@@ -408,6 +411,31 @@ ggarrange(actualSpatPlotBW, trainingTestingPlotBW, actualTrainingSpatPlotBW,
           labels = c("A", "B", "C"), align = "h", ncol = 3, nrow = 1, 
           common.legend = TRUE, legend = "top")
 ggsave("toyExActualSpatPlots.png", width = 24, height = 8, units = "cm")
+
+trainingTestingPlot <- ggplot(spatGpDF) + geom_point(aes(x = x, y = y, col = trainingTestingSpatGp), size = 7, show.legend = FALSE) + 
+  scale_color_manual(values = c("lightgreen", "red")) + labs(x = "", y = "") +
+  theme_void()
+trainingTestingPlot
+ggsave("toyExSpatTrainingTestingPlot.png", width=12, height=12, units="cm")
+actualSpatPlot <- ggplot(spatGpDF) + geom_point(aes(x = x, y = y, col = actualGp), size = 7, show.legend = FALSE) + 
+  scale_color_manual(values = c("#55CC11","#1177CC")) + labs(x = "", y = "") +
+  theme_void()
+actualSpatPlot
+ggsave("toyExActualSpatCluster.png", width=12, height=12, units="cm")
+actualTrainingSpatPlot <- ggplot(spatTrainingGpDF) + 
+  geom_point(aes(x = x, y = y, col = actualTrainingSpatGp), 
+             size = 7, show.legend = FALSE) + 
+  scale_color_manual(values = c("#55CC11","#1177CC")) + labs(x = "", y = "") +
+  theme_void()
+actualTrainingSpatPlot
+ggsave("toyExActualTrainingSpatCluster.png", width=12, height=12, units="cm")
+ggarrange(ggplot() + theme_void(), actualSpatPlot, 
+          ggplot() + theme_void(), trainingTestingPlot, 
+          ggplot() + theme_void(), actualTrainingSpatPlot,
+          labels = c("A", "", "B", "", "C", ""), 
+          widths = c(0.05, 1, 0.05, 1, 0.05, 1), align = "h", 
+          ncol = 6, nrow = 1, common.legend = TRUE, legend = "top")
+ggsave("toyExActualSpatPlots.png", width = 37, height = 12, units = "cm")
 
 #setwd("C:/Users/annie/OneDrive - National University of Singapore/Documents/PhD/research/first paper/spatempBFA/simu/mainScalabilityVerificationSimu/toyExample")
 library(rmarkdown)

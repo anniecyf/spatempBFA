@@ -1602,7 +1602,7 @@ CreateMcmc <- function(mcmc, DatObj) {
   WhichPilotAdapt <- (1:NPilot) * NBurn / NPilot
   PilotAdaptDenominator <- WhichPilotAdapt[1]
 
-  ###Burn-in progres bar
+  ###Burn-in progress bar
   BarLength <- 100 #Burn-in bar length (arbitrary)
   BurnInProgress <- seq(1 / BarLength, 1, 1 / BarLength)
   WhichBurnInProgress <- sapply(BurnInProgress, function(x) tail(which(1 : NBurn <= x * NBurn), 1))

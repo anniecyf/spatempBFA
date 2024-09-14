@@ -1,6 +1,6 @@
 #include <iostream>
 #include <RcppArmadillo.h>
-#include "MCMC_bfaSpatTemp.h"
+#include "MCMC_bfaSpatemp.h"
 
 
 //Function to update the LjVec vector-------------------------------------------

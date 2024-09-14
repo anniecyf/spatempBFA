@@ -3,7 +3,7 @@ library(tidyverse)
 library(ggpubr)
 projDirec <- "C:/Users/annie/OneDrive - National University of Singapore/Documents/PhD/research/first paper/spatempBFA"
 setwd(paste(projDirec, "simu/appen/real data ex/SSTm1612", sep = "/"))
-# load("realExNNGPsequenFixedL.RData"); regFixedL.simu.sequen$runtime # days
+# load("realExNNGPsequenFixedL.RData"); regFixedL.simu.sequen$runtime # 17.17 days
 # rm(regFixedL.simu.sequen)
 load("NNGPsequenFixedLDiags.RData")
 load("NNGPsequenFixedLDeviance.RData")
@@ -254,7 +254,7 @@ SSTtraininglocDFday351predicted.sequenFixedL
 ggarrange(SSTtraininglocDFday351actual, SSTtraininglocDFday351predicted.sequenFixedL, 
           labels = c("Actual", "Predicted"), align = "h", ncol = 2, nrow = 1, 
           common.legend = TRUE, legend = "top")
-ggsave("NNGPsequenFixedLSSTtraininglocDFday351plots.png", width = 16, height = 8, units = "cm")
+#ggsave("NNGPsequenFixedLSSTtraininglocDFday351plots.png", width = 16, height = 8, units = "cm")
 SSTtraininglocDFday352predicted.sequenFixedL <- ggplot(SSTtraininglocDFpredicted) +
   geom_tile(aes(x = Longitude, y = Latitude, fill = SST352)) + coord_sf() +
   scale_fill_viridis_c(name = "Sea Surface Temperature (degC)", direction = -1) +
@@ -263,7 +263,7 @@ SSTtraininglocDFday352predicted.sequenFixedL
 ggarrange(SSTtraininglocDFday352actual, SSTtraininglocDFday352predicted.sequenFixedL, 
           labels = c("Actual", "Predicted"), align = "h", ncol = 2, nrow = 1, 
           common.legend = TRUE, legend = "top")
-ggsave("NNGPsequenFixedLSSTtraininglocDFday352plots.png", width = 16, height = 8, units = "cm")
+#ggsave("NNGPsequenFixedLSSTtraininglocDFday352plots.png", width = 16, height = 8, units = "cm")
 SSTtraininglocDFday353predicted.sequenFixedL <- ggplot(SSTtraininglocDFpredicted) +
   geom_tile(aes(x = Longitude, y = Latitude, fill = SST353)) + coord_sf() +
   scale_fill_viridis_c(name = "Sea Surface Temperature (degC)", direction = -1) +
@@ -272,7 +272,7 @@ SSTtraininglocDFday353predicted.sequenFixedL
 ggarrange(SSTtraininglocDFday353actual, SSTtraininglocDFday353predicted.sequenFixedL, 
           labels = c("Actual", "Predicted"), align = "h", ncol = 2, nrow = 1, 
           common.legend = TRUE, legend = "top")
-ggsave("NNGPsequenFixedLSSTtraininglocDFday353plots.png", width = 16, height = 8, units = "cm")
+#ggsave("NNGPsequenFixedLSSTtraininglocDFday353plots.png", width = 16, height = 8, units = "cm")
 SSTtraininglocDFday354predicted.sequenFixedL <- ggplot(SSTtraininglocDFpredicted) +
   geom_tile(aes(x = Longitude, y = Latitude, fill = SST354)) + coord_sf() +
   scale_fill_viridis_c(name = "Sea Surface Temperature (degC)", direction = -1) +
@@ -281,7 +281,7 @@ SSTtraininglocDFday354predicted.sequenFixedL
 ggarrange(SSTtraininglocDFday354actual, SSTtraininglocDFday354predicted.sequenFixedL, 
           labels = c("Actual", "Predicted"), align = "h", ncol = 2, nrow = 1, 
           common.legend = TRUE, legend = "top")
-ggsave("NNGPsequenFixedLSSTtraininglocDFday354plots.png", width = 16, height = 8, units = "cm")
+#ggsave("NNGPsequenFixedLSSTtraininglocDFday354plots.png", width = 16, height = 8, units = "cm")
 SSTtraininglocDFday355predicted.sequenFixedL <- ggplot(SSTtraininglocDFpredicted) +
   geom_tile(aes(x = Longitude, y = Latitude, fill = SST355)) + coord_sf() +
   scale_fill_viridis_c(name = "Sea Surface Temperature (degC)", direction = -1) +
@@ -290,7 +290,7 @@ SSTtraininglocDFday355predicted.sequenFixedL
 ggarrange(SSTtraininglocDFday355actual, SSTtraininglocDFday355predicted.sequenFixedL, 
           labels = c("Actual", "Predicted"), align = "h", ncol = 2, nrow = 1, 
           common.legend = TRUE, legend = "top")
-ggsave("NNGPsequenFixedLSSTtraininglocDFday355plots.png", width = 16, height = 8, units = "cm")
+#ggsave("NNGPsequenFixedLSSTtraininglocDFday355plots.png", width = 16, height = 8, units = "cm")
 SSTtraininglocDFday360predicted.sequenFixedL <- ggplot(SSTtraininglocDFpredicted) +
   geom_tile(aes(x = Longitude, y = Latitude, fill = SST360)) + coord_sf() +
   scale_fill_viridis_c(name = "Sea Surface Temperature (degC)", direction = -1) +
@@ -299,7 +299,7 @@ SSTtraininglocDFday360predicted.sequenFixedL
 ggarrange(SSTtraininglocDFday360actual, SSTtraininglocDFday360predicted.sequenFixedL, 
           labels = c("Actual", "Predicted"), align = "h", ncol = 2, nrow = 1, 
           common.legend = TRUE, legend = "top")
-ggsave("NNGPsequenFixedLSSTtraininglocDFday360plots.png", width = 16, height = 8, units = "cm")
+#ggsave("NNGPsequenFixedLSSTtraininglocDFday360plots.png", width = 16, height = 8, units = "cm")
 SSTtraininglocDFday365predicted.sequenFixedL <- ggplot(SSTtraininglocDFpredicted) +
   geom_tile(aes(x = Longitude, y = Latitude, fill = SST365)) + coord_sf() +
   scale_fill_viridis_c(name = "Sea Surface Temperature (degC)", direction = -1) +
@@ -308,7 +308,7 @@ SSTtraininglocDFday365predicted.sequenFixedL
 ggarrange(SSTtraininglocDFday365actual, SSTtraininglocDFday365predicted.sequenFixedL, 
           labels = c("Actual", "Predicted"), align = "h", ncol = 2, nrow = 1, 
           common.legend = TRUE, legend = "top")
-ggsave("NNGPsequenFixedLSSTtraininglocDFday365plots.png", width = 16, height = 8, units = "cm")
+#ggsave("NNGPsequenFixedLSSTtraininglocDFday365plots.png", width = 16, height = 8, units = "cm")
 tempPredMetricMat[1, 1] <- mean((ytempPredMean - ytempPred)^2)
 diffMat <- sweep(ytempPred, 1, YtestingTemp, "-")
 tempPredMetricMat[2, 1] = mean(rowMeans(diffMat^2))

@@ -1,5 +1,5 @@
 #include <RcppArmadillo.h>
-#include "MCMC_bfaSpatTemp.h"
+#include "MCMC_bfaSpatemp.h"
 
 //Functions to convert Rcpp::List DatObj to custom C++ struct datobjFixedL or datobjVaryLj--------------------------------------------------
 datobjFixedL ConvertDatObjFixedL(Rcpp::List DatObj_List) {

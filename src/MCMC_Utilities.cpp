@@ -1,5 +1,5 @@
 #include <RcppArmadillo.h>
-#include "MCMC_bfaSpatTemp.h"
+#include "MCMC_bfaSpatemp.h"
 
 //Initiate burn-in progress bar--------------------------------------------------------------------------
 void BeginBurnInProgress(mcmcobj McmcObj, bool Interactive) {
@@ -2083,7 +2083,7 @@ void UpdateBurnInBar(int s, mcmcobj McmcObj) {
   int NewStar = NewStarBooleanVec(0) + 1;
   Rcpp::Rcout << std::fixed << "\rBurn-in progress:  |";
   for (int i = 0; i < NewStar; i++) Rcpp::Rcout << std::fixed << "*";
-  for (int i = 0; i < (BarLength - 1 - NewStar); i++) Rcpp::Rcout << std::fixed << " ";
+  for (int i = 0; i < (BarLength - NewStar); i++) Rcpp::Rcout << std::fixed << " ";
   Rcpp::Rcout << std::fixed << "|";
   Rcpp::Rcout << s; // for debugging
 }

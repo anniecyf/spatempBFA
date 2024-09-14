@@ -1,5 +1,5 @@
 #include <RcppArmadillo.h>
-#include "MCMC_bfaSpatTemp.h"
+#include "MCMC_bfaSpatemp.h"
 
 //Calculate inverse root of upper cholesky for log density of normal-----------------------------------------------
 // [[Rcpp::depends(RcppArmadillo)]]

@@ -1,5 +1,5 @@
 #include <RcppArmadillo.h>
-#include "MCMC_bfaSpatTemp.h"
+#include "MCMC_bfaSpatemp.h"
 
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export]]

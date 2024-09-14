@@ -130,6 +130,7 @@ arma::vec rnormRcpp(int n, double mean, double sd);
 arma::mat rmvnormRcpp(int n, arma::vec const& mean, arma::mat const& sigma);
 arma::mat rmvnormRcppNew(int n, arma::vec const& mean, arma::mat const& cholSigma);
 double rbinomRcpp(double n, double p);
+double rigammaRcpp(double Alpha, double Theta);
 arma::vec rnormVecRcpp(arma::vec const& mean, arma::vec const& sd);
 double pnormRcpp(double q);
 double UpperpnormRcpp(double q);
