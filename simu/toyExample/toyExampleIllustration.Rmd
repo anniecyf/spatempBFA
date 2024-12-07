@@ -80,17 +80,19 @@ ycoord <- rep(seq(sqrootM, 1, by = -1), each = sqrootM)
 trainingTestingSpatGp <- rep(1, M); trainingTestingSpatGp[whichTesting] = 2
 spatGpDF <- data.frame(x = xcoord, y = ycoord, actualGp <- as.factor(spatGroupOverall), 
                        trainingTestingSpatGp <- as.factor(trainingTestingSpatGp))
-trainingTestingPlotBW <- ggplot(spatGpDF) + ggtitle("Training / Testing Spatial Points") +
+trainingTestingPlotBW <- ggplot(spatGpDF) + ggtitle("Training / Testing Spatial Points") + 
+  coord_fixed(ratio = 1) +
   geom_point(aes(x = x, y = y, col = trainingTestingSpatGp), 
-             size = 7, show.legend = FALSE) +
+             size = 4.2, show.legend = FALSE) +
   scale_color_manual(values = c("white", "black")) + labs(x = "", y = "") + 
   theme(plot.title = element_text(hjust = 0.5), 
         axis.text.x = element_blank(), axis.text.y = element_blank(),
         axis.ticks.x = element_blank(), axis.ticks.y = element_blank(),
         panel.grid.major = element_line(color="grey"), 
         panel.grid.minor = element_line(color="grey"))
-actualSpatPlotBW <- ggplot(spatGpDF) + ggtitle("2 Actual Spatial Groups") + 
-  geom_point(aes(x = x, y = y, col = actualGp), size = 7, show.legend = FALSE) + 
+actualSpatPlotBW <- ggplot(spatGpDF) + ggtitle("2 Actual Spatial Groups") +  
+  coord_fixed(ratio = 1) +
+  geom_point(aes(x = x, y = y, col = actualGp), size = 4.2, show.legend = FALSE) + 
   scale_color_manual(values = c("black", "white")) + labs(x = "", y = "") +
   theme(plot.title = element_text(hjust = 0.5), 
         axis.text.x = element_blank(), axis.text.y = element_blank(),
@@ -100,7 +102,7 @@ actualSpatPlotBW <- ggplot(spatGpDF) + ggtitle("2 Actual Spatial Groups") +
 ggarrange(trainingTestingPlotBW, actualSpatPlotBW, align = "h", ncol = 2, nrow = 1, 
           labels = c("A", "B"))
 ```
-The entire simulated data set consists of $y_t(\bm{s}_i)$'s from `r Nu` time points and `r M` spatial locations, which belong to 2 actual spatial groups (**B**). `r m` out of the `r M` locations (**A**) are training ones, and the `r (M - m)` remaining black locations (**A**) are testing ones. The training data set used to fit all 6 models (our 4 models `fullGPfixedL`, `NNGPblockFixedL`, `NNGPsequenFixedL`, and `NNGPsequenVaryLj` $\&$ `spBFAL10`, `spBFALInf` from the R package `spBFA`) are data corresponding to the `r m` white locations (**A**) and the first `r trainingT` time points. $y_t(\bm{s}_i)$'s corresponding to the 9 testing locations for the first `r trainingT` time points are used to assess our 4 models' spatial prediction performances. Similarly, $y_t(\bm{s}_i)$'s corresponding to the `r m` training locations for the last `r testingT` time points are used to assess all 6 models' temporal prediction performances.
+The entire simulated data set consists of $y_t(\bm{s}_i)$'s from `r Nu` time points and `r M` spatial locations, which belong to 2 actual spatial groups (**B**). `r m` out of the `r M` locations (**A**) are training ones, and the `r (M - m)` remaining black locations (**A**) are testing ones. The training data set used to fit all 6 methods (our 4 methods `fullGPfixedL`, `NNGPblockFixedL`, `NNGPsequenFixedL`, and `NNGPsequenVaryLj` $\&$ `spBFAL10`, `spBFALInf` from the R package `spBFA`) are data corresponding to the `r m` white locations (**A**) and the first `r trainingT` time points. $y_t(\bm{s}_i)$'s corresponding to the 9 testing locations for the first `r trainingT` time points are used to assess our 4 methods' spatial prediction performances. Similarly, $y_t(\bm{s}_i)$'s corresponding to the `r m` training locations for the last `r testingT` time points are used to assess all 6 methods' temporal prediction performances.
 ```{r eval = FALSE, echo = -(1:3)}
 library(devtools)
 setwd("C:/Users/annie/OneDrive - National University of Singapore/Documents/PhD/research/server/spatempBFA") # the version that records main model fitting and spatial prediction step time 
@@ -492,7 +494,7 @@ rm(reg.simu, reg.simu.LInf)
 rm(regFixedL.simu, regFixedL.simu.block, regFixedL.simu.sequen, regVaryLj.simu.sequen)
 setwd("..")
 ```
-As expected, our 4 models are several times faster than `spBFALInf` and more than 10 times faster than `spBFAL10` in terms of main model fitting. 
+As expected, our 4 methods are several times faster than `spBFALInf` and more than 10 times faster than `spBFAL10` in terms of main model fitting. 
 ```{r}
 round(apply(GibbsStepTimeFixedLfullGP, 2, summary), digits = 3)
 round(apply(GibbsStepTimeFixedLblock, 2, summary), digits = 3)
@@ -506,7 +508,7 @@ The version of our `spatempBFA` package run for this toy example records Gibbs s
 - Compared to their `fullGPfixedL` counterparts, `NNGPblockFixedL`'s Gibbs sampler steps corresponding to $\rho$ and $\kappa$ are evidently accelerated by our spatial NNGP prior;
 - The only Gibbs sampler step time that should clearly differ between `NNGPblockFixedL` and `NNGPsequenFixedL` is the step updating all $\alpha_{jl}(\bm{s}_{i,o})$'s, which result from whether we adopt our sequential updating method or not. Here, `NNGPsequenFixedL` is mostly more than two times faster than `NNGPblockFixedL` for the posterior sampling step corresponding to $\alpha_{jl}(\bm{s}_{i,o})$'s;
 - Thanks to our slice sampling approach, `NNGPsequenVaryLj`'s Gibbs sampler steps for $u_j(\bm{s}_{i,o})$'s and $\xi_j(\bm{s}_{i,o})$'s are significantly faster than `NNGPsequenFixedL`'s Gibbs sampler steps for $z_{jl}(\bm{s}_{i,o})$'s and $\xi_j(\bm{s}_{i,o})$'s. It turns out that `NNGPsequenVaryLj`'s Gibbs sampler step for $\alpha_{jl_j}(\bm{s}_{i,o})$'s is slower than its `NNGPsequenFixedL` counterpart, indicating that inefficiencies caused by case discussion, calculating all required upper or lower bounds, and rejection sampling outweigh acceleration brought about by slice sampling's ensured non-increasing posterior samples for $L_j$'s through the MCMC iterations;
-- There aren't any significant differences between our 4 models regarding posterior sampling time for the 3 temporal parameters $\psi$, $\Upsilon$, and $\bm{\eta}_t$'s.
+- There aren't any significant differences between our 4 methods regarding posterior sampling time for the 3 temporal parameters $\psi$, $\Upsilon$, and $\bm{\eta}_t$'s.
 
 ## Diagnostics and Posterior Deviances
 ``` {r}
@@ -516,8 +518,7 @@ print(Diags.sequen[setdiff(names(Diags.sequen), "deviance")])
 print(Diags.sequenVaryLj[setdiff(names(Diags.sequenVaryLj), "deviance")])
 print(spBFADiags[setdiff(names(spBFADiags), "deviance")])
 print(spBFADiagsLInf[setdiff(names(spBFADiagsLInf), "deviance")])
-rm(Diags, Diags.block, Diags.sequen, Diags.sequenVaryLj)
-rm(spBFADiags, spBFADiagsLInf)
+rm(Diags, Diags.block, Diags.sequen, Diags.sequenVaryLj, spBFADiags, spBFADiagsLInf)
 NKeep <- 5000
 postDeviancesDF <- data.frame(MCMCiter = 1:NKeep, fullGPfixedL = as.vector(Deviance), 
                               NNGPblockFixedL = as.vector(Deviance.block),
@@ -577,14 +578,13 @@ spBFALInfDeviances <- ggplot(postDeviancesDF) +
         axis.ticks.x = element_blank(), axis.ticks.y = element_blank())
 ggarrange(fullGPfixedLpostDeviances, NNGPsequenFixedLpostDeviances, spBFAL10Deviances,
           NNGPblockFixedLpostDeviances, NNGPsequenVaryLjpostDeviances, spBFALInfDeviances,
-          labels = c("A", "C", "E", "B", "D", "F"), align = "v",
-          ncol = 3, nrow = 2)
+          labels = c("A", "C", "E", "B", "D", "F"), align = "v", ncol = 3, nrow = 2)
 #ggsave("toyExPostDeviancesSmall.png", width = 24, height = 16, units = "cm")
 rm(fullGPfixedLpostDeviances, NNGPblockFixedLpostDeviances)
 rm(NNGPsequenFixedLpostDeviances, NNGPsequenVaryLjpostDeviances)
 rm(postDeviancesDF, spBFAL10Deviances, spBFALInfDeviances)
 ```
-All our 4 models' diagnostics and converged posterior deviances are comparable to their `spBFAL10` counterparts and clearly better than their `spBFALInf` counterparts.
+All our 4 methods' diagnostics and converged posterior deviances are comparable to their `spBFAL10` counterparts and clearly better than their `spBFALInf` counterparts.
 
 ## Predictions for all 352 Training Locations at the 10 Future Time Points
 ```{r warning = FALSE}
@@ -599,8 +599,7 @@ ggplot(YtestingTempDF) + geom_histogram(aes(x = YtestingTemp), bins = 50) +
 tempPredMetricMat <- matrix(0, 3, 6, 
                             dimnames = list(c("postMeanMSE", "postMSE", "postVar"),
                                             c("fullGPfixedL", "NNGPblockFixedL", 
-                                              "NNGPsequenFixedL", 
-                                              "NNGPsequenVaryLj",
+                                              "NNGPsequenFixedL", "NNGPsequenVaryLj",
                                               "spBFAL10", "spBFALInf")))
 # testingT = 10
 ytempPredList = temppredFixedL$Y
@@ -659,7 +658,7 @@ tempPredMetricMat[2, 6] = mean(rowMeans(diffMat^2))
 tempPredMetricMat[3, 6] = mean(apply(ytempPred, 1, var))
 tempPredMetricMat
 ```
-Temporal prediction results from all our 4 models are close and significantly better than their `spBFALInf` model counterparts. Among our 4 models and `spBFAL10`, `NNGPsequenFixedL` appears to be the best, followed by `fullGPfixedL`, `NNGPblockFixedL`, and finally `NNGPsequenVaryLj` and `spBFAL10`. Similar conclusions can be drawn from future-time prediction metrics calculated from temporal prediction objects generated using 3 other random seeds, as presented below.
+Temporal prediction results from all our 4 methods are close and significantly better than their `spBFALInf` counterparts. Among our 4 methods and `spBFAL10`, `NNGPsequenFixedL` appears to be the best, followed by `fullGPfixedL`, `NNGPblockFixedL`, and finally `NNGPsequenVaryLj` and `spBFAL10`. Similar conclusions can be drawn from future-time prediction metrics calculated from temporal prediction objects generated using 3 other random seeds, as presented below.
 ```{r}
 setwd("fullGPfixedL")
 load("s19toyExFullGPtemppredFixedL.RData")
@@ -676,8 +675,7 @@ setwd("..")
 tempPredMetricMat <- matrix(0, 3, 6, 
                             dimnames = list(c("postMeanMSE", "postMSE", "postVar"),
                                             c("fullGPfixedL", "NNGPblockFixedL", 
-                                              "NNGPsequenFixedL", 
-                                              "NNGPsequenVaryLj",
+                                              "NNGPsequenFixedL", "NNGPsequenVaryLj",
                                               "spBFAL10", "spBFALInf")))
 # testingT = 10
 ytempPredList = temppredFixedL$Y
@@ -750,8 +748,7 @@ setwd("..")
 tempPredMetricMat <- matrix(0, 3, 6, 
                             dimnames = list(c("postMeanMSE", "postMSE", "postVar"),
                                             c("fullGPfixedL", "NNGPblockFixedL", 
-                                              "NNGPsequenFixedL", 
-                                              "NNGPsequenVaryLj",
+                                              "NNGPsequenFixedL", "NNGPsequenVaryLj",
                                               "spBFAL10", "spBFALInf")))
 # testingT = 10
 ytempPredList = temppredFixedL$Y
@@ -818,14 +815,12 @@ load("s31toyExNNGPtemppredFixedLsequen.RData")
 setwd("../NNGPsequenVaryLj")
 load("s31toyExNNGPtemppredVaryLj.RData")
 setwd("../spBFA")
-load("s31toyExspBFAL10temppred.RData")
-load("s31toyExspBFALInftemppred.RData")
+load("s31toyExspBFAL10temppred.RData"); load("s31toyExspBFALInftemppred.RData")
 setwd("..")
 tempPredMetricMat <- matrix(0, 3, 6, 
                             dimnames = list(c("postMeanMSE", "postMSE", "postVar"),
                                             c("fullGPfixedL", "NNGPblockFixedL", 
-                                              "NNGPsequenFixedL", 
-                                              "NNGPsequenVaryLj",
+                                              "NNGPsequenFixedL", "NNGPsequenVaryLj",
                                               "spBFAL10", "spBFALInf")))
 # testingT = 10
 ytempPredList = temppredFixedL$Y
@@ -888,7 +883,7 @@ tempPredMetricMat
 ```
 # Spatial Prediction and Clustering by `spatempBFA` 
 ## Predictions for all 300 Training Time Points at the 9 Testing Locations
-### Spatial Prediction Time Breakdown for Our 4 Models
+### Spatial Prediction Time Breakdown for Our 4 Methods
 ```{r}
 spatPredKrigTime <- matrix(0, 2, 4, 
                             dimnames = list(c("alpha", "weightsXiLambda"),
@@ -907,7 +902,7 @@ spatPredKrigTime
 The results correspond well to what we have derived in Appendix H. 
 
 - `alphaKrigTime` corresponding to `NNGPblockFixedL` and `NNGPsequenFixedL` should be close and markedly (more than 20 times) smaller than that of `fullGPfixedL`. `NNGPsequenVaryLj`'s `alphaKrigTime` should be even smaller;
-- `weightsXiLambdaKrigTime` corresponding to `NNGPsequenVaryLj` should be smaller than their counterparts from the other 3 models.
+- `weightsXiLambdaKrigTime` corresponding to `NNGPsequenVaryLj` should be smaller than their counterparts from the other 3 methods.
 
 ### Spatial Prediction Metrics
 ```{r warning = FALSE}
@@ -1215,8 +1210,7 @@ spatPredMetricMat <- matrix(0, 3, 4,
                             dimnames = list(c("postMeanMSE", "postMSE", "postVar"),
                                             c("fullGPfixedL", "NNGPblockFixedL", 
                                               "NNGPsequenFixedL", "NNGPsequenVaryLj")))
-testingLocNum <- M - m
-ylocPredList = spatpredFixedL$Y
+testingLocNum <- M - m; ylocPredList = spatpredFixedL$Y
 ylocPred <- t(matrix(unlist(ylocPredList), ncol = testingLocNum * trainingT * O)) 
 #(testingLocNum * trainingT * O) * NKeep 
 ylocPredMean <- apply(ylocPred, 1, mean) 
@@ -1258,8 +1252,7 @@ spatPredMetricMat
 ## Spatial Clustering of Temporal Trends for all 352 Training Spatial Locations
 ```{r}
 calcRandIndex <- function(predictedCluster, actualGroup, numObs){
-  denominator <- numObs * (numObs-1) / 2
-  numerator <- denominator
+  numerator <- denominator <- numObs * (numObs-1) / 2
   for (i in 1:(numObs-1)){
     for (j in (i + 1):numObs){
       if ((predictedCluster[i]==predictedCluster[j])+(actualGroup[i]==actualGroup[j]) == 1) 
@@ -1293,16 +1286,17 @@ randIndMat <- matrix(apply(fittedClusGpMat, 2, calcRandIndex,
                      dimnames = list(clusIterWeightsVec, modelVec))
 randIndMat
 ```
-The above results suggest that all our 4 models `fullGPfixedL`, `NNGPblockFixedL`, `NNGPsequenFixedL`, and `NNGPsequenVaryLj` lead to completely correct spatial clustering outcomes depicted below.
+The above results suggest that all our 4 methods `fullGPfixedL`, `NNGPblockFixedL`, `NNGPsequenFixedL`, and `NNGPsequenVaryLj` lead to completely correct spatial clustering outcomes depicted below.
 ```{r}
 xcoordTraining <- xcoord[-whichTesting]; ycoordTraining = ycoord[-whichTesting]
 spatTrainingGpDF <- data.frame(x = xcoordTraining, y = ycoordTraining, 
                        actualTrainingSpatGp = as.factor(spatGroupOverallTraining))
 actualTrainingSpatPlotBW <- ggplot(spatTrainingGpDF) + 
   geom_point(aes(x = x, y = y, col = actualTrainingSpatGp), 
-             size = 7, show.legend = FALSE) + 
+             size = 5, show.legend = FALSE) + 
   scale_color_manual(values = c("black", "white")) + labs(x = "", y = "") +
-  ggtitle("2 Actual Spatial Groups for the 352 Training Locations") +
+  ggtitle("2 Actual Spatial Groups for the 352 Training Locations") + 
+  coord_fixed(ratio = 1) +
   theme(plot.title = element_text(hjust = 0.5),
         axis.text.x = element_blank(), axis.text.y = element_blank(),
         axis.ticks.x = element_blank(), axis.ticks.y = element_blank(),

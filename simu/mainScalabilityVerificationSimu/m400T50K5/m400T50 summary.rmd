@@ -9,22 +9,20 @@ header-includes:
 ---
 
 # Portions of Recorded Gibbs Sampler Time for 10 Key Parameters
-We first display the first 50 kept post-burn-in MCMC iterations' posterior sampling time (in milliseconds) for 10 key Gibbs sampler steps corresponding to our 4 models, i.e., `fullGPfixedL`, `NNGPblockFixedL`, `NNGPsequenFixedL`, and `NNGPsequenVaryLj`.
+We first display the first 50 kept post-burn-in MCMC iterations' posterior sampling time (in milliseconds) for 10 key Gibbs sampler steps corresponding to our 4 methods, i.e., `fullGPfixedL`, `NNGPblockFixedL`, `NNGPsequenFixedL`, and `NNGPsequenVaryLj`.
 ```{r echo = -(1:2)}
 rm(list=ls())
-projDirec <- "C:/Users/annie/OneDrive - National University of Singapore/Documents/PhD/research/first paper/spatempBFA"
+projDirec <- "C:/Users/annie/OneDrive - National University of Singapore/Documents/PhD/research/spatempBFA"
 wd <- paste(projDirec, "simu/mainScalabilityVerificationSimu/m400T50K5", sep = "/")
 setwd(wd)
-load("GibbsStepTimeFixedLfullGP.RData")
-load("GibbsStepTimeFixedLblock.RData")
-load("GibbsStepTimeFixedLsequen.RData")
-load("GibbsStepTimeVaryLjSequen.RData")
+load("GibbsStepTimeFixedLfullGP.RData"); load("GibbsStepTimeFixedLblock.RData")
+load("GibbsStepTimeFixedLsequen.RData"); load("GibbsStepTimeVaryLjSequen.RData")
 head(GibbsStepTimeFixedLfullGP, 50)
 head(GibbsStepTimeFixedLblock, 50)
 head(GibbsStepTimeFixedLsequen, 50)
 head(GibbsStepTimeVaryLjSequen, 50)
 ```   
-As expected, there aren't any significant differences between our 4 models regarding posterior sampling time for the 3 temporal parameters $\psi$, $\Upsilon$, and $\bm{\eta}_t$'s.
+As expected, there aren't any significant differences between our 4 methods regarding posterior sampling time for the 3 temporal parameters $\psi$, $\Upsilon$, and $\bm{\eta}_t$'s.
 
 # Posterior Sampling Time Summary Statistics
 We then present vital posterior sampling time summary statistics for the 7 spatial-related parameters ($z_{jl}(\bm{s}_{i,o})$'s or $u_j(\bm{s}_{i,o})$'s, $\xi_j(\bm{s}_{i,o})$'s, $\theta_{jl_j}$'s, $\delta_{1:k}$, $\rho$, $\kappa$, and $\alpha_{jl_j}(\bm{s}_{i,o})$'s) to showcase the manifest scalability improvements brought about by our 3 novelties, i.e., slice sampling, spatial NNGP, and sequential updates.

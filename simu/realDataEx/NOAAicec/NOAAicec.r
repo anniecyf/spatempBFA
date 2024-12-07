@@ -28,36 +28,6 @@ colnames(noNAicecDF) <- c("Longitude", "Latitude", paste0("Day", 1:nTime), "Loca
 noNAicecDF <- as.data.frame(noNAicecDF)
 # save(noNAicecDF, file = "noNAicec2023DF.RData")
 world2 <- map_data(map = "world2", region = ".")
-t <- 365
-icecDFslice <- data.frame(long = longTraining, lat = latTraining, 
-                          icec = noNAicecDF[, (t+2)]) # 67874 obs
-icecPlot <- ggplot(icecDFslice) + geom_tile(aes(x = long, y = lat, fill = icec)) + coord_sf() +
-  scale_fill_gradientn(name = "Sea Ice Concentration (percent)", 
-                       colors = rev(topo.colors(30))) +
-  labs(x = "Longitude", y = "Latitude") + # for picking a representative rectangle 
-  theme(axis.ticks = element_blank(), legend.position = "top")
-icecPlot 
-# ggsave("icec2023nonNAday365topo.png", width = 20, height = 8, units = "cm")
-icecPlotBlue <- ggplot(icecDFslice) + geom_tile(aes(x = long, y = lat, fill = icec)) + coord_sf() +
-  scale_fill_distiller(name = "Sea Ice Concentration (percent)", 
-                       palette = "Blues") +
-  labs(x = "Longitude", y = "Latitude") + # for picking a representative rectangle 
-  theme(axis.ticks = element_blank(), legend.position = "top", 
-        panel.grid.major = element_line(color = "forestgreen", linewidth = 0.5), 
-        panel.grid.minor = element_line(color = "forestgreen", linewidth = 0.5))
-icecPlotBlue 
-# ggsave("icec2023nonNAday365blue.png", width = 20, height = 8, units = "cm")
-icecPlotviridis <- ggplot(icecDFslice) + geom_tile(aes(x = long, y = lat, fill = icec)) + coord_sf() +
-  scale_fill_viridis_c(name = "Sea Ice Concentration (percent)", direction = -1) +
-  labs(x = "Longitude", y = "Latitude") + # for picking a representative rectangle 
-  theme(axis.ticks = element_blank(), legend.position = "top")
-icecPlotviridis 
-# ggsave("icec2023nonNAday365viridis.png", width = 20, height = 8, units = "cm")
-icecPlotviridis +
-  geom_polygon(data = world2, mapping = aes(x = long, y = lat, group = group), 
-               color = "black", fill = "transparent") 
-# ggsave("icec2023nonNAday365viridisWithWorldMap.png", width = 20, height = 8, units = "cm")
-world2 <- map_data(map = "world2", region = ".")
 icecDFsliceAll <- data.frame(long = longAll, lat = latAll, 
                              icec90 = icecMat[,90], icec181 = icecMat[,181],
                              icec273 = icecMat[,273], icec365 = icecMat[,365])

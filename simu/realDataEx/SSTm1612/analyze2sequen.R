@@ -152,44 +152,13 @@ ggarrange(SSTtestinglocDFday350actual,
 
 SSTtraininglocDF <- SSTtrainingDF[-testingLocs, ]
 SSTtraininglocDFactual <- SSTtraininglocDF %>% 
-  select(Longitude, Latitude, Day351, Day352, Day353, Day354, Day355, Day360, Day365) %>% 
-  rename(SST351 = Day351, SST352 = Day352, SST353 = Day353, SST354 = Day354, 
-         SST355 = Day355, SST360 = Day360, SST365 = Day365)
+  select(Longitude, Latitude, Day351) %>% 
+  rename(SST351 = Day351)
 SSTtraininglocDFday351actual <- ggplot(SSTtraininglocDFactual) +
   geom_tile(aes(x = Longitude, y = Latitude, fill = SST351)) + coord_sf() +
   scale_fill_viridis_c(name = "Sea Surface Temperature (degC)", direction = -1) +
   theme(axis.ticks = element_blank(), legend.position = "top", legend.key = element_blank())
 SSTtraininglocDFday351actual
-SSTtraininglocDFday352actual <- ggplot(SSTtraininglocDFactual) +
-  geom_tile(aes(x = Longitude, y = Latitude, fill = SST352)) + coord_sf() +
-  scale_fill_viridis_c(name = "Sea Surface Temperature (degC)", direction = -1) +
-  theme(axis.ticks = element_blank(), legend.position = "top", legend.key = element_blank())
-SSTtraininglocDFday352actual
-SSTtraininglocDFday353actual <- ggplot(SSTtraininglocDFactual) +
-  geom_tile(aes(x = Longitude, y = Latitude, fill = SST353)) + coord_sf() +
-  scale_fill_viridis_c(name = "Sea Surface Temperature (degC)", direction = -1) +
-  theme(axis.ticks = element_blank(), legend.position = "top", legend.key = element_blank())
-SSTtraininglocDFday353actual
-SSTtraininglocDFday354actual <- ggplot(SSTtraininglocDFactual) +
-  geom_tile(aes(x = Longitude, y = Latitude, fill = SST354)) + coord_sf() +
-  scale_fill_viridis_c(name = "Sea Surface Temperature (degC)", direction = -1) +
-  theme(axis.ticks = element_blank(), legend.position = "top", legend.key = element_blank())
-SSTtraininglocDFday354actual
-SSTtraininglocDFday355actual <- ggplot(SSTtraininglocDFactual) +
-  geom_tile(aes(x = Longitude, y = Latitude, fill = SST355)) + coord_sf() +
-  scale_fill_viridis_c(name = "Sea Surface Temperature (degC)", direction = -1) +
-  theme(axis.ticks = element_blank(), legend.position = "top", legend.key = element_blank())
-SSTtraininglocDFday355actual
-SSTtraininglocDFday360actual <- ggplot(SSTtraininglocDFactual) +
-  geom_tile(aes(x = Longitude, y = Latitude, fill = SST360)) + coord_sf() +
-  scale_fill_viridis_c(name = "Sea Surface Temperature (degC)", direction = -1) +
-  theme(axis.ticks = element_blank(), legend.position = "top", legend.key = element_blank())
-SSTtraininglocDFday360actual
-SSTtraininglocDFday365actual <- ggplot(SSTtraininglocDFactual) +
-  geom_tile(aes(x = Longitude, y = Latitude, fill = SST365)) + coord_sf() +
-  scale_fill_viridis_c(name = "Sea Surface Temperature (degC)", direction = -1) +
-  theme(axis.ticks = element_blank(), legend.position = "top", legend.key = element_blank())
-SSTtraininglocDFday365actual
 summary(YtestingTemp)
 summary(abs(YtestingTemp))
 tempPredMetricMat <- matrix(0, 3, 2, 
@@ -206,36 +175,6 @@ SSTtraininglocDFday351predicted.sequenFixedL <- ggplot(SSTtraininglocDFpredicted
   scale_fill_viridis_c(name = "Sea Surface Temperature (degC)", direction = -1) +
   theme(axis.ticks = element_blank(), legend.position = "top", legend.key = element_blank())
 SSTtraininglocDFday351predicted.sequenFixedL
-SSTtraininglocDFday352predicted.sequenFixedL <- ggplot(SSTtraininglocDFpredicted) +
-  geom_tile(aes(x = Longitude, y = Latitude, fill = SST352)) + coord_sf() +
-  scale_fill_viridis_c(name = "Sea Surface Temperature (degC)", direction = -1) +
-  theme(axis.ticks = element_blank(), legend.position = "top", legend.key = element_blank())
-SSTtraininglocDFday352predicted.sequenFixedL
-SSTtraininglocDFday353predicted.sequenFixedL <- ggplot(SSTtraininglocDFpredicted) +
-  geom_tile(aes(x = Longitude, y = Latitude, fill = SST353)) + coord_sf() +
-  scale_fill_viridis_c(name = "Sea Surface Temperature (degC)", direction = -1) +
-  theme(axis.ticks = element_blank(), legend.position = "top", legend.key = element_blank())
-SSTtraininglocDFday353predicted.sequenFixedL
-SSTtraininglocDFday354predicted.sequenFixedL <- ggplot(SSTtraininglocDFpredicted) +
-  geom_tile(aes(x = Longitude, y = Latitude, fill = SST354)) + coord_sf() +
-  scale_fill_viridis_c(name = "Sea Surface Temperature (degC)", direction = -1) +
-  theme(axis.ticks = element_blank(), legend.position = "top", legend.key = element_blank())
-SSTtraininglocDFday354predicted.sequenFixedL
-SSTtraininglocDFday355predicted.sequenFixedL <- ggplot(SSTtraininglocDFpredicted) +
-  geom_tile(aes(x = Longitude, y = Latitude, fill = SST355)) + coord_sf() +
-  scale_fill_viridis_c(name = "Sea Surface Temperature (degC)", direction = -1) +
-  theme(axis.ticks = element_blank(), legend.position = "top", legend.key = element_blank())
-SSTtraininglocDFday355predicted.sequenFixedL
-SSTtraininglocDFday360predicted.sequenFixedL <- ggplot(SSTtraininglocDFpredicted) +
-  geom_tile(aes(x = Longitude, y = Latitude, fill = SST360)) + coord_sf() +
-  scale_fill_viridis_c(name = "Sea Surface Temperature (degC)", direction = -1) +
-  theme(axis.ticks = element_blank(), legend.position = "top", legend.key = element_blank())
-SSTtraininglocDFday360predicted.sequenFixedL
-SSTtraininglocDFday365predicted.sequenFixedL <- ggplot(SSTtraininglocDFpredicted) +
-  geom_tile(aes(x = Longitude, y = Latitude, fill = SST365)) + coord_sf() +
-  scale_fill_viridis_c(name = "Sea Surface Temperature (degC)", direction = -1) +
-  theme(axis.ticks = element_blank(), legend.position = "top", legend.key = element_blank())
-SSTtraininglocDFday365predicted.sequenFixedL
 tempPredMetricMat[1, 1] <- mean((ytempPredMean - ytempPred)^2)
 diffMat <- sweep(ytempPred, 1, YtestingTemp, "-")
 tempPredMetricMat[2, 1] = mean(rowMeans(diffMat^2))
@@ -251,36 +190,6 @@ SSTtraininglocDFday351predicted.sequenVaryLj <- ggplot(SSTtraininglocDFpredicted
   scale_fill_viridis_c(name = "Sea Surface Temperature (degC)", direction = -1) +
   theme(axis.ticks = element_blank(), legend.position = "top", legend.key = element_blank())
 SSTtraininglocDFday351predicted.sequenVaryLj
-SSTtraininglocDFday352predicted.sequenVaryLj <- ggplot(SSTtraininglocDFpredicted) +
-  geom_tile(aes(x = Longitude, y = Latitude, fill = SST352)) + coord_sf() +
-  scale_fill_viridis_c(name = "Sea Surface Temperature (degC)", direction = -1) +
-  theme(axis.ticks = element_blank(), legend.position = "top", legend.key = element_blank())
-SSTtraininglocDFday352predicted.sequenVaryLj
-SSTtraininglocDFday353predicted.sequenVaryLj <- ggplot(SSTtraininglocDFpredicted) +
-  geom_tile(aes(x = Longitude, y = Latitude, fill = SST353)) + coord_sf() +
-  scale_fill_viridis_c(name = "Sea Surface Temperature (degC)", direction = -1) +
-  theme(axis.ticks = element_blank(), legend.position = "top", legend.key = element_blank())
-SSTtraininglocDFday353predicted.sequenVaryLj
-SSTtraininglocDFday354predicted.sequenVaryLj <- ggplot(SSTtraininglocDFpredicted) +
-  geom_tile(aes(x = Longitude, y = Latitude, fill = SST354)) + coord_sf() +
-  scale_fill_viridis_c(name = "Sea Surface Temperature (degC)", direction = -1) +
-  theme(axis.ticks = element_blank(), legend.position = "top", legend.key = element_blank())
-SSTtraininglocDFday354predicted.sequenVaryLj
-SSTtraininglocDFday355predicted.sequenVaryLj <- ggplot(SSTtraininglocDFpredicted) +
-  geom_tile(aes(x = Longitude, y = Latitude, fill = SST355)) + coord_sf() +
-  scale_fill_viridis_c(name = "Sea Surface Temperature (degC)", direction = -1) +
-  theme(axis.ticks = element_blank(), legend.position = "top", legend.key = element_blank())
-SSTtraininglocDFday355predicted.sequenVaryLj
-SSTtraininglocDFday360predicted.sequenVaryLj <- ggplot(SSTtraininglocDFpredicted) +
-  geom_tile(aes(x = Longitude, y = Latitude, fill = SST360)) + coord_sf() +
-  scale_fill_viridis_c(name = "Sea Surface Temperature (degC)", direction = -1) +
-  theme(axis.ticks = element_blank(), legend.position = "top", legend.key = element_blank())
-SSTtraininglocDFday360predicted.sequenVaryLj
-SSTtraininglocDFday365predicted.sequenVaryLj <- ggplot(SSTtraininglocDFpredicted) +
-  geom_tile(aes(x = Longitude, y = Latitude, fill = SST365)) + coord_sf() +
-  scale_fill_viridis_c(name = "Sea Surface Temperature (degC)", direction = -1) +
-  theme(axis.ticks = element_blank(), legend.position = "top", legend.key = element_blank())
-SSTtraininglocDFday365predicted.sequenVaryLj
 tempPredMetricMat[1, 2] <- mean((ytempPredMean - ytempPred)^2) # 175.9535
 diffMat <- sweep(ytempPred, 1, YtestingTemp, "-")
 tempPredMetricMat[2, 2] = mean(rowMeans(diffMat^2)) # 282.5623
@@ -300,34 +209,4 @@ ggarrange(SSTtraininglocDFday351actual, SSTtraininglocDFday351predicted.sequenFi
           labels = c("A", "B", "C"), label.x = 0.08, align = "h", ncol = 3, nrow = 1, 
           common.legend = TRUE, legend = "top")
 #ggsave("NNGPsequenSSTtraininglocDFday351plots.png", width = 24, height = 8, units = "cm")
-ggarrange(SSTtraininglocDFday352actual, SSTtraininglocDFday352predicted.sequenFixedL, 
-          SSTtraininglocDFday352predicted.sequenVaryLj, 
-          labels = c("A", "B", "C"), label.x = 0.08, align = "h", ncol = 3, nrow = 1, 
-          common.legend = TRUE, legend = "top")
-#ggsave("NNGPsequenSSTtraininglocDFday352plots.png", width = 24, height = 8, units = "cm")
-ggarrange(SSTtraininglocDFday353actual, SSTtraininglocDFday353predicted.sequenFixedL, 
-          SSTtraininglocDFday353predicted.sequenVaryLj, 
-          labels = c("A", "B", "C"), label.x = 0.08, align = "h", ncol = 3, nrow = 1, 
-          common.legend = TRUE, legend = "top")
-#ggsave("NNGPsequenSSTtraininglocDFday353plots.png", width = 24, height = 8, units = "cm")
-ggarrange(SSTtraininglocDFday354actual, SSTtraininglocDFday354predicted.sequenFixedL, 
-          SSTtraininglocDFday354predicted.sequenVaryLj, 
-          labels = c("A", "B", "C"), label.x = 0.08, align = "h", ncol = 3, nrow = 1, 
-          common.legend = TRUE, legend = "top")
-#ggsave("NNGPsequenSSTtraininglocDFday354plots.png", width = 24, height = 8, units = "cm")
-ggarrange(SSTtraininglocDFday355actual, SSTtraininglocDFday355predicted.sequenFixedL, 
-          SSTtraininglocDFday355predicted.sequenVaryLj, 
-          labels = c("A", "B", "C"), label.x = 0.08, align = "h", ncol = 3, nrow = 1, 
-          common.legend = TRUE, legend = "top")
-#ggsave("NNGPsequenSSTtraininglocDFday355plots.png", width = 24, height = 8, units = "cm")
-ggarrange(SSTtraininglocDFday360actual, SSTtraininglocDFday360predicted.sequenFixedL, 
-          SSTtraininglocDFday360predicted.sequenVaryLj, 
-          labels = c("A", "B", "C"), label.x = 0.08, align = "h", ncol = 3, nrow = 1, 
-          common.legend = TRUE, legend = "top")
-#ggsave("NNGPsequenSSTtraininglocDFday360plots.png", width = 24, height = 8, units = "cm")
-ggarrange(SSTtraininglocDFday365actual, SSTtraininglocDFday365predicted.sequenFixedL, 
-          SSTtraininglocDFday365predicted.sequenVaryLj, 
-          labels = c("A", "B", "C"), label.x = 0.08, align = "h", ncol = 3, nrow = 1, 
-          common.legend = TRUE, legend = "top")
-#ggsave("NNGPsequenSSTtraininglocDFday365plots.png", width = 24, height = 8, units = "cm")
 

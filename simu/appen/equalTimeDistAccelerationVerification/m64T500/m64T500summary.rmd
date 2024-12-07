@@ -9,18 +9,19 @@ header-includes:
 ---
 
 # Simulation Set-Up and Overall Model Fitting Time
-When fitting each of our 4 models (`fullGPfixedL`, `NNGPblockFixedL`, `NNGPsequenFixedL`, and `NNGPsequenVaryLj`) with $m=8^2=64$ and $T=500$, we specified both `equalTimeDist = TRUE` and `equalTimeDist = FALSE`. We thus have $4\times 2 = 8$ model settings. 
+When fitting each of our 4 methods (`fullGPfixedL`, `NNGPblockFixedL`, `NNGPsequenFixedL`, and `NNGPsequenVaryLj`) with $m=8^2=64$ and $T=500$, we specified both `equalTimeDist = TRUE` and `equalTimeDist = FALSE`. We thus have $4\times 2 = 8$ settings. 
 
-Since $m=64$ is quite small, we do not expect any significant differences in the posterior sampling time between our 4 models with the same `equalTimeDist` input. Since $T=500$ is quite large, what we have discussed in Appendix B of our manuscript suggest that the 3 temporal parameters' posterior sampling steps, especially the step for $\bm{\eta}_t$'s, can be markedly accelerated by adopting our approaches and specifying `equalTimeDist = TRUE` for each of our 4 models. 
+Since $m=64$ is quite small, we do not expect any significant differences in the posterior sampling time between our 4 methods with the same `equalTimeDist` input. Since $T=500$ is quite large, what we have discussed in Appendix B of our manuscript suggest that the 3 temporal parameters' posterior sampling steps, especially the step for $\bm{\eta}_t$'s, can be markedly accelerated by adopting our approaches and specifying `equalTimeDist = TRUE` for each of our 4 methods. 
 
-The results we have obtained corroborate these well. With `equalTimeDist = TRUE` specified, the overall model fitting time for our 4 models, i.e., `fullGPfixedL`, `NNGPblockFixedL`, `NNGPsequenFixedL`, and `NNGPsequenVaryLj`, are 7.04 hours, 7.03 hours, 7.04 hours, and 6.31 hours, respectively. If we do not take advantage of our tactics for evenly dispersed time points presented in Appendix B of our manuscript by specifying `equalTimeDist = FALSE` instead, we will need 28.98 days, 29.09 days, 29.03 days, and 28.74 days to fit the same 4 models using the same computation resources. 
+The results we have obtained corroborate these well. With `equalTimeDist = TRUE` specified, the overall model fitting time for our 4 methods, i.e., `fullGPfixedL`, `NNGPblockFixedL`, `NNGPsequenFixedL`, and `NNGPsequenVaryLj`, are 7.04 hours, 7.03 hours, 7.04 hours, and 6.31 hours, respectively. If we do not take advantage of our tactics for evenly dispersed time points presented in Appendix B of our manuscript by specifying `equalTimeDist = FALSE` instead, we will need 28.98 days, 29.09 days, 29.03 days, and 28.74 days to fit the same 4 methods using the same computation resources. 
 
 # Portions of Recorded Gibbs Sampler Time for 10 Key Parameters
-We first display the first 50 kept post-burn-in MCMC iterations' posterior sampling time (in milliseconds) for 10 key Gibbs sampler steps (corresponding to $\bm{\eta}_t$'s, $\Upsilon$, $\psi$, $z_{jl}(\bm{s}_{i,o})$'s or $u_j(\bm{s}_{i,o})$'s, $\xi_j(\bm{s}_{i,o})$'s, $\theta_{jl_j}$'s, $\delta_{1:k}$, $\alpha_{jl_j}(\bm{s}_{i,o})$'s, $\kappa$, and $\rho$) for our 8 model settings.
+We first display the first 50 kept post-burn-in MCMC iterations' posterior sampling time (in milliseconds) for 10 key Gibbs sampler steps (corresponding to $\bm{\eta}_t$'s, $\Upsilon$, $\psi$, $z_{jl}(\bm{s}_{i,o})$'s or $u_j(\bm{s}_{i,o})$'s, $\xi_j(\bm{s}_{i,o})$'s, $\theta_{jl_j}$'s, $\delta_{1:k}$, $\alpha_{jl_j}(\bm{s}_{i,o})$'s, $\kappa$, and $\rho$) for our 8 settings.
 ```{r echo = -(1:2)}
 rm(list=ls())
-projDirec <- "C:/Users/annie/OneDrive - National University of Singapore/Documents/PhD/research/GitHub desktop repos/spatiotemporalBFA"
-wd <- paste(projDirec, "simu/appen/equalTimeDistAccelerationVerification/m64T500", sep = "/")
+projDirec <- "C:/Users/annie/OneDrive - National University of Singapore/Documents/PhD/research/spatempBFA"
+wd <- paste(projDirec, "simu/appen/equalTimeDistAccelerationVerification/m64T500", 
+            sep = "/")
 setwd(wd)
 load("GibbsStepTimeFixedLfullGP.RData")
 load("GibbsStepTimeFixedLfullGPfast.RData")
@@ -79,7 +80,7 @@ NNGPblockFixedLsummary
 NNGPsequenFixedLsummary
 NNGPsequenVaryLjsummary
 ```
-The results correspond well to what we have discussed in Appendix B of our manuscript. **For each of our 4 models, specifying `equalTimeDist = TRUE` instead of `equalTimeDist = FALSE` on equispaced time points markedly accelerates posterior Gibbs sampler steps of $\bm{\eta}_t$'s, $\psi$, and $\Upsilon$ (especially the step for $\bm{\eta}_t$'s).**
+The results correspond well to what we have discussed in Appendix B of our manuscript. **For each of our 4 methods, specifying `equalTimeDist = TRUE` instead of `equalTimeDist = FALSE` on equispaced time points markedly accelerates posterior Gibbs sampler steps of $\bm{\eta}_t$'s, $\psi$, and $\Upsilon$ (especially the step for $\bm{\eta}_t$'s).**
 
 We finally calculate standard deviations for the 3 temporal-related parameters' posterior sampling time across all kept post-burn-in MCMC iterations.
 ```{r}
@@ -93,7 +94,7 @@ round(apply(GibbsStepTimeVaryLjSequen[,8:10], 2, sd), 5)
 round(apply(GibbsStepTimeVaryLjSequen.fast[,8:10], 2, sd), 5)
 ```
 # Time Required for Predicting at Future Time Points
-For each of our 8 model settings, we record time needed to predict at 10 future time points. We obtain 100 temporal prediction instances based on each of our 8 obtained model fitting objects and thus have $100\times 8$ recorded time intervals for analysis.
+For each of our 8 settings, we record time needed to predict at 10 future time points. We obtain 100 temporal prediction instances based on each of our 8 obtained model fitting objects and thus have $100\times 8$ recorded time intervals for analysis.
 ```{r eval = FALSE}
 rm(list=ls())
 library(spatempBFA)
@@ -160,7 +161,6 @@ load("m64T500temppredTimeMat.RData")
 apply(temppredTimeMat, 2, summary)
 library(tidyverse)
 library(ggpubr)
-legendColors <- c("#55CC11", "#1177CC")
 N <- nrow(temppredTimeMat)
 equalTimeDistTF = as.factor(rep(rep(c("equalTimeDist = TRUE", 
                                       "equalTimeDist = FALSE"), each = N), 4))
@@ -168,17 +168,17 @@ temppredTimeDF <- data.frame(temppredTime = as.vector(temppredTimeMat),
                              model = as.factor(rep(colnames(temppredTimeMat), each = N)),
                              equalTimeDistTF = equalTimeDistTF)
 temppredtimeBox <- ggplot(temppredTimeDF) + labs(y = "", x = "Time (in seconds)") + 
-  geom_boxplot(aes(x = temppredTime, y = model, fill = equalTimeDistTF)) +
-  scale_fill_manual("", values = legendColors) +
+  geom_boxplot(aes(x = temppredTime, y = model, color = equalTimeDistTF)) +
+  #scale_fill_manual("", values = c("#55CC11", "#1177CC")) +
   theme(axis.text.x = element_text(size = 10, color = "black"),
         axis.text.y = element_text(size = 10, color = "black"),
         axis.ticks.x = element_blank(), axis.ticks.y = element_blank(),
         legend.position = "top", legend.key = element_blank(),
-        legend.title = element_text(face = "bold", size = 12))
+        legend.title = element_blank())
 temppredtimeBox
 # ggsave("tempPredBox.png", width = 16, height = 10, units = "cm")
 ```
-For each of our 4 models, specifying `equalTimeDist = TRUE` instead of `equalTimeDist = FALSE` on equispaced time points markedly accelerates the step obtaining $\hat{\bm{\eta}}_{(T+1):(T+q)}$ given $\bm{\eta}_{1:T},\,\Upsilon,\,\psi$ when making future-time predictions, as we no longer need to evaluate $H(\psi)^{-1}$ in each MCMC iteration. The overall temporal prediction time is thus considerably reduced, as expected. See Appendices B.1, B.3.3, and G.1 for more details.
+For each of our 4 methods, specifying `equalTimeDist = TRUE` instead of `equalTimeDist = FALSE` on equispaced time points markedly accelerates the step obtaining $\hat{\bm{\eta}}_{(T+1):(T+q)}$ given $\bm{\eta}_{1:T},\,\Upsilon,\,\psi$ when making future-time predictions, as we no longer need to evaluate $H(\psi)^{-1}$ in each MCMC iteration. The overall temporal prediction time is thus considerably reduced, as expected. See Appendices B.1, B.3.3, and G.1 for more details.
 
 # Data Generation and Model Fitting
 ```{r eval = FALSE}
@@ -214,7 +214,7 @@ Frho <- exp(-rho*D)
 ### 6) actual Eta (c(Eta_1,...,Eta_T)) (vec of length Nu*K)
 Hpsi <- exp(-psi*TimeDist)
 Eta <- rmvnorm(1, mean=rep(0, Nu*K), sigma=kronecker(Hpsi, Upsilon))
-## Y~0 (P=0) so no need to sample Beta; all familyInd=0 (all normal) so no need to sample Y
+## Y~0 (P=0) so no need to sample Beta; all familyInd=0 (normal) so no need to sample Y
 maxL <- 10
 LStarJ <- sample(maxL, size=K, replace=T)
 ### 7) actual alpha
@@ -244,8 +244,7 @@ for(j in 1:K){
 }
 ### 9) actual Delta
 a1=1; a2=10
-Delta <- sapply(c(a1,rep(a2,(K-1))), rgamma, n=1, rate=1)
-#Tau <- cumprod(Delta)
+Delta <- sapply(c(a1,rep(a2,(K-1))), rgamma, n=1, rate=1) # Tau <- cumprod(Delta)
 ### 10) actual Theta
 Theta <- list()
 for(j in 1:K){
