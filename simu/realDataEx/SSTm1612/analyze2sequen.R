@@ -109,20 +109,11 @@ SSTtestinglocDFday350predicted.sequenVaryLj <- ggplot(SSTtestinglocDFpredicted) 
   scale_size_continuous(name = "") +
   theme(axis.ticks = element_blank(), legend.position = "top", legend.key = element_blank())
 SSTtestinglocDFday350predicted.sequenVaryLj
-spatPredMetricMat[1, 2] <- mean((ylocPredMean - YtestingSpat)^2) # 0.8744089
+spatPredMetricMat[1, 2] <- mean((ylocPredMean - YtestingSpat)^2) 
 diffMat <- sweep(ylocPred, 1, YtestingSpat, "-")
-spatPredMetricMat[2, 2] = mean(rowMeans(diffMat^2)) # 15.46964
-spatPredMetricMat[3, 2] = mean(apply(ylocPred, 1, var)) # 14.60984
+spatPredMetricMat[2, 2] = mean(rowMeans(diffMat^2)) 
+spatPredMetricMat[3, 2] = mean(apply(ylocPred, 1, var))
 spatPredMetricMat
-# NNGPsequenFixedL NNGPsequenVaryLj
-# postMeanMSE         1.026568        0.8744089
-# postMSE            26.039550       15.4696393
-# postVar            25.038020       14.6098402
-# spatPredMetricMat iter60000
-# # NNGPsequenFixedL NNGPsequenVaryLj
-# # postMeanMSE         1.056436        0.8881475
-# # postMSE            19.192943       15.5725018
-# # postVar            18.154662       14.6990533
 spatPredKrigTime <- matrix(0, 2, 2, 
                             dimnames = list(c("alpha", "weightsXiLambda"),
                                             c("NNGPsequenFixedL", "NNGPsequenVaryLj")))
@@ -190,20 +181,11 @@ SSTtraininglocDFday351predicted.sequenVaryLj <- ggplot(SSTtraininglocDFpredicted
   scale_fill_viridis_c(name = "Sea Surface Temperature (degC)", direction = -1) +
   theme(axis.ticks = element_blank(), legend.position = "top", legend.key = element_blank())
 SSTtraininglocDFday351predicted.sequenVaryLj
-tempPredMetricMat[1, 2] <- mean((ytempPredMean - ytempPred)^2) # 175.9535
+tempPredMetricMat[1, 2] <- mean((ytempPredMean - ytempPred)^2) 
 diffMat <- sweep(ytempPred, 1, YtestingTemp, "-")
-tempPredMetricMat[2, 2] = mean(rowMeans(diffMat^2)) # 282.5623
-tempPredMetricMat[3, 2] = mean(apply(ytempPred, 1, var)) # 176.1296
+tempPredMetricMat[2, 2] = mean(rowMeans(diffMat^2)) 
+tempPredMetricMat[3, 2] = mean(apply(ytempPred, 1, var)) 
 tempPredMetricMat
-# NNGPsequenFixedL NNGPsequenVaryLj
-# postMeanMSE         178.5120         175.9535
-# postMSE             282.0187         282.5623
-# postVar             178.6907         176.1296
-# tempPredMetricMat iter60000
-# # NNGPsequenFixedL NNGPsequenVaryLj
-# # postMeanMSE         176.8944         176.4250
-# # postMSE             280.3932         283.0353
-# # postVar             177.0715         176.6016
 ggarrange(SSTtraininglocDFday351actual, SSTtraininglocDFday351predicted.sequenFixedL, 
           SSTtraininglocDFday351predicted.sequenVaryLj, 
           labels = c("A", "B", "C"), label.x = 0.08, align = "h", ncol = 3, nrow = 1, 

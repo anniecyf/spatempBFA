@@ -350,16 +350,16 @@ m400T30plot <- ggplot(m400T30DF, aes(x = modelVec, y = meanTimeVec, fill = paraV
             position = "stack", color = "black",fill = NA, outline.type = "both")
 m400T30plot
 setwd("..")
-ggarrange(m1600T100plot, m1600T50plot, m1600T30plot,
-          m3600T100plot, m900T50plot, m400T50plot,
-          m3600T50plot, m900T30plot, m400T30plot,
-          labels = c("A", "B", "C", "D", "F", "H", "E", "G", "I"), align = "hv",
-          ncol = 3, nrow = 3, common.legend = TRUE, legend = "top")
-ggsave("9stackedPlots.png", width = 50, height = 50, units = "cm")
+# ggarrange(m1600T100plot, m1600T50plot, m1600T30plot,
+#           m3600T100plot, m900T50plot, m400T50plot,
+#           m3600T50plot, m900T30plot, m400T30plot,
+#           labels = c("A", "B", "C", "D", "F", "H", "E", "G", "I"), align = "hv",
+#           ncol = 3, nrow = 3, common.legend = TRUE, legend = "top")
+# ggsave("9stackedPlots.png", width = 50, height = 50, units = "cm")
 ggarrange(m400T30plot, m400T50plot, m900T30plot,
           m900T50plot, m1600T30plot, m1600T50plot, 
           m1600T100plot, m3600T50plot, m3600T100plot,  
           labels = c("A", "B", "C", "D", "E", "F", "G", "H", "I"), align = "hv",
           ncol = 3, nrow = 3, common.legend = TRUE, legend = "top")
-ggsave("stackedPlots.png", width = 50, height = 50, units = "cm")
+# ggsave("stackedPlots.png", width = 50, height = 50, units = "cm")
 

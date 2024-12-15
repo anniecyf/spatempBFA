@@ -199,7 +199,7 @@ for(whichTestingLoc in whichTesting){
   discardInd <- c(discardInd, seq(from = whichTestingLoc, by = M, length.out = trainingT))
 }
 Ytraining <- YtrainingTemp[-discardInd]
-YtestingSpat <- YtrainingTemp[discardInd]  #YtestingSpat <- as.vector(t(matrix(YtestingSpat, M-m, trainingT)))
+YtestingSpat <- YtrainingTemp[discardInd]  
 rm(YtrainingTemp)
 spatGroupOverallTraining <- spatGroupOverall[-whichTesting]
 distOrigNew = as.matrix(D[-whichTesting, whichTesting])
@@ -371,76 +371,3 @@ tempPredMetricMat[2, 6] = mean(rowMeans(diffMat^2))
 tempPredMetricMat[3, 6] = mean(apply(ytempPred, 1, var))
 tempPredMetricMat
 
-# setwd("fullGPfixedL")
-# load("toyExfullGPfixedL.RData")
-# spatpredFixedL <- predictNewLocFixedL(regFixedL.simu, 9, distOrigNew, distNewNew, 
-#                                       NewX = NULL, NewTrials = NULL, Verbose = TRUE, 
-#                                       seed = 29)
-# save(spatpredFixedL, file = "s29toyExFullGPspatpredFixedL.RData")
-# setwd("../NNGPblockFixedL")
-# load("toyExNNGPblockFixedL.RData")
-# spatpredFixedLblock <- predictNewLocFixedL(regFixedL.simu.block, 9, 
-#                                            distOrigNew, distNewNew, 
-#                                            NewX = NULL, NewTrials = NULL, Verbose = TRUE, 
-#                                            seed = 29)
-# save(spatpredFixedLblock, file = "s29toyExNNGPspatpredFixedLblock.RData")
-# setwd("../NNGPsequenFixedL")
-# load("toyExNNGPsequenFixedL.RData")
-# spatpredFixedLsequen <- predictNewLocFixedL(regFixedL.simu.sequen, 9, 
-#                                             distOrigNew, distNewNew, 
-#                                             NewX = NULL, NewTrials = NULL, Verbose = TRUE, 
-#                                             seed = 29)
-# save(spatpredFixedLsequen, file = "s29toyExNNGPspatpredFixedLsequen.RData")
-# setwd("../NNGPsequenVaryLj")
-# load("toyExNNGPsequenVaryLj.RData")
-# spatpredVaryLj <- predictNewLocVaryLj(regVaryLj.simu.sequen, 9, distOrigNew, distNewNew, 
-#                                       NewX = NULL, NewTrials = NULL, Verbose = TRUE, 
-#                                       seed = 29)
-# save(spatpredVaryLj, file = "s29toyExNNGPspatpredVaryLj.RData")
-actualTrainingSpatPlotBW <- ggplot(spatTrainingGpDF) + 
-  geom_point(aes(x = x, y = y, col = actualTrainingSpatGp), 
-             size = 7, show.legend = FALSE) + 
-  scale_color_manual(values = c("black", "white")) + labs(x = "", y = "") +
-  theme(plot.title = element_text(hjust = 0.5),
-        axis.text.x = element_blank(), axis.text.y = element_blank(),
-        axis.ticks.x = element_blank(), axis.ticks.y = element_blank(),
-        panel.grid.major = element_line(color="grey"), 
-        panel.grid.minor = element_line(color="grey"))
-actualTrainingSpatPlotBW
-ggarrange(actualSpatPlotBW, trainingTestingPlotBW, actualTrainingSpatPlotBW,
-          labels = c("A", "B", "C"), align = "h", ncol = 3, nrow = 1, 
-          common.legend = TRUE, legend = "top")
-ggsave("toyExActualSpatPlots.png", width = 24, height = 8, units = "cm")
-
-trainingTestingPlot <- ggplot(spatGpDF) + geom_point(aes(x = x, y = y, col = trainingTestingSpatGp), size = 7, show.legend = FALSE) + 
-  scale_color_manual(values = c("lightgreen", "red")) + labs(x = "", y = "") +
-  theme_void()
-trainingTestingPlot
-ggsave("toyExSpatTrainingTestingPlot.png", width=12, height=12, units="cm")
-actualSpatPlot <- ggplot(spatGpDF) + geom_point(aes(x = x, y = y, col = actualGp), size = 7, show.legend = FALSE) + 
-  scale_color_manual(values = c("#55CC11","#1177CC")) + labs(x = "", y = "") +
-  theme_void()
-actualSpatPlot
-ggsave("toyExActualSpatCluster.png", width=12, height=12, units="cm")
-actualTrainingSpatPlot <- ggplot(spatTrainingGpDF) + 
-  geom_point(aes(x = x, y = y, col = actualTrainingSpatGp), 
-             size = 7, show.legend = FALSE) + 
-  scale_color_manual(values = c("#55CC11","#1177CC")) + labs(x = "", y = "") +
-  theme_void()
-actualTrainingSpatPlot
-ggsave("toyExActualTrainingSpatCluster.png", width=12, height=12, units="cm")
-ggarrange(ggplot() + theme_void(), actualSpatPlot, 
-          ggplot() + theme_void(), trainingTestingPlot, 
-          ggplot() + theme_void(), actualTrainingSpatPlot,
-          labels = c("A", "", "B", "", "C", ""), 
-          widths = c(0.05, 1, 0.05, 1, 0.05, 1), align = "h", 
-          ncol = 6, nrow = 1, common.legend = TRUE, legend = "top")
-ggsave("toyExActualSpatPlots.png", width = 37, height = 12, units = "cm")
-
-#setwd("C:/Users/annie/OneDrive - National University of Singapore/Documents/PhD/research/first paper/spatempBFA/simu/mainScalabilityVerificationSimu/toyExample")
-library(rmarkdown)
-library(knitr)
-render("toyExampleIllustration.Rmd", 
-       output_format = "pdf_document", 
-       output_options = list(keep_tex = TRUE),
-       output_file = "toyExampleIllustrationEdited.tex")

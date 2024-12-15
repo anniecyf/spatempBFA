@@ -32,79 +32,36 @@ weightsXiLambdaKrigTime <- c(weightsXiLambdaKrigTime, weightsXiLambdaKrigTimeVec
 spatpredtimeDF <- data.frame(spatpredTime = spatpredTime, alphaKrigTime = alphaKrigTime / 1000,
                              weightsXiLambdaKrigTime = weightsXiLambdaKrigTime,
                              model = as.factor(modelVec))
-spatpredtimeBoxBW <- ggplot(spatpredtimeDF) + labs(y = "", x = "Time (in seconds)") + 
-  geom_boxplot(aes(x = spatpredTime, y = model)) +
-  theme(axis.text.x = element_text(size = 10, color = "black"), 
-        axis.ticks.x = element_blank(), axis.ticks.y = element_blank())
-spatpredtimeBoxBW
-alphaKrigTimeBoxBW <- ggplot(spatpredtimeDF) + labs(y = "", x = "Time (in seconds)") + 
-  geom_boxplot(aes(x = alphaKrigTime, y = model)) +
-  theme(axis.text.x = element_text(size = 10, color = "black"), 
-        axis.text.y = element_blank(),
-        axis.ticks.x = element_blank(), axis.ticks.y = element_blank())
-alphaKrigTimeBoxBW
-weightsXiLambdaKrigTimeBoxBW <- ggplot(spatpredtimeDF) + 
-  labs(y = "", x = "Time (in milliseconds)") + 
-  geom_boxplot(aes(x = weightsXiLambdaKrigTime, y = model)) +
-  theme(axis.text.x = element_text(size = 10, color = "black"), 
-        axis.text.y = element_blank(),
-        axis.ticks.x = element_blank(), axis.ticks.y = element_blank())
-weightsXiLambdaKrigTimeBoxBW
-combinedSpatPredBoxBW <- ggarrange(spatpredtimeBoxBW, alphaKrigTimeBoxBW, 
-                                   weightsXiLambdaKrigTimeBoxBW,
-                                   labels = c("A", "B", "C"), align = "h",
-                                   ncol = 3, nrow = 1, widths = c(3, 2.15, 2.15))
-combinedSpatPredBoxBW
-# ggsave("combinedSpatPredBoxBWcorrected.png", width = 24, height = 8, units = "cm")
-spatpredtimeBoxBW <- ggplot(spatpredtimeDF) + labs(y = "Time (in seconds)", x = "") + 
-  geom_boxplot(aes(x = model, y = spatpredTime)) +
-  theme(axis.text.x = element_text(size = 8, color = "black"), 
-        axis.text.y = element_text(size = 10, color = "black"), 
-        axis.ticks.x = element_blank(), axis.ticks.y = element_blank())
-spatpredtimeBoxBW
-alphaKrigTimeBoxBW <- ggplot(spatpredtimeDF) + labs(y = "Time (in seconds)", x = "") + 
-  geom_boxplot(aes(x = model, y = alphaKrigTime)) +
-  theme(axis.text.x = element_text(size = 8, color = "black"), 
-        axis.text.y = element_text(size = 10, color = "black"),
-        axis.ticks.x = element_blank(), axis.ticks.y = element_blank())
-alphaKrigTimeBoxBW
-weightsXiLambdaKrigTimeBoxBW <- ggplot(spatpredtimeDF) + 
-  labs(y = "Time (in milliseconds)", x = "") + 
-  geom_boxplot(aes(x = model, y = weightsXiLambdaKrigTime)) +
-  theme(axis.text.x = element_text(size = 8, color = "black"), 
-        axis.text.y = element_text(size = 10, color = "black"),
-        axis.ticks.x = element_blank(), axis.ticks.y = element_blank())
-weightsXiLambdaKrigTimeBoxBW
-combinedSpatPredBoxBW <- ggarrange(spatpredtimeBoxBW, alphaKrigTimeBoxBW, 
-                                   weightsXiLambdaKrigTimeBoxBW,
-                                   labels = c("A", "B", "C"), align = "h",
-                                   ncol = 3, nrow = 1)
-combinedSpatPredBoxBW
-#ggsave("correctedCombinedSpatPredBoxBW.png", width = 39, height = 13, units = "cm")
 spatpredtimeBox <- ggplot(spatpredtimeDF) + labs(y = "Time (in seconds)", x = "") + 
   geom_boxplot(aes(x = model, y = spatpredTime, color = model)) +
+  scale_color_manual("Model", values = legendColors) +
   theme(axis.text.x = element_text(size = 8, color = "black"), 
-        axis.text.y = element_text(size = 10, color = "black"), 
+        axis.text.y = element_text(size = 12, color = "black"), 
         axis.ticks.x = element_blank(), axis.ticks.y = element_blank(), 
         legend.title = element_blank(),
-        legend.key = element_blank())
+        legend.key = element_blank(),
+        legend.text = element_text(size = 12))
 spatpredtimeBox
 alphaKrigTimeBox <- ggplot(spatpredtimeDF) + labs(y = "Time (in seconds)", x = "") + 
   geom_boxplot(aes(x = model, y = alphaKrigTime, color = model)) +
+  scale_color_manual("Model", values = legendColors) +
   theme(axis.text.x = element_text(size = 8, color = "black"), 
-        axis.text.y = element_text(size = 10, color = "black"),
+        axis.text.y = element_text(size = 12, color = "black"),
         axis.ticks.x = element_blank(), axis.ticks.y = element_blank(), 
         legend.title = element_blank(),
-        legend.key = element_blank())
+        legend.key = element_blank(),
+        legend.text = element_text(size = 12))
 alphaKrigTimeBox
 weightsXiLambdaKrigTimeBox <- ggplot(spatpredtimeDF) + 
   labs(y = "Time (in milliseconds)", x = "") + 
   geom_boxplot(aes(x = model, y = weightsXiLambdaKrigTime, color = model)) +
+  scale_color_manual("Model", values = legendColors) +
   theme(axis.text.x = element_text(size = 8, color = "black"), 
-        axis.text.y = element_text(size = 10, color = "black"),
+        axis.text.y = element_text(size = 12, color = "black"),
         axis.ticks.x = element_blank(), axis.ticks.y = element_blank(), 
         legend.title = element_blank(),
-        legend.key = element_blank())
+        legend.key = element_blank(),
+        legend.text = element_text(size = 12))
 weightsXiLambdaKrigTimeBox
 combinedSpatPredBox <- ggarrange(spatpredtimeBox, alphaKrigTimeBox, 
                                    weightsXiLambdaKrigTimeBox,
@@ -112,7 +69,7 @@ combinedSpatPredBox <- ggarrange(spatpredtimeBox, alphaKrigTimeBox,
                                    ncol = 3, nrow = 1,
                                    common.legend = TRUE, legend = "top")
 combinedSpatPredBox
-#ggsave("correctedCombinedSpatPredBox.png", width = 39, height = 13, units = "cm")
+#ggsave("combinedSpatPredBox.png", width = 39, height = 13, units = "cm")
 
 spatpredMetricMat <- matrix(0, 4, 3, 
                             dimnames = list(c("fullGPfixedL", "NNGPblockFixedL", "NNGPsequenFixedL", "NNGPsequenVaryLj"),
@@ -142,9 +99,3 @@ spatpredMetricMat[4, 1] <- mean(apply(postGmat, 2, median))
 spatpredMetricMat[4, 2] <- mean(apply(postMSEmat, 2, median))
 spatpredMetricMat[4, 3] <- mean(apply(postVarMat, 2, median))
 #save(spatpredMetricMat, file = "spatpredMetric.RData")
-spatpredMetricMat
-# meanMedianPostMeanMSE meanMedianPostMSE meanMedianPostVar
-# fullGPfixedL                 0.4780934          5.964139          5.502430
-# NNGPblockFixedL              0.4815116          5.965555          5.499377
-# NNGPsequenFixedL             0.4766795          5.962761          5.495316
-# NNGPsequenVaryLj             6.1963940         16.034109          9.832205
