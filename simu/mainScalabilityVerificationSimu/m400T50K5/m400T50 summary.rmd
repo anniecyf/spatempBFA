@@ -1,0 +1,61 @@
+---
+title: "Key Parameters' Posterior Sampling Time Analysis"
+author: Yifan CHENG $\quad$ [\textcolor{blue}{y.cheng@u.nus.edu}](mailto:y.cheng@u.nus.edu)  
+output:
+  pdf_document: default
+header-includes: 
+ - \usepackage{bm}
+ - \usepackage{xcolor}
+---
+
+# Portions of Recorded Gibbs Sampler Time for 10 Key Parameters
+We first display the first 50 kept post-burn-in MCMC iterations' posterior sampling time (in milliseconds) for 10 key Gibbs sampler steps corresponding to our 4 methods, i.e., `fullGPfixedL`, `NNGPblockFixedL`, `NNGPsequenFixedL`, and `NNGPsequenVaryLj`.
+```{r echo = -(1:2)}
+rm(list=ls())
+projDirec <- "C:/Users/annie/OneDrive - National University of Singapore/Documents/PhD/research/spatempBFA"
+wd <- paste(projDirec, "simu/mainScalabilityVerificationSimu/m400T50K5", sep = "/")
+setwd(wd)
+load("GibbsStepTimeFixedLfullGP.RData"); load("GibbsStepTimeFixedLblock.RData")
+load("GibbsStepTimeFixedLsequen.RData"); load("GibbsStepTimeVaryLjSequen.RData")
+head(GibbsStepTimeFixedLfullGP, 50)
+head(GibbsStepTimeFixedLblock, 50)
+head(GibbsStepTimeFixedLsequen, 50)
+head(GibbsStepTimeVaryLjSequen, 50)
+```   
+As expected, there aren't any significant differences between our 4 methods regarding posterior sampling time for the 3 temporal parameters $\psi$, $\Upsilon$, and $\bm{\eta}_t$'s.
+
+# Posterior Sampling Time Summary Statistics
+We then present vital posterior sampling time summary statistics for the 7 spatial-related parameters ($z_{jl_j}^o(\bm{s}_{i})$'s or $u_j^o(\bm{s}_{i})$'s, $\xi_j^o(\bm{s}_{i})$'s, $\theta_{jl_j}$'s, $\delta_{1:k}$, $\rho$, $\kappa$, and $\alpha_{jl_j}^o(\bm{s}_{i})$'s) to showcase the manifest scalability improvements brought about by our 3 novelties, i.e., slice sampling, spatial NNGP, and sequential updates.
+```{r}
+apply(GibbsStepTimeFixedLfullGP[,1:7], 2, summary)
+apply(GibbsStepTimeFixedLblock[,1:7], 2, summary)
+apply(GibbsStepTimeFixedLsequen[,1:7], 2, summary)
+apply(GibbsStepTimeVaryLjSequen[,1:7], 2, summary)
+```
+The results correspond well to what we have deduced in Appendix H of our manuscript. 
+
+- Compared to their `fullGPfixedL` counterparts, `NNGPblockFixedL`'s Gibbs sampler steps corresponding to $\rho$ and $\kappa$ are evidently accelerated by our **spatial NNGP prior**;
+- The only Gibbs sampler step time that should clearly differ between `NNGPblockFixedL` and `NNGPsequenFixedL` is the step updating all $\alpha_{jl_j}^o(\bm{s}_{i})$'s, which result from whether we adopt our **sequential updating method** or not. Since $m=400$ is quite small here, `NNGPblockFixedL` is slightly faster than `NNGPsequenFixedL` for the posterior sampling step corresponding to $\alpha_{jl_j}^o(\bm{s}_{i})$'s. As $m$ gets larger, `NNGPsequenFixedL` will be much faster than `NNGPblockFixedL` for the same step;
+- Thanks to our **slice sampling approach**, `NNGPsequenVaryLj`'s Gibbs sampler steps for $u_j^o(\bm{s}_{i})$'s and $\xi_j^o(\bm{s}_{i})$'s are significantly faster than `NNGPsequenFixedL`'s Gibbs sampler steps for $z_{jl_j}^o(\bm{s}_{i})$'s and $\xi_j^o(\bm{s}_{i})$'s. It turns out that `NNGPsequenVaryLj`'s Gibbs sampler step for $\alpha_{jl_j}^o(\bm{s}_{i})$'s is slower than its `NNGPsequenFixedL` counterpart, indicating that inefficiencies caused by case discussion, calculating all required upper or lower bounds, and rejection sampling outweigh acceleration brought about by slice sampling's ensured non-increasing posterior samples for $L_j$'s through the MCMC iterations.
+
+We finally calculate standard deviations for the 7 spatial-related parameters' posterior sampling time across all kept post-burn-in MCMC iterations.
+```{r}
+round(apply(GibbsStepTimeFixedLfullGP[,1:7], 2, sd), 5)
+round(apply(GibbsStepTimeFixedLblock[,1:7], 2, sd), 5)
+round(apply(GibbsStepTimeFixedLsequen[,1:7], 2, sd), 5)
+round(apply(GibbsStepTimeVaryLjSequen[,1:7], 2, sd), 5)
+```
+
+
+
+
+
+     
+     
+
+
+     
+
+
+
+

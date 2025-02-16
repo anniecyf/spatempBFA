@@ -1,0 +1,514 @@
+---
+title: "Posterior Sampling and Temporal Prediction Time Analysis"
+author: Yifan CHENG $\quad$ [\textcolor{blue}{y.cheng@u.nus.edu}](mailto:y.cheng@u.nus.edu)  
+output:
+  pdf_document: default
+header-includes: 
+ - \usepackage{bm}
+ - \usepackage{xcolor}
+---
+
+# Simulation Set-Up and Overall Model Fitting Time
+When fitting each of our 4 methods (`fullGPfixedL`, `NNGPblockFixedL`, `NNGPsequenFixedL`, and `NNGPsequenVaryLj`) with $m=8^2=64$ and $T=500$, we specified both `equalTimeDist = TRUE` and `equalTimeDist = FALSE`. We thus have $4\times 2 = 8$ settings. 
+
+Since $m=64$ is quite small, we do not expect any significant differences in the posterior sampling time between our 4 methods with the same `equalTimeDist` input. Since $T=500$ is quite large, what we have discussed in Appendix B of our manuscript suggest that the 3 temporal parameters' posterior sampling steps, especially the step for $\bm{\eta}_t$'s, can be markedly accelerated by adopting our approaches and specifying `equalTimeDist = TRUE` for each of our 4 methods. 
+
+The results we have obtained corroborate these well. With `equalTimeDist = TRUE` specified, the overall model fitting time for our 4 methods, i.e., `fullGPfixedL`, `NNGPblockFixedL`, `NNGPsequenFixedL`, and `NNGPsequenVaryLj`, are 7.04 hours, 7.03 hours, 7.04 hours, and 6.31 hours, respectively. If we do not take advantage of our tactics for evenly dispersed time points presented in Appendix B of our manuscript by specifying `equalTimeDist = FALSE` instead, we will need 28.98 days, 29.09 days, 29.03 days, and 28.74 days to fit the same 4 methods using the same computation resources. 
+
+# Portions of Recorded Gibbs Sampler Time for 10 Key Parameters
+We first display the first 50 kept post-burn-in MCMC iterations' posterior sampling time (in milliseconds) for 10 key Gibbs sampler steps (corresponding to $\bm{\eta}_t$'s, $\Upsilon$, $\psi$, $z_{jl_j}^o(\bm{s}_{i})$'s or $u_j^o(\bm{s}_{i})$'s, $\xi_j^o(\bm{s}_{i})$'s, $\theta_{jl_j}$'s, $\delta_{1:k}$, $\alpha_{jl_j}^o(\bm{s}_{i})$'s, $\kappa$, and $\rho$) for our 8 settings.
+```{r echo = -(1:2)}
+rm(list=ls())
+projDirec <- "C:/Users/annie/OneDrive - National University of Singapore/Documents/PhD/research/spatempBFA"
+wd <- paste(projDirec, "simu/appen/equalTimeDistAccelerationVerification/m64T500", 
+            sep = "/")
+setwd(wd)
+load("GibbsStepTimeFixedLfullGP.RData")
+load("GibbsStepTimeFixedLfullGPfast.RData")
+load("GibbsStepTimeFixedLblock.RData")
+load("GibbsStepTimeFixedLblockFast.RData")
+load("GibbsStepTimeFixedLsequen.RData")
+load("GibbsStepTimeFixedLsequenFast.RData")
+load("GibbsStepTimeVaryLjSequen.RData")
+load("GibbsStepTimeVaryLjSequenFast.RData")
+head(GibbsStepTimeFixedLfullGP, 50)      # equalTimeDist = FALSE
+head(GibbsStepTimeFixedLfullGP.fast, 50) # equalTimeDist = TRUE
+head(GibbsStepTimeFixedLblock, 50)       # equalTimeDist = FALSE
+head(GibbsStepTimeFixedLblock.fast, 50)  # equalTimeDist = TRUE
+head(GibbsStepTimeFixedLsequen, 50)      # equalTimeDist = FALSE
+head(GibbsStepTimeFixedLsequen.fast, 50) # equalTimeDist = TRUE
+head(GibbsStepTimeVaryLjSequen, 50)      # equalTimeDist = FALSE
+head(GibbsStepTimeVaryLjSequen.fast, 50) # equalTimeDist = TRUE
+```   
+# Posterior Sampling Time Summary Statistics for the 3 Temporal Parameters
+We then present vital posterior sampling time summary statistics for the 3 temporal parameters $\bm{\eta}_t$'s, $\Upsilon$, and $\psi$ to showcase the manifest computational acceleration brought about by our tactics for evenly dispersed time points presented in Appendix B.
+```{r}
+fullGPfixedL.slow <- apply(GibbsStepTimeFixedLfullGP[,8:10], 2, summary)      
+fullGPfixedL.fast <- apply(GibbsStepTimeFixedLfullGP.fast[,8:10], 2, summary) 
+NNGPblockFixedL.slow <- apply(GibbsStepTimeFixedLblock[,8:10], 2, summary)       
+NNGPblockFixedL.fast <- apply(GibbsStepTimeFixedLblock.fast[,8:10], 2, summary)  
+NNGPsequenFixedL.slow <- apply(GibbsStepTimeFixedLsequen[,8:10], 2, summary)     
+NNGPsequenFixedL.fast <- apply(GibbsStepTimeFixedLsequen.fast[,8:10], 2, summary) 
+NNGPsequenVaryLj.slow <- apply(GibbsStepTimeVaryLjSequen[,8:10], 2, summary)      
+NNGPsequenVaryLj.fast <- apply(GibbsStepTimeVaryLjSequen.fast[,8:10], 2, summary) 
+fullGPfixedLsummary <- data.frame(eta = fullGPfixedL.slow[,1], 
+                                  eta.fast = fullGPfixedL.fast[,1],
+                                  upsilon = fullGPfixedL.slow[,2], 
+                                  upsilon.fast = fullGPfixedL.fast[,2],
+                                  psi = fullGPfixedL.slow[,3], 
+                                  psi.fast = fullGPfixedL.fast[,3])
+NNGPblockFixedLsummary <- data.frame(eta = NNGPblockFixedL.slow[,1], 
+                                     eta.fast = NNGPblockFixedL.fast[,1],
+                                     upsilon = NNGPblockFixedL.slow[,2], 
+                                     upsilon.fast = NNGPblockFixedL.fast[,2],
+                                     psi = NNGPblockFixedL.slow[,3], 
+                                     psi.fast = NNGPblockFixedL.fast[,3])
+NNGPsequenFixedLsummary <- data.frame(eta = NNGPsequenFixedL.slow[,1], 
+                                      eta.fast = NNGPsequenFixedL.fast[,1],
+                                      upsilon = NNGPsequenFixedL.slow[,2], 
+                                      upsilon.fast = NNGPsequenFixedL.fast[,2],
+                                      psi = NNGPsequenFixedL.slow[,3], 
+                                      psi.fast = NNGPsequenFixedL.fast[,3])
+NNGPsequenVaryLjsummary <- data.frame(eta = NNGPsequenVaryLj.slow[,1], 
+                                      eta.fast = NNGPsequenVaryLj.fast[,1],
+                                      upsilon = NNGPsequenVaryLj.slow[,2], 
+                                      upsilon.fast = NNGPsequenVaryLj.fast[,2],
+                                      psi = NNGPsequenVaryLj.slow[,3], 
+                                      psi.fast = NNGPsequenVaryLj.fast[,3])
+fullGPfixedLsummary
+NNGPblockFixedLsummary 
+NNGPsequenFixedLsummary
+NNGPsequenVaryLjsummary
+```
+The results correspond well to what we have discussed in Appendix B of our manuscript. **For each of our 4 methods, specifying `equalTimeDist = TRUE` instead of `equalTimeDist = FALSE` on equispaced time points markedly accelerates posterior Gibbs sampler steps of $\bm{\eta}_t$'s, $\psi$, and $\Upsilon$ (especially the step for $\bm{\eta}_t$'s).**
+
+We finally calculate standard deviations for the 3 temporal-related parameters' posterior sampling time across all kept post-burn-in MCMC iterations.
+```{r}
+round(apply(GibbsStepTimeFixedLfullGP[,8:10], 2, sd), 5)
+round(apply(GibbsStepTimeFixedLfullGP.fast[,8:10], 2, sd), 5)
+round(apply(GibbsStepTimeFixedLblock[,8:10], 2, sd), 5)
+round(apply(GibbsStepTimeFixedLblock.fast[,8:10], 2, sd), 5)
+round(apply(GibbsStepTimeFixedLsequen[,8:10], 2, sd), 5)
+round(apply(GibbsStepTimeFixedLsequen.fast[,8:10], 2, sd), 5)
+round(apply(GibbsStepTimeVaryLjSequen[,8:10], 2, sd), 5)
+round(apply(GibbsStepTimeVaryLjSequen.fast[,8:10], 2, sd), 5)
+```
+# Time Required for Predicting at Future Time Points
+For each of our 8 settings, we record time needed to predict at 10 future time points. We obtain 100 temporal prediction instances based on each of our 8 obtained model fitting objects and thus have $100\times 8$ recorded time intervals for analysis.
+```{r eval = FALSE}
+rm(list=ls())
+library(spatempBFA)
+modelVec <- c("fullGPfixedLfast", "fullGPfixedL", "NNGPblockFixedLfast", "NNGPblockFixedL", 
+              "NNGPsequenFixedLfast", "NNGPsequenFixedL", 
+              "NNGPsequenVaryLjFast", "NNGPsequenVaryLj")
+N <- 100
+Nu <- 500
+newT <- 10
+temppredTimeMat <- matrix(0, N, 8)
+colnames(temppredTimeMat) <- modelVec
+load("regFixedL30simuT500M64Iter30000.RData")
+regFixedL.simu.fast <- regFixedL.simu
+load("regFixedL30simuT500M64Iter30000specifyEqualTimeDistF.RData")
+load("regFixedL30simuBlockT500M64Iter30000.RData")
+regFixedL.simu.block.fast <- regFixedL.simu.block
+load("regFixedL30simuBlockT500M64Iter30000specifyEqualTimeDistF.RData")
+load("regFixedL30simuSequenT500M64Iter30000nostorealphaweights.RData")
+regFixedL.simu.sequen.fast <- regFixedL.simu.sequen
+load("regFixedL30simuSequenT500M64Iter30000specifyEqualTimeDistFnostorealphaweights.RData")
+load("regVaryLjsimuSequenT500M64Iter30000nostorealphaweight.RData")
+regVaryLj.simu.sequen.fast <- regVaryLj.simu.sequen
+load("regVaryLjsimuSequenT500M64Iter30000specifyEqualTimeDistFnostorealphaweight.RData")
+for (n in 1:N) {
+  print(n)
+  t1 <- Sys.time()
+  temppredobj <- predictNewTime(regFixedL.simu.fast, (Nu+1):(Nu+newT), seed = 29)
+  t2 <- Sys.time()
+  temppredTimeMat[n, 1] = difftime(t2, t1, units = "secs")
+  t1 <- Sys.time()
+  temppredobj <- predictNewTime(regFixedL.simu, (Nu+1):(Nu+newT), seed = 29)
+  t2 <- Sys.time()
+  temppredTimeMat[n, 2] = difftime(t2, t1, units = "secs")
+  t1 <- Sys.time()
+  temppredobj <- predictNewTime(regFixedL.simu.block.fast, (Nu+1):(Nu+newT), seed = 29)
+  t2 <- Sys.time()
+  temppredTimeMat[n, 3] = difftime(t2, t1, units = "secs")
+  t1 <- Sys.time()
+  temppredobj <- predictNewTime(regFixedL.simu.block, (Nu+1):(Nu+newT), seed = 29)
+  t2 <- Sys.time()
+  temppredTimeMat[n, 4] = difftime(t2, t1, units = "secs")
+  t1 <- Sys.time()
+  temppredobj <- predictNewTime(regFixedL.simu.sequen.fast, (Nu+1):(Nu+newT), seed = 29)
+  t2 <- Sys.time()
+  temppredTimeMat[n, 5] = difftime(t2, t1, units = "secs")
+  t1 <- Sys.time()
+  temppredobj <- predictNewTime(regFixedL.simu.sequen, (Nu+1):(Nu+newT), seed = 29)
+  t2 <- Sys.time()
+  temppredTimeMat[n, 6] = difftime(t2, t1, units = "secs")
+  t1 <- Sys.time()
+  temppredobj <- predictNewTime(regVaryLj.simu.sequen.fast, (Nu+1):(Nu+newT), seed = 29)
+  t2 <- Sys.time()
+  temppredTimeMat[n, 7] = difftime(t2, t1, units = "secs")
+  t1 <- Sys.time()
+  temppredobj <- predictNewTime(regVaryLj.simu.sequen, (Nu+1):(Nu+newT), seed = 29)
+  t2 <- Sys.time()
+  temppredTimeMat[n, 8] = difftime(t2, t1, units = "secs")
+}
+save(temppredTimeMat, file = "m64T500temppredTimeMat.RData")
+```
+```{r warning = FALSE, message = FALSE}
+setwd(wd)
+load("m64T500temppredTimeMat.RData")
+apply(temppredTimeMat, 2, summary)
+library(tidyverse)
+library(ggpubr)
+N <- nrow(temppredTimeMat)
+equalTimeDistTF = as.factor(rep(rep(c("equalTimeDist = TRUE", 
+                                      "equalTimeDist = FALSE"), each = N), 4))
+temppredTimeDF <- data.frame(temppredTime = as.vector(temppredTimeMat), 
+                             model = as.factor(rep(colnames(temppredTimeMat), each = N)),
+                             equalTimeDistTF = equalTimeDistTF)
+temppredtimeBox <- ggplot(temppredTimeDF) + labs(y = "", x = "Time (in seconds)") + 
+  geom_boxplot(aes(x = temppredTime, y = model, color = equalTimeDistTF)) +
+  #scale_fill_manual("", values = c("#55CC11", "#1177CC")) +
+  theme(axis.text.x = element_text(size = 10, color = "black"),
+        axis.text.y = element_text(size = 10, color = "black"),
+        axis.ticks.x = element_blank(), axis.ticks.y = element_blank(),
+        legend.position = "top", legend.key = element_blank(),
+        legend.title = element_blank())
+temppredtimeBox
+# ggsave("tempPredBox.png", width = 16, height = 10, units = "cm")
+```
+For each of our 4 methods, specifying `equalTimeDist = TRUE` instead of `equalTimeDist = FALSE` on equispaced time points markedly accelerates the step obtaining $\hat{\bm{\eta}}_{(T+1):(T+q)}$ given $\bm{\eta}_{1:T},\,\Upsilon,\,\psi$ when making future-time predictions, as we no longer need to evaluate $H(\psi)^{-1}$ in each MCMC iteration. The overall temporal prediction time is thus considerably reduced, as expected. See Appendices B.1, B.3.3, and G.1 for more details.
+
+# Data Generation and Model Fitting
+```{r eval = FALSE}
+rm(list=ls())
+library(mvtnorm)
+library(fields)
+library(spatempBFA)
+library(coda)
+K <- 5
+O <- 1
+L <- 30
+M <- 64
+LjVec <- rep(min(30, M), K)
+sqrootM <- 8
+Nu <- 500
+Time <- 1:Nu
+TimeDist <- as.matrix(dist(Time))
+APsi = 0.1; BPsi = 4.5
+set.seed(29)
+### 1) actual sigma^2(i,o) (for i=1,2,...,M and o=1) values
+sigma2 <- 0.01
+### 2) actual psi value
+psi <- 2.3
+### 3) actual kappa value
+kappa <- 0.7
+### 4) actual Upsilon(K\times K)
+tempMat <- matrix(runif(K*K,0,1),K,K)
+Upsilon <- t(tempMat)%*%tempMat
+### 5) actual rho value
+rho <- 0.8
+D <- rdist(expand.grid(1:sqrootM, 1:sqrootM))
+Frho <- exp(-rho*D)
+### 6) actual Eta (c(Eta_1,...,Eta_T)) (vec of length Nu*K)
+Hpsi <- exp(-psi*TimeDist)
+Eta <- rmvnorm(1, mean=rep(0, Nu*K), sigma=kronecker(Hpsi, Upsilon))
+## Y~0 (P=0) so no need to sample Beta; all familyInd=0 (normal) so no need to sample Y
+maxL <- 10
+LStarJ <- sample(maxL, size=K, replace=T)
+### 7) actual alpha
+Alpha <- list()
+for(j in 1:K) {
+  Alpha[[j]] <-  t(rmvnorm(LStarJ[j], mean=rep(0,M*O), sigma=kappa*Frho))
+  #every list index an M by L_j matrix 
+}
+w <- list()
+for(j in 1:K){
+  w[[j]] <- pnorm(Alpha[[j]])
+  Lj <- LStarJ[j]
+  w[[j]][,Lj] <- rep(1, M)
+  temp <- rep(1, M)
+  for(l in 1:Lj){
+    w[[j]][,l] <- w[[j]][,l]*temp
+    if(l<Lj) {temp <- temp * pnorm(Alpha[[j]][,l], lower.tail = FALSE)}
+  }
+}
+### 8) actual Xi
+Xi <- matrix(1, M, K)
+for(j in 1:K){
+  Lj <- LStarJ[j]
+  for(i in 1:M){
+    Xi[i,j] <- sample(Lj, size=1, prob=w[[j]][i,])
+  }
+}
+### 9) actual Delta
+a1=1; a2=10
+Delta <- sapply(c(a1,rep(a2,(K-1))), rgamma, n=1, rate=1) # Tau <- cumprod(Delta)
+### 10) actual Theta
+Theta <- list()
+for(j in 1:K){
+  Theta[[j]] <- rnorm(LStarJ[j], 0, sd=sqrt(1/Delta[j])) #vector of length Lj
+}
+Lambda <- matrix(0, M*O, K)
+for(j in 1:K){
+  for(i in 1:M){
+    Lambda[i,j] = Theta[[j]][Xi[i,j]]
+  }
+}
+Sigma.NuMO <- rnorm(Nu * M * O, sd = sqrt(sigma2))
+EtaMat <- matrix(Eta, K, Nu)
+meanMat <- Lambda%*%EtaMat #M*O\times Nu
+Yobs <- as.vector(meanMat) + Sigma.NuMO
+dat <- data.frame(Y = Yobs)
+Hypers <- list(Sigma2 = list(A = 1, B = 1), Rho = list(ARho=0.1, BRho=1),
+               Kappa = list(SmallUpsilon = O + 1, BigTheta = diag(O)),
+               Psi = list(APsi = APsi, BPsi = BPsi),
+               Upsilon = list(Zeta = K + 1, Omega = diag(K)))
+MCMC <- list(NBurn = 20000, NSims = 10000, NThin = 2, NPilot = 5)
+regFixedL.simu <- bfaFixedL(Y ~ 0, data = dat, dist = D, time = Time,  K = K, 
+                            starting = NULL, hypers = Hypers, tuning = NULL, 
+                            mcmc = MCMC,
+                            L = L,
+                            family = "normal",
+                            temporal.structure = "exponential",
+                            spatial.structure = "continuous",
+                            seed = 29, 
+                            gamma.shrinkage = TRUE,
+                            include.time = TRUE,
+                            include.space = TRUE,
+                            clustering = TRUE,
+                            seasonPeriod = 1, 
+                            equalTimeDist = TRUE,
+                            spatApprox = FALSE, 
+                            alphaMethod = "block", 
+                            h = 15, 
+                            storeSpatPredPara = FALSE,
+                            storeWeights = FALSE,
+                            alphasWeightsToFiles = FALSE) 
+save(regFixedL.simu, file="regFixedL30simuT500M64Iter30000.RData")
+Diags <- diagnostics(regFixedL.simu, diags = c("dic", "dinf", "meanIC", "waic"), 
+                     keepDeviance = TRUE)
+save(Diags, file = "regFixedL30simuT500M64Iter30000Diags.RData")
+Deviance <- as.mcmc(Diags$deviance)
+save(Deviance, file = "regFixedL30simuT500M64Iter30000Deviance.RData")
+GibbsStepTimeFixedLfullGP.fast <- regFixedL.simu$GibbsStepTime
+save(GibbsStepTimeFixedLfullGP.fast, file = "GibbsStepTimeFixedLfullGPfast.RData")
+regFixedL.simu <- bfaFixedL(Y ~ 0, data = dat, dist = D, time = Time,  K = K, 
+                            starting = NULL, hypers = Hypers, tuning = NULL, 
+                            mcmc = MCMC,
+                            L = L,
+                            family = "normal",
+                            temporal.structure = "exponential",
+                            spatial.structure = "continuous",
+                            seed = 29, 
+                            gamma.shrinkage = TRUE,
+                            include.time = TRUE,
+                            include.space = TRUE,
+                            clustering = TRUE,
+                            seasonPeriod = 1, 
+                            equalTimeDist = FALSE,
+                            spatApprox = FALSE, 
+                            alphaMethod = "block", 
+                            h = 15, 
+                            storeSpatPredPara = FALSE,
+                            storeWeights = FALSE,
+                            alphasWeightsToFiles = FALSE) 
+save(regFixedL.simu, 
+     file="regFixedL30simuT500M64Iter30000specifyEqualTimeDistF.RData")
+Diags <- diagnostics(regFixedL.simu, diags = c("dic", "dinf", "meanIC", "waic"), 
+                     keepDeviance = TRUE)
+save(Diags, 
+     file = "regFixedL30simuT500M64Iter30000specifyEqualTimeDistFDiags.RData")
+Deviance <- as.mcmc(Diags$deviance)
+save(Deviance, 
+     file = "regFixedL30simuT500M64Iter30000specifyEqualTimeDistFDeviance.RData")
+GibbsStepTimeFixedLfullGP <- regFixedL.simu$GibbsStepTime
+save(GibbsStepTimeFixedLfullGP, file = "GibbsStepTimeFixedLfullGP.RData")
+regFixedL.simu.block <- bfaFixedL(Y ~ 0, data = dat, dist = D, time = Time,  K = K, 
+                                  starting = NULL, hypers = Hypers, tuning = NULL, 
+                                  mcmc = MCMC,
+                                  L = L,
+                                  family = "normal",
+                                  temporal.structure = "exponential",
+                                  spatial.structure = "continuous",
+                                  seed = 29, 
+                                  gamma.shrinkage = TRUE,
+                                  include.time = TRUE,
+                                  include.space = TRUE,
+                                  clustering = TRUE,
+                                  seasonPeriod = 1, 
+                                  equalTimeDist = TRUE,
+                                  spatApprox = TRUE, 
+                                  alphaMethod = "block", 
+                                  h = 15,
+                                  storeSpatPredPara = FALSE,
+                                  storeWeights = FALSE,
+                                  alphasWeightsToFiles = FALSE) 
+save(regFixedL.simu.block, file="regFixedL30simuBlockT500M64Iter30000.RData")
+Diags.block <- diagnostics(regFixedL.simu.block, 
+                           diags = c("dic", "dinf", "meanIC", "waic"), 
+                           keepDeviance = TRUE)
+save(Diags.block, file = "regFixedL30simuBlockT500M64Iter30000Diags.RData")
+Deviance.block <- as.mcmc(Diags.block$deviance)
+save(Deviance.block, file = "regFixedL30simuBlockT500M64Iter30000Deviance.RData")
+GibbsStepTimeFixedLblock.fast <- regFixedL.simu.block$GibbsStepTime
+save(GibbsStepTimeFixedLblock.fast, file = "GibbsStepTimeFixedLblockFast.RData")
+regFixedL.simu.block <- bfaFixedL(Y ~ 0, data = dat, dist = D, time = Time,  K = K, 
+                                  starting = NULL, hypers = Hypers, tuning = NULL, m
+                                  cmc = MCMC,
+                                  L = L,
+                                  family = "normal",
+                                  temporal.structure = "exponential",
+                                  spatial.structure = "continuous",
+                                  seed = 29, 
+                                  gamma.shrinkage = TRUE,
+                                  include.time = TRUE,
+                                  include.space = TRUE,
+                                  clustering = TRUE,
+                                  seasonPeriod = 1, 
+                                  equalTimeDist = FALSE,
+                                  spatApprox = TRUE, 
+                                  alphaMethod = "block", 
+                                  h = 15,
+                                  storeSpatPredPara = FALSE,
+                                  storeWeights = FALSE,
+                                  alphasWeightsToFiles = FALSE) 
+save(regFixedL.simu.block, 
+     file="regFixedL30simuBlockT500M64Iter30000specifyEqualTimeDistF.RData")
+Diags.block <- diagnostics(regFixedL.simu.block, 
+                           diags = c("dic", "dinf", "meanIC", "waic"), 
+                           keepDeviance = TRUE)
+save(Diags.block, 
+     file = "regFixedL30simuBlockT500M64Iter30000specifyEqualTimeDistFDiags.RData")
+Deviance.block <- as.mcmc(Diags.block$deviance)
+save(Deviance.block, 
+     file = "regFixedL30simuBlockT500M64Iter30000specifyEqualTimeDistFDeviance.RData")
+GibbsStepTimeFixedLblock <- regFixedL.simu.block$GibbsStepTime
+save(GibbsStepTimeFixedLblock, file = "GibbsStepTimeFixedLblock.RData")
+regFixedL.simu.sequen <- bfaFixedL(Y ~ 0, data = dat, dist = D, time = Time,  K = K, 
+                                   starting = NULL, hypers = Hypers, tuning = NULL, 
+                                   mcmc = MCMC,
+                                   L = L,
+                                   family = "normal",
+                                   temporal.structure = "exponential",
+                                   spatial.structure = "continuous",
+                                   seed = 29, 
+                                   gamma.shrinkage = TRUE,
+                                   include.time = TRUE,
+                                   include.space = TRUE,
+                                   clustering = TRUE,
+                                   seasonPeriod = 1, 
+                                   equalTimeDist = TRUE,
+                                   spatApprox = TRUE, 
+                                   alphaMethod = "sequential", 
+                                   h = 15, 
+                                   storeSpatPredPara = FALSE,
+                                   storeWeights = FALSE,
+                                   alphasWeightsToFiles = FALSE) 
+save(regFixedL.simu.sequen, 
+     file = "regFixedL30simuSequenT500M64Iter30000nostorealphaweights.RData")
+Diags.sequen <- diagnostics(regFixedL.simu.sequen, 
+                            diags = c("dic", "dinf", "meanIC", "waic"), 
+                            keepDeviance = TRUE)
+save(Diags.sequen, 
+     file = "regFixedL30simuSequenT500M64Iter30000DiagsNostorealphaweights.RData")
+Deviance.sequen <- as.mcmc(Diags.sequen$deviance)
+save(Deviance.sequen, 
+     file = "regFixedL30simuSequenT500M64Iter30000DevianceNostorealphaweights.RData")
+GibbsStepTimeFixedLsequen.fast <- regFixedL.simu.sequen$GibbsStepTime
+save(GibbsStepTimeFixedLsequen.fast, file = "GibbsStepTimeFixedLsequenFast.RData")
+regFixedL.simu.sequen <- bfaFixedL(Y ~ 0, data = dat, dist = D, time = Time,  K = K, 
+                                   starting = NULL, hypers = Hypers, tuning = NULL, 
+                                   mcmc = MCMC,
+                                   L = L,
+                                   family = "normal",
+                                   temporal.structure = "exponential",
+                                   spatial.structure = "continuous",
+                                   seed = 29, 
+                                   gamma.shrinkage = TRUE,
+                                   include.time = TRUE,
+                                   include.space = TRUE,
+                                   clustering = TRUE,
+                                   seasonPeriod = 1, 
+                                   equalTimeDist = FALSE,
+                                   spatApprox = TRUE, 
+                                   alphaMethod = "sequential", 
+                                   h = 15, 
+                                   storeSpatPredPara = FALSE,
+                                   storeWeights = FALSE,
+                                   alphasWeightsToFiles = FALSE) 
+save(regFixedL.simu.sequen, file =
+       "regFixedL30simuSequenT500M64Iter30000specifyEqualTimeDistFnostorealphaweights.RData")
+Diags.sequen <- diagnostics(regFixedL.simu.sequen, 
+                            diags = c("dic", "dinf", "meanIC", "waic"), 
+                            keepDeviance = TRUE)
+save(Diags.sequen, file = 
+       "regFixedL30simuSequenT500M64Iter30000specifyEqualTimeDistFDiagsNostorealphaweights.RData")
+Deviance.sequen <- as.mcmc(Diags.sequen$deviance)
+save(Deviance.sequen, file = 
+       "regFixedL30simuSequenT500M64Iter30000specifyEqualTimeDistFDevianceNostorealphaweights.RData")
+GibbsStepTimeFixedLsequen <- regFixedL.simu.sequen$GibbsStepTime
+save(GibbsStepTimeFixedLsequen, file = "GibbsStepTimeFixedLsequen.RData")
+regVaryLj.simu.sequen <- bfaVaryingLjs(Y ~ 0, data = dat, dist = D, time = Time,  K = K, 
+                                       LjVec = LjVec,
+                                       starting = NULL, hypers = Hypers, tuning = NULL, 
+                                       mcmc = MCMC,
+                                       family = "normal",
+                                       temporal.structure = "exponential",
+                                       spatial.structure = "continuous",
+                                       seed = 29, 
+                                       gamma.shrinkage = TRUE,
+                                       include.time = TRUE,
+                                       include.space = TRUE,
+                                       seasonPeriod = 1, 
+                                       equalTimeDist = TRUE,
+                                       spatApprox = TRUE, 
+                                       alphaSequen = TRUE, 
+                                       h = 15,
+                                       storeSpatPredPara = FALSE, 
+                                       storeWeights = FALSE) 
+save(regVaryLj.simu.sequen, 
+     file="regVaryLjsimuSequenT500M64Iter30000nostorealphaweight.RData")
+Diags.sequenVaryLj <- diagnostics(regVaryLj.simu.sequen, 
+                                  diags = c("dic", "dinf", "meanIC", "waic"), 
+                                  keepDeviance = TRUE)
+save(Diags.sequenVaryLj, 
+     file = "regVaryLjsimuSequenT500M64Iter30000DiagsNostorealphaweight.RData")
+Deviance.sequenVaryLj <- as.mcmc(Diags.sequenVaryLj$deviance)
+save(Deviance.sequenVaryLj, 
+     file = "regVaryLjsimuSequenT500M64Iter30000DevianceNostorealphaweight.RData")
+GibbsStepTimeVaryLjSequen.fast <- regVaryLj.simu.sequen$GibbsStepTime
+save(GibbsStepTimeVaryLjSequen.fast, file = "GibbsStepTimeVaryLjSequenFast.RData")
+regVaryLj.simu.sequen <- bfaVaryingLjs(Y ~ 0, data = dat, dist = D, time = Time,  K = K, 
+                                       LjVec = LjVec,
+                                       starting = NULL, hypers = Hypers, tuning = NULL, 
+                                       mcmc = MCMC,
+                                       family = "normal",
+                                       temporal.structure = "exponential",
+                                       spatial.structure = "continuous",
+                                       seed = 29, 
+                                       gamma.shrinkage = TRUE,
+                                       include.time = TRUE,
+                                       include.space = TRUE,
+                                       seasonPeriod = 1, 
+                                       equalTimeDist = FALSE,
+                                       spatApprox = TRUE, 
+                                       alphaSequen = TRUE, 
+                                       h = 15,
+                                       storeSpatPredPara = FALSE, 
+                                       storeWeights = FALSE) 
+save(regVaryLj.simu.sequen, file =
+       "regVaryLjsimuSequenT500M64Iter30000specifyEqualTimeDistFnostorealphaweight.RData")
+Diags.sequenVaryLj <- diagnostics(regVaryLj.simu.sequen, 
+                                  diags = c("dic", "dinf", "meanIC", "waic"), 
+                                  keepDeviance = TRUE)
+save(Diags.sequenVaryLj, file = 
+       "regVaryLjsimuSequenT500M64Iter30000specifyEqualTimeDistFDiagsNostorealphaweight.RData")
+Deviance.sequenVaryLj <- as.mcmc(Diags.sequenVaryLj$deviance)
+save(Deviance.sequenVaryLj, file = 
+       "regVaryLjsimuSequenT500M64Iter30000specifyEqualTimeDistFDevianceNostorealphaweight.RData")
+GibbsStepTimeVaryLjSequen <- regVaryLj.simu.sequen$GibbsStepTime
+save(GibbsStepTimeVaryLjSequen, file = "GibbsStepTimeVaryLjSequen.RData")
+```
+

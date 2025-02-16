@@ -1,0 +1,51 @@
+---
+title: "Posterior Sampling Time Exploration -- $m=64$ and $T=1000$"
+author: Yifan CHENG $\quad$ [\textcolor{blue}{y.cheng@u.nus.edu}](mailto:y.cheng@u.nus.edu)  
+output:
+  pdf_document: default
+header-includes: 
+ - \usepackage{bm}
+ - \usepackage{xcolor}
+---
+
+The overall model fitting time (with `equalTimeDist = TRUE` specified) for our 4 methods, i.e., `fullGPfixedL`, `NNGPblockFixedL`, `NNGPsequenFixedL`, and `NNGPsequenVaryLj`, are 1.09 days, 1.09 days, 1.09 days, and 1.06 days, respectively. If we do not take advantage of our tactics for evenly dispersed time points presented in Appendix B of our manuscript by specifying `equalTimeDist = FALSE` instead, we will need more than 3 months to fit the same methods using the same computation resources, as $T=1000$ is huge. This corresponds well to what we have discussed in Appendix B regarding our approaches' manifest computational acceleration in Gibbs sampler steps for temporal parameters $\psi$, $\Upsilon$, and $\bm{\eta}_t$'s. Since $m = 64$ is quite small, there aren't any significant differences in the recorded posterior sampling time between our four methods, as expected. 
+
+We first display the first 50 kept post-burn-in MCMC iterations' posterior sampling time (in milliseconds) for 10 key Gibbs sampler steps (corresponding to $\psi$, $\Upsilon$, $\bm{\eta}_t$'s, $z_{jl_j}^o(\bm{s}_{i})$'s or $u_j^o(\bm{s}_{i})$'s, $\xi_j^o(\bm{s}_{i})$'s, $\theta_{jl_j}$'s, $\delta_{1:k}$, $\rho$, $\kappa$, and $\alpha_{jl_j}^o(\bm{s}_{i})$'s) for our 4 methods, i.e., `fullGPfixedL`, `NNGPblockFixedL`, `NNGPsequenFixedL`, and `NNGPsequenVaryLj`.
+```{r echo = -(1:2)}
+rm(list=ls())
+wd <- "C:/Users/annie/OneDrive - National University of Singapore/Documents/PhD/research/spatempBFA/simu/appen/equalTimeDistAccelerationVerification/m64T1000"
+setwd(wd)
+load("GibbsStepTimeFixedLfullGP.RData")
+load("GibbsStepTimeFixedLblock.RData")
+load("GibbsStepTimeFixedLsequen.RData")
+load("GibbsStepTimeVaryLjSequen.RData")
+head(GibbsStepTimeFixedLfullGP, 50)
+head(GibbsStepTimeFixedLblock, 50)
+head(GibbsStepTimeFixedLsequen, 50)
+head(GibbsStepTimeVaryLjSequen, 50)
+```   
+We then present vital posterior sampling time summary statistics for the 10 key parameters. 
+```{r}
+round(apply(GibbsStepTimeFixedLfullGP, 2, summary), 2)
+round(apply(GibbsStepTimeFixedLblock, 2, summary), 2)
+round(apply(GibbsStepTimeFixedLsequen, 2, summary), 2)
+round(apply(GibbsStepTimeVaryLjSequen, 2, summary), 2)
+round(apply(GibbsStepTimeFixedLfullGP, 2, sd), 3)
+round(apply(GibbsStepTimeFixedLblock, 2, sd), 3)
+round(apply(GibbsStepTimeFixedLsequen, 2, sd), 3)
+round(apply(GibbsStepTimeVaryLjSequen, 2, sd), 3)
+```
+
+
+
+
+
+     
+     
+
+
+     
+
+
+
+
